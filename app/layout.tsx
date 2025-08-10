@@ -3,7 +3,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import localFont from "next/font/local"
 import "./globals.css"
-import { ThemeProvider } from "next-themes"
+import { ThemeProvider } from "@/components/theme-provider"
 
 // Arabic/Persian font (Peyda)
 const Peyda = localFont({
@@ -43,10 +43,12 @@ export default function RootLayout({
       lang={currentLang}
       dir={isRTL ? "rtl" : "ltr"}
       className={`${isRTL ? Peyda.variable : GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
     >
       <body className="font-sans">
-        
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
