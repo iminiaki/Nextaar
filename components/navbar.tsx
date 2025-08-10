@@ -6,6 +6,8 @@ import { ModeToggle } from "./mode-toggle"
 import { LanguageSwitcher } from "./language-switcher"
 import type { Locale } from "@/lib/i18n"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export function Navbar({
   locale,
@@ -15,6 +17,10 @@ export function Navbar({
   nav: { home: string; about: string; services: string; portfolio: string; blog: string; contact: string }
 }) {
   const base = `/${locale}`
+  const pathname = usePathname()
+
+  const isActiveExact = (href: string) => pathname === href
+  const isActiveStartsWith = (href: string) => pathname === href || pathname.startsWith(href + "/")
   return (
     <header className="border-b">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3 ">
@@ -24,22 +30,64 @@ export function Navbar({
           </Link>
         </div>
         <nav className="hidden items-center gap-6 md:flex">
-          <Link href={`${base}`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveExact(base) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveExact(base) ? "page" : undefined}
+          >
             {nav.home}
           </Link>
-          <Link href={`${base}/about`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}/about`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveStartsWith(`${base}/about`) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveStartsWith(`${base}/about`) ? "page" : undefined}
+          >
             {nav.about}
           </Link>
-          <Link href={`${base}/services`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}/services`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveStartsWith(`${base}/services`) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveStartsWith(`${base}/services`) ? "page" : undefined}
+          >
             {nav.services}
           </Link>
-          <Link href={`${base}/portfolio`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}/portfolio`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveStartsWith(`${base}/portfolio`) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveStartsWith(`${base}/portfolio`) ? "page" : undefined}
+          >
             {nav.portfolio}
           </Link>
-          <Link href={`${base}/blog`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}/blog`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveStartsWith(`${base}/blog`) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveStartsWith(`${base}/blog`) ? "page" : undefined}
+          >
             {nav.blog}
           </Link>
-          <Link href={`${base}/contact`} className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href={`${base}/contact`}
+            className={cn(
+              "text-sm hover:text-foreground",
+              isActiveStartsWith(`${base}/contact`) ? "text-foreground" : "text-muted-foreground"
+            )}
+            aria-current={isActiveStartsWith(`${base}/contact`) ? "page" : undefined}
+          >
             {nav.contact}
           </Link>
         </nav>
