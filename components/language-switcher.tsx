@@ -1,13 +1,14 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { type Locale, locales } from "@/lib/i18n"
 import { Globe } from "lucide-react"
 import { getDictionary } from "@/lib/i18n"
 
-export async function LanguageSwitcher({ locale }: { locale: Locale }) {
+export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const router = useRouter()
   const pathname = usePathname() || "/en"
 
@@ -22,7 +23,11 @@ export async function LanguageSwitcher({ locale }: { locale: Locale }) {
   }
 
   const label = locale === "en" ? "English" : locale === "fa" ? "فارسی" : "العربية"
-  const dict = getDictionary(locale)
+  const [dict, setDict] = useState<any>(null)
+
+  useEffect(() => {
+    getDictionary(locale).then(setDict)
+  }, [locale])
 
   return (
     <DropdownMenu>
@@ -33,9 +38,15 @@ export async function LanguageSwitcher({ locale }: { locale: Locale }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => switchTo("en")}>{(await dict).nav.enLangName}</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => switchTo("fa")}>{(await dict).nav.faLangName}</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => switchTo("ar")}>{(await dict).nav.arLangName}</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => switchTo("en")}>
+          {dict ? dict.nav.enLangName : "English"}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => switchTo("fa")}>
+          {dict ? dict.nav.faLangName : "فارسی"}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => switchTo("ar")}>
+          {dict ? dict.nav.arLangName : "العربية"}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

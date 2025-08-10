@@ -11,7 +11,13 @@ export function ModeToggle() {
 
   useEffect(() => setMounted(true), [])
 
-  const isDark = mounted ? resolvedTheme === "dark" : false
+  if (!mounted) {
+    return (
+      <Button variant="outline" size="icon" aria-label="Toggle theme" className="relative shrink-0 bg-transparent" />
+    )
+  }
+
+  const isDark = resolvedTheme === "dark"
 
   return (
     <Button

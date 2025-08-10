@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Locale } from "@/lib/i18n"
 import { subscribeEmail } from "@/app/actions"
-import { MapPinCheckInside } from "lucide-react"
+import { MailCheck, MapPinHouse, Phone, Smartphone } from "lucide-react"
 
 type ColumnLinks = { label: string; href: string }[]
 
@@ -36,24 +36,26 @@ export function SiteFooter({
             {office.address.map((line, i) => (
               
               <li className="flex gap-2 items-center" key={i}>
-                <MapPinCheckInside width={16}/>
-                <a className="hover:text-foreground" href={`address:${office.address}`}>     
-                {line}
+                <MapPinHouse width={16} />
+                <a className="hover:text-foreground" href={`address:${office.address}`}>
+                  {line}
                 </a>
                 </li>
             ))}
             <li className="flex gap-2 items-center">
-              
+              <MailCheck width={16} />
               <a className="hover:text-foreground" href={`mailto:${office.email}`}>
                 {office.email}
               </a>
             </li>
             <li className="flex gap-2 items-center">
+              <Phone width={16} />
               <a className="hover:text-foreground" href={`tel:${office.phone.replace(/[^0-9]/g, "")}`}>
                 {office.phone}
               </a>
             </li>
             <li className="flex gap-2 items-center">
+              <Smartphone width={16} />
               <a className="hover:text-foreground" href={`tel:${office.mobile.replace(/[^0-9]/g, "")}`}>
                 {office.mobile}
               </a>

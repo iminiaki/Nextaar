@@ -1,3 +1,5 @@
+"use client" // Navbar needs to be a client component if it contains ModeToggle or LanguageSwitcher
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
@@ -13,16 +15,14 @@ export function Navbar({
   nav: { home: string; about: string; services: string; portfolio: string; blog: string; contact: string }
 }) {
   const base = `/${locale}`
-
   return (
     <header className="border-b">
-      <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
+      <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3 ">
         <div className="flex items-center gap-3">
           <Link href={base} className="font-semibold">
             <Image src="/Nextaar.png" alt="Lastaar" width={64} height={64} />
           </Link>
         </div>
-
         <nav className="hidden items-center gap-6 md:flex">
           <Link href={`${base}`} className="text-sm text-muted-foreground hover:text-foreground">
             {nav.home}
@@ -43,7 +43,6 @@ export function Navbar({
             {nav.contact}
           </Link>
         </nav>
-
         <div className="flex items-center gap-2">
           <LanguageSwitcher locale={locale} />
           <ModeToggle />

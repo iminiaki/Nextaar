@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import localFont from "next/font/local"
 import "./globals.css"
+import { ThemeProvider } from "next-themes"
 
 // Arabic/Persian font (Peyda)
 const Peyda = localFont({
@@ -22,9 +23,12 @@ const Peyda = localFont({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.dev",
+  title: "Lastaar",
+  description: "Your Last Website",
+  generator: "imanak",
+  icons: {
+    icon: "/nextaar.png",
+  },
 }
 
 export default function RootLayout({
@@ -40,7 +44,10 @@ export default function RootLayout({
       dir={isRTL ? "rtl" : "ltr"}
       className={`${isRTL ? Peyda.variable : GeistSans.variable} ${GeistMono.variable}`}
     >
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        
+        <ThemeProvider attribute="class">{children}</ThemeProvider>
+      </body>
     </html>
   )
 }

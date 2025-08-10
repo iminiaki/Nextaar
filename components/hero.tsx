@@ -115,9 +115,9 @@ export function Hero({
         <div className="relative">
           <Image
             ref={imgRef as any}
-            src="/lastrounat.webp"
+            src="/assi.jpg"
             alt="Product preview"
-            width={500}
+            width={700}
             height={500}
             className="mx-auto rounded-4xl bg-background object-cover will-change-transform"
             priority
