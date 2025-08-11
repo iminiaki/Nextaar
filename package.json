@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "lint": "next lint",
     "start": "next start"
   },
@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.17.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",

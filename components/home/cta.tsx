@@ -16,7 +16,7 @@ export function CallToAction({
 }) {
   return (
     <section className="py-8 md:py-24">
-      <div className="relative container mx-auto">
+      <div className="relative container mx-auto px-4">
         <div className="absolute inset-0 -z-10 rounded-2xl bg-primary/10 blur-2xl"></div>
         <div className="container mx-auto px-4 py-8 rounded-2xl bg-background border">
         <RevealOnScroll className="mx-auto max-w-2xl text-center">

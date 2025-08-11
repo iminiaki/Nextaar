@@ -105,7 +105,7 @@ const dictionaries: Record<Locale, Dict> = {
             href: "/en/services",
           },
           {
-            title: "SEO Services",
+            title: "SEO, AEO and GEO Services",
             desc: "Strategic optimization based on brand‑fit keywords.",
             cta: "Learn more",
             href: "/en/services",
@@ -232,7 +232,7 @@ const dictionaries: Record<Locale, Dict> = {
             href: "/fa/services",
           },
           {
-            title: "خدمات سئو (سئو و بهینه سازی وب‌سایت)",
+            title: "خدمات SEO, AEO و GEO (سئو و بهینه سازی وب‌سایت)",
             desc: "بهینه‌سازی و سئوی استراتژیک وب‌سایت بر اساس کلمات کلیدی متناسب با برند",
             cta: "اطلاعات بیشتر",
             href: "/fa/services",
@@ -359,7 +359,7 @@ const dictionaries: Record<Locale, Dict> = {
             href: "/ar/services",
           },
           {
-            title: "خدمات SEO",
+            title: "خدمات SEO, AEO و GEO",
             desc: "تحسين استراتيجي يعتمد على كلمات مفتاحية مناسبة للعلامة.",
             cta: "المزيد",
             href: "/ar/services",

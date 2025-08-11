@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Locale } from "@/lib/i18n"
 import { subscribeEmail } from "@/app/actions"
-import { MailCheck, MapPinHouse, Phone, Smartphone } from "lucide-react"
+import { MailCheck, MapPinHouse, Phone, Send, Smartphone } from "lucide-react"
 
 type ColumnLinks = { label: string; href: string }[]
 
@@ -101,7 +101,7 @@ export function SiteFooter({
               aria-label={newsletter.placeholder}
             />
             <Button type="submit" disabled={pending}>
-              {newsletter.button}
+              <Send />
             </Button>
           </form>
           {state.ok && <p className="mt-2 text-xs text-green-600 dark:text-green-400">{newsletter.success}</p>}
@@ -110,7 +110,7 @@ export function SiteFooter({
       <div className="border-t">
         <div className="container mx-auto flex items-center justify-between px-4 py-6 text-xs text-muted-foreground">
           <p>{rights}</p>
-          <p>{"Built by Lastaar with Next.js, Tailwind, shadcn/ui."}</p>
+          <p>{"Lastaar © " + new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>
