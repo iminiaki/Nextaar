@@ -141,3 +141,6 @@ export {
   DialogTitle,
   DialogTrigger,
 }
+
+// Re-export the Radix namespace for local consumers (e.g., sheet)
+export { DialogPrimitive }
