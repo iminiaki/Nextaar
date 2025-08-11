@@ -1,8 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Define Peyda font faces */
 @font-face {
@@ -212,4 +209,37 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Theme switch circular reveal using View Transitions API */
+html {
+  view-transition-name: root;
+}
+
+@keyframes theme-circle-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    /* Large enough to cover viewport */
+    clip-path: circle(150vmax at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+}
+
+@keyframes theme-circle-hide {
+  from {
+    clip-path: circle(150vmax at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+}
+
+/* Apply only while toggling to avoid affecting other transitions */
+html.theme-transition::view-transition-new(root) {
+  animation: theme-circle-reveal 420ms ease-out;
+}
+
+html.theme-transition::view-transition-old(root) {
+  animation: theme-circle-hide 420ms ease-out;
 }
