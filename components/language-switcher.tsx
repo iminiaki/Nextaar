@@ -37,7 +37,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
           {label}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent className="min-w-[105px]">
         <DropdownMenuItem onClick={() => switchTo("en")}>
           {dict ? dict.nav.enLangName : "English"}
         </DropdownMenuItem>

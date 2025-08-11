@@ -8,6 +8,7 @@ import type { Locale } from "@/lib/i18n"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
 export function Navbar({
   locale,
@@ -18,11 +19,29 @@ export function Navbar({
 }) {
   const base = `/${locale}`
   const pathname = usePathname()
+  const [isSticky, setIsSticky] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 100)
+    }
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const isActiveExact = (href: string) => pathname === href
   const isActiveStartsWith = (href: string) => pathname === href || pathname.startsWith(href + "/")
   return (
-    <header className="border-b">
+    <header
+      className={cn(
+        "transition-all duration-300 ease-in-out",
+        !isSticky
+          ? "border-b"
+          : "border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm sticky top-2 z-20 max-w-7xl mx-auto rounded-2xl"
+      )}
+      data-sticky={isSticky ? "true" : undefined}
+    >
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3 ">
         <div className="flex items-center gap-3">
           <Link href={base} className="font-semibold">
