@@ -1,23 +1,26 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 
 export function FancyCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
+  const [enabled, setEnabled] = useState(false)
+
+  // Decide whether to enable the custom cursor (pointer: fine only)
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0
+    const isCoarsePointer = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches
+    setEnabled(!(isTouch || isCoarsePointer))
+  }, [])
 
   useEffect(() => {
+    if (!enabled) return
     const dot = dotRef.current
     const inner = innerRef.current
     if (!dot || !inner) return
-
-    // hide on touch devices
-    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0
-    if (isTouch) {
-      dot.style.display = "none"
-      return
-    }
 
     // Outer circle movement
     const qxOuter = gsap.quickTo(dot, "x", { duration: 0.2, ease: "power3.out" })
@@ -75,22 +78,24 @@ export function FancyCursor() {
       window.removeEventListener("mouseup", up)
       cleanups.forEach((c) => c())
     }
-  }, [])
+  }, [enabled])
 
   return (
-    <>
-      {/* Outer Circle */}
-      <div
-        ref={dotRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-50 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/70"
-      />
-      {/* Inner Circle */}
-      <div
-        ref={innerRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-50 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
-      />
-    </>
+    enabled ? (
+      <>
+        {/* Outer Circle */}
+        <div
+          ref={dotRef}
+          aria-hidden="true"
+          className="fancy-cursor pointer-events-none fixed left-0 top-0 z-50 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/70"
+        />
+        {/* Inner Circle */}
+        <div
+          ref={innerRef}
+          aria-hidden="true"
+          className="fancy-cursor pointer-events-none fixed left-0 top-0 z-50 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
+        />
+      </>
+    ) : null
   )
 }

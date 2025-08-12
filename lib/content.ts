@@ -79,7 +79,7 @@ export const posts: Post[] = [
       ar: "تحسين سهولة الاستخدام والدقة للغات RTL.",
     },
     body: {
-      en: "Supporting RTL involves more than flipping layouts...",
+      en: "Supporting RTL involves more than flipping layouts Supporting RTL involves more than flipping layouts Supporting RTL involves more than flipping layouts ...",
       fa: "پشتیبانی از RTL فقط وارونه‌کردن چیدمان نیست...",
       ar: "دعم RTL يتجاوز قلب التخطيط...",
     },

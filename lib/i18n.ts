@@ -56,6 +56,23 @@ type Dict = {
     send: string
     success: string
   }
+  blogDetail: {
+    tocTitle: string
+    noHeadings: string
+    readTimeSuffix: string
+    share: {
+      title: string
+      linkedin: string
+      instagram: string
+      telegram: string
+      facebook: string
+      email: string
+      x: string
+      copy: string
+      close: string
+    }
+    subscribe: { title: string; help: string; placeholder: string; success: string; buttonAria: string }
+  }
   footer: {
     rights: string
     office: { title: string; address: string[]; email: string; phone: string; mobile: string }
@@ -164,6 +181,29 @@ const dictionaries: Record<Locale, Dict> = {
       messageLabel: "Message",
       send: "Send",
       success: "Thanks! We received your message.",
+    },
+    blogDetail: {
+      tocTitle: "Table of contents",
+      noHeadings: "No headings",
+      readTimeSuffix: "min read",
+      share: {
+        title: "Share",
+        linkedin: "LinkedIn",
+        instagram: "Instagram",
+        telegram: "Telegram",
+        facebook: "Facebook",
+        email: "Email",
+        x: "X",
+        copy: "Copy link",
+        close: "Close",
+      },
+      subscribe: {
+        title: "Subscribe",
+        help: "Get our latest posts in your inbox.",
+        placeholder: "you@example.com",
+        success: "You’re subscribed!",
+        buttonAria: "Subscribe",
+      },
     },
     footer: {
       rights: "All rights reserved.",
@@ -292,6 +332,29 @@ const dictionaries: Record<Locale, Dict> = {
       send: "ارسال",
       success: "متشکریم! پیام شما دریافت شد.",
     },
+    blogDetail: {
+      tocTitle: "فهرست مطالب",
+      noHeadings: "بدون سرفصل",
+      readTimeSuffix: "دقیقه",
+      share: {
+        title: "اشتراک‌گذاری",
+        linkedin: "لینکدین",
+        instagram: "اینستاگرام",
+        telegram: "تلگرام",
+        facebook: "فیسبوک",
+        email: "ایمیل",
+        x: "ایکس",
+        copy: "کپی لینک",
+        close: "بستن",
+      },
+      subscribe: {
+        title: "عضویت",
+        help: "آخرین مقالات را در ایمیل خود دریافت کنید.",
+        placeholder: "ایمیل شما",
+        success: "با موفقیت عضو شدید!",
+        buttonAria: "اشتراک",
+      },
+    },
     footer: {
       rights: "کلیه حقوق محفوظ است.",
       office: {
@@ -403,6 +466,29 @@ const dictionaries: Record<Locale, Dict> = {
       messageLabel: "الرسالة",
       send: "إرسال",
       success: "شكرًا لك! استلمنا رسالتك.",
+    },
+    blogDetail: {
+      tocTitle: "جدول المحتويات",
+      noHeadings: "لا عناوين",
+      readTimeSuffix: "دقيقة",
+      share: {
+        title: "مشاركة",
+        linkedin: "لينكدإن",
+        instagram: "إنستغرام",
+        telegram: "تلغرام",
+        facebook: "فيسبوك",
+        email: "البريد",
+        x: "X",
+        copy: "نسخ الرابط",
+        close: "إغلاق",
+      },
+      subscribe: {
+        title: "اشترك",
+        help: "احصل على أحدث المقالات في بريدك.",
+        placeholder: "بريدك الإلكتروني",
+        success: "تم الاشتراك!",
+        buttonAria: "اشترك",
+      },
     },
     footer: {
       rights: "جميع الحقوق محفوظة.",

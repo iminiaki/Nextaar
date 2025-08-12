@@ -90,6 +90,11 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Prevent custom cursor flash on initial paint for touch/coarse pointers */
+@media (pointer: coarse) {
+  .fancy-cursor { display: none !important; }
+}
+
 /* Removed unsupported @custom-variant dark (&:is(.dark *)); */
 
 :root {

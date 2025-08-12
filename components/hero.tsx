@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { SparklesCore } from "./ui/sparkles"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -103,7 +104,16 @@ export function Hero({
           >
             <Link href={`${baseHref}/contact`}>
               <Button size="lg" className="w-full">{ctaPrimary}</Button>
+              <SparklesCore
+          background="transparent"
+          minSize={0.4}
+          maxSize={1}
+          particleDensity={1200}
+          className="h-20 absolute -top-3 -mx-2 flex left-2 -z-10"
+          particleColor="#a30098"
+        />
             </Link>
+            
             <Link href={`${baseHref}/services`}>
               <Button size="lg" variant="outline">
                 {ctaSecondary}

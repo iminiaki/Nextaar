@@ -32,9 +32,9 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="shrink-0 bg-transparent">
-          <Globe className="mr-2 h-4 w-4" />
-          {label}
+        <Button variant="outline" className="shrink-0 bg-transparent flex gap-2 w-9 md:w-auto">
+          <Globe className="h-4 w-4" />
+          <span className="hidden md:inline">{label}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[105px]">
