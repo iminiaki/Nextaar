@@ -1,17 +1,24 @@
-import { getDictionary, type Locale } from "@/lib/i18n"
-import { Hero } from "@/components/hero"
-import { ServicesFeatures } from "@/components/home/services-features"
-import { CallToAction } from "@/components/home/cta"
-import { PortfolioPreview } from "@/components/home/portfolio-preview"
-import { WhyChoose } from "@/components/home/why-choose"
-import { AboutTeaser } from "@/components/home/about-teaser"
-import { LatestPosts } from "@/components/home/latest-posts"
-import { Partners } from "@/components/home/partners"
-import { ContactForm } from "@/components/contact-form"
+import { getDictionary, type Locale } from "@/lib/i18n";
+import { Hero } from "@/components/hero";
+import { ServicesFeatures } from "@/components/home/services-features";
+import { CallToAction } from "@/components/home/cta";
+import { PortfolioPreview } from "@/components/home/portfolio-preview";
+import { WhyChoose } from "@/components/home/why-choose";
+import { AboutTeaser } from "@/components/home/about-teaser";
+import { LatestPosts } from "@/components/home/latest-posts";
+import { Partners } from "@/components/home/partners";
+import { ContactForm } from "@/components/contact-form";
 
-export default async function Page({ params }: { params: { locale: Locale } }) {
-  const dict = await getDictionary(params.locale)
-  const base = `/${params.locale}`
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { locale: Locale };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  console.log("searchParams", searchParams);
+  const dict = await getDictionary(params.locale);
+  const base = `/${params.locale}`;
 
   return (
     <>
@@ -75,5 +82,5 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
         success={dict.contact.success}
       />
     </>
-  )
+  );
 }
