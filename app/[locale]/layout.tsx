@@ -41,10 +41,10 @@ export default async function LocaleLayout({
         latestPosts={{
           title: dict.footer.latest.title,
           posts: [
-            { label: "تفاوت سایت وردپرسی با سایت کدنویسی‌شده", href: `/${locale}/blog` },
-            { label: "تفاوت وب‌سایت و وب‌اپ", href: `/${locale}/blog` },
-            { label: "پروکسی تلگرام چیست؟", href: `/${locale}/blog` },
-            { label: "آپدیت جدید tailwind", href: `/${locale}/blog` },
+            { label: "blog 1", href: `/${locale}/blog` },
+            { label: "blog 2", href: `/${locale}/blog` },
+            { label: "blog 3", href: `/${locale}/blog` },
+            { label: "blog 4", href: `/${locale}/blog` },
           ],
         }}
         newsletter={{
