@@ -6,8 +6,28 @@ import { CalendarDays, UserRound, Clock3 } from "lucide-react";
 import { ShareButton } from "@/components/blog/share-button";
 import { BlogTOC } from "@/components/blog/toc";
 import { SubscribeWidget } from "@/components/blog/subscribe-widget";
+import { getPayload } from "payload";
+import payloadConfig from "@/payload.config";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 type Params = { params: { locale: Locale; slug: string } };
+
+export const generateMetaData = async ({ params }: Params) => {
+  const payload = await getPayload({ config: payloadConfig });
+  const { docs: posts } = await payload.find({
+    collection: "posts" as any,
+    limit: 100,
+    locale: params.locale as any,
+  });
+
+  const post = posts.find((p) => p.slug === params.slug);
+  if (!post) return notFound();
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+  };
+};
 
 export async function generateStaticParams() {
   return ["en", "fa", "ar"].flatMap((loc) =>
@@ -17,14 +37,15 @@ export async function generateStaticParams() {
 
 export default async function PostDetail({ params }: Params) {
   const dict = await getDictionary(params.locale);
+  const payload = await getPayload({ config: payloadConfig });
+  const { docs: posts } = await payload.find({
+    collection: "posts" as any,
+    limit: 100,
+    locale: params.locale as any,
+  });
+
   const post = posts.find((p) => p.slug === params.slug);
   if (!post) return notFound();
-
-  const author = "Lastaar";
-  const bodyText = post.body[params.locale] || "";
-  const words = bodyText.trim().split(/\s+/).filter(Boolean);
-  const readingMinutes = Math.max(1, Math.ceil(words.length / 200));
-  const shareLabels = dict.blogDetail.share;
 
   return (
     <article className="container mx-auto px-4 py-16 md:py-24">
@@ -49,7 +70,7 @@ export default async function PostDetail({ params }: Params) {
         <div className="lg:col-span-3 order-1 md:order-2">
           <RevealOnScroll>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              {post.title[params.locale]}
+              {post.title}
             </h1>
           </RevealOnScroll>
 
@@ -61,35 +82,33 @@ export default async function PostDetail({ params }: Params) {
               </span>
               <span className="inline-flex items-center gap-1">
                 <UserRound className="size-4" />
-                {author}
+                {post.author.name}
               </span>
               <span className="inline-flex items-center gap-1">
                 <Clock3 className="size-4" />
-                {`${readingMinutes} ${dict.blogDetail.readTimeSuffix}`}
+                {`${post.readingMinutes} ${dict.blogDetail.readTimeSuffix}`}
               </span>
               <span className="mx-1 h-4 w-px bg-border" />
               <ShareButton
-                title={post.title[params.locale]}
-                ariaLabel={shareLabels.title}
+                title={post.title}
+                ariaLabel={dict.blogDetail.share.title}
                 locale={params.locale}
-                labels={shareLabels}
+                labels={dict.blogDetail.share}
               />
             </div>
           </RevealOnScroll>
 
           <RevealOnScroll className="mt-8">
             <img
-              src={post.image || "/placeholder.svg"}
-              alt={post.title[params.locale]}
+              src={post.sizes.banner.url || "/placeholder.svg"}
+              alt={post.title}
               className="w-full rounded-xl border"
             />
           </RevealOnScroll>
 
           <RevealOnScroll className="prose mt-8 max-w-none dark:prose-invert">
             <div id="post-content">
-              <h2>hiiiii</h2>
-              <p>{bodyText}</p>
-              <h3>dadadfadf</h3>
+              <RichText data={post.body} />
             </div>
           </RevealOnScroll>
         </div>
