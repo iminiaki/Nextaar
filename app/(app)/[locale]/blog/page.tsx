@@ -45,7 +45,7 @@ export default async function BlogPage({
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
                     <img
-                      src={p.sizes.thumbnail.url || "/placeholder.svg"}
+                      src={p.thumbnail.url || "/placeholder.svg"}
                       alt={p.title}
                       className="mb-3 w-full rounded-md border"
                     />

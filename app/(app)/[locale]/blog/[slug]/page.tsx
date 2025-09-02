@@ -82,11 +82,11 @@ export default async function PostDetail({ params }: Params) {
               </span>
               <span className="inline-flex items-center gap-1">
                 <UserRound className="size-4" />
-                {post.author.name}
+                {post.author?.name}
               </span>
               <span className="inline-flex items-center gap-1">
                 <Clock3 className="size-4" />
-                {`${post.readingMinutes} ${dict.blogDetail.readTimeSuffix}`}
+                {`${post.readingTime} ${dict.blogDetail.readTimeSuffix}`}
               </span>
               <span className="mx-1 h-4 w-px bg-border" />
               <ShareButton
@@ -100,9 +100,9 @@ export default async function PostDetail({ params }: Params) {
 
           <RevealOnScroll className="mt-8">
             <img
-              src={post.sizes.banner.url || "/placeholder.svg"}
+              src={post.thumbnail.url || "/placeholder.svg"}
               alt={post.title}
-              className="w-full rounded-xl border"
+              className="w-full rounded-xl aspect-[2/1] object-cover"
             />
           </RevealOnScroll>
 

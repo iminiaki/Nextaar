@@ -29,8 +29,19 @@ function extractPlainTextFromLexical(value: any): string {
 
 export const Posts: CollectionConfig = {
   slug: "posts",
+  // access: {
+  //   read: () => true,
+  // },
   access: {
-    read: () => true,
+    read: ({req : { user }}) => {
+      if(user) return true
+      
+      return {
+        _status: {
+          equals: "published"
+        }
+      };
+    }
   },
   hooks: {
     beforeChange: [
@@ -62,6 +73,16 @@ export const Posts: CollectionConfig = {
         return data;
       },
     ],
+  },
+  
+  admin: {
+    preview: ({ slug }) => `http://localhost:3000/${slug}`,
+    useAsTitle: "title",
+  },
+  versions: {
+    drafts: {
+      autosave: true,
+    },
   },
   fields: [
     {
@@ -129,20 +150,19 @@ export const Posts: CollectionConfig = {
     {
       name: "excerpt",
       type: "text",
-      required: true,
       localized: true,
     },
 
     {
       name: "body",
       type: "richText",
-      required: true,
       localized: true,
     },
     {
       name: "date",
       type: "date",
       required: true,
+  
       localized: true,
     },
     {
@@ -158,43 +178,46 @@ export const Posts: CollectionConfig = {
     {
       name: "metaTag",
       type: "text",
-      required: true,
       localized: true,
     },
     {
       name: "metaDescription",
       type: "text",
-      required: true,
       localized: true,
     },
     {
       name: "metaKeywords",
       type: "text",
-      required: true,
       localized: true,
     },
     {
       name: "metaTitle",
       type: "text",
-      required: true,
       localized: true,
-    },
+    },{
+    name: "thumbnail",
+    type: "upload",
+    relationTo: "media",
+    admin: { position: "sidebar" },
+    
+  }
   ],
-  upload: {
-    adminThumbnail: "thumbnail",
-    mimeTypes: ["image/*"],
-    staticDir: "public/blog-media",
-    imageSizes: [
-      {
-        name: "thumbnail",
-        width: 300,
-        height: 300,
-      },
-      {
-        name: "banner",
-        width: 1024,
-        height: 640,
-      },
-    ],
-  },
+  // upload: {
+  //   adminThumbnail: "thumbnail",
+  //   mimeTypes: ["image/*"],
+  //   staticDir: "public/blog-media",
+  //   // admin: { position: "sidebar" },
+  //   imageSizes: [
+  //     {
+  //       name: "thumbnail",
+  //       width: 300,
+  //       height: 300,
+  //     },
+  //     {
+  //       name: "banner",
+  //       width: 1024,
+  //       height: 640,
+  //     },
+  //   ],
+  // },
 };
