@@ -199,7 +199,7 @@ export const Posts: CollectionConfig = {
     type: "upload",
     relationTo: "media",
     admin: { position: "sidebar" },
-    
+    localized: true,
   }
   ],
   // upload: {

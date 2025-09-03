@@ -20,6 +20,7 @@ export default async function BlogPage({
     collection: "posts" as any,
     limit: 100,
     locale: params.locale as any,
+    fallbackLocale: params.locale as any,
   });
 
   return (
@@ -45,7 +46,7 @@ export default async function BlogPage({
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
                     <img
-                      src={p.thumbnail.url || "/placeholder.svg"}
+                      src={p.thumbnail?.url || "/placeholder.svg"}
                       alt={p.title}
                       className="mb-3 w-full rounded-md border"
                     />

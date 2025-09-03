@@ -42,6 +42,7 @@ export default async function PostDetail({ params }: Params) {
     collection: "posts" as any,
     limit: 100,
     locale: params.locale as any,
+    fallbackLocale: params.locale as any,
   });
 
   const post = posts.find((p) => p.slug === params.slug);

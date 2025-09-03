@@ -56,6 +56,5 @@ export default buildConfig({
       },
     ],
     defaultLocale: "en",
-    fallback: true,
   },
 });
