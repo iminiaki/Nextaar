@@ -14,7 +14,7 @@ export function Partners({ title }: { title: string }) {
     "/techs/MySQL.svg",
     "/techs/Nest.js.svg",
     "/techs/Next.js.svg",
-    "/techs/NGINX.svg",
+    "/techs/NGINeX.svg",
     "/techs/Node.js.svg",
     "/techs/Nuxt JS.svg",
     "/techs/payload.svg",
