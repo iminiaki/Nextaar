@@ -206,32 +206,21 @@ export const Posts: CollectionConfig = {
       name: "author",
       type: "relationship",
       relationTo: "users",
-      localized: true,
+      // localized: true,
     },
     {
       name: "readingTime",
       type: "number",
     },
     {
-      name: "metaTag",
-      type: "text",
-      localized: true,
-    },
-    {
-      name: "metaDescription",
-      type: "text",
-      localized: true,
-    },
-    {
-      name: "metaKeywords",
-      type: "text",
-      localized: true,
-    },
-    {
-      name: "metaTitle",
-      type: "text",
-      localized: true,
-    },
+  name: "seo",
+  type: "group",
+  fields: [
+    { name: "metaTitle", type: "text", localized: true },
+    { name: "metaDescription", type: "textarea", localized: true },
+    { name: "metaKeywords", type: "text", localized: true },
+  ],
+},
     {
       name: "image",
       type: "upload",
