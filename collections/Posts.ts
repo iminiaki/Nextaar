@@ -131,13 +131,13 @@ export const Posts: CollectionConfig = {
     {
       name: "slug",
       type: "text",
-      required: false,
+      required: true,
       localized: true,
       unique: true,
       admin: {
         position: "sidebar",
-        readOnly: true,
-        condition: () => false, // hide from admin UI; generated automatically
+        // readOnly: true,
+        // condition: () => false, // hide from admin UI; generated automatically
       },
       hooks: {
         beforeValidate: [
