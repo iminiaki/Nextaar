@@ -33,20 +33,19 @@ export const Posts: CollectionConfig = {
   //   read: () => true,
   // },
   access: {
-    read: ({req : { user }}) => {
-      if(user) return true
-      
+    read: ({ req: { user } }) => {
+      if (user) return true;
+
       return {
         _status: {
-          equals: "published"
-        }
+          equals: "published",
+        },
       };
-    }
+    },
   },
   hooks: {
     beforeChange: [
       async ({ data, context }) => {
-        console.log("THIS IS DATA", { data, context });
         // Calculate reading time from richText `body`
         let plainText = "";
 
@@ -74,9 +73,47 @@ export const Posts: CollectionConfig = {
       },
     ],
   },
-  
+
   admin: {
-    preview: ({ slug }) => `http://localhost:3000/${slug}`,
+    preview: (doc, options) => {
+      const { id, slug, title } = doc as any;
+      const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+      const token = process.env.DRAFT_SECRET || "dev-secret";
+      const loc =
+        typeof (options as any)?.locale === "string"
+          ? (options as any).locale
+          : "en";
+      const slugify = (val: string): string => {
+        const base = (val || "")
+          .toString()
+          .normalize("NFKD")
+          .trim()
+          .toLowerCase();
+        const dashed = base.replace(/[\s_]+/g, "-");
+        const cleaned = dashed.replace(/[^\p{L}\p{N}-]+/gu, "");
+        const collapsed = cleaned.replace(/-+/g, "-").replace(/^-|-$/g, "");
+        return collapsed || "untitled";
+      };
+      const getLocalized = (obj: any, l: string): string | undefined => {
+        if (!obj) return undefined;
+        if (typeof obj === "object" && typeof obj[l] === "string")
+          return obj[l] as string;
+        if (typeof obj === "string") return obj as string;
+        return undefined;
+      };
+      const localizedTitle = getLocalized(title, loc) || "untitled";
+      const finalSlug = (() => {
+        const s = getLocalized(slug, loc);
+        if (s && s.trim() !== "") return s;
+        return slugify(String(localizedTitle));
+      })();
+      const idParam = id ? `&id=${encodeURIComponent(String(id))}` : "";
+      return `${base}/api/draft?secret=${encodeURIComponent(
+        token
+      )}&slug=${encodeURIComponent(
+        String(finalSlug)
+      )}&locale=${encodeURIComponent(loc)}${idParam}`;
+    },
     useAsTitle: "title",
   },
   versions: {
@@ -94,25 +131,32 @@ export const Posts: CollectionConfig = {
     {
       name: "slug",
       type: "text",
-      required: true,
+      required: false,
       localized: true,
       unique: true,
-      admin: { position: "sidebar" },
+      admin: {
+        position: "sidebar",
+        readOnly: true,
+        condition: () => false, // hide from admin UI; generated automatically
+      },
       hooks: {
         beforeValidate: [
           (
             (fallbackField: string = "title"): FieldHook =>
             ({ value, data, originalDoc, req }) => {
-              const slugify = (val: string): string =>
-                val
+              const slugify = (val: string): string => {
+                const base = (val || "")
+                  .toString()
                   .normalize("NFKD")
-                  .replace(/[\u0300-\u036f]/g, "")
                   .trim()
-                  .toLowerCase()
-                  .replace(/[^a-z0-9 -]/g, "")
-                  .replace(/\s+/g, "-")
+                  .toLowerCase();
+                const dashed = base.replace(/[\s_]+/g, "-");
+                const cleaned = dashed.replace(/[^\p{L}\p{N}-]+/gu, "");
+                const collapsed = cleaned
                   .replace(/-+/g, "-")
                   .replace(/^-|-$/g, "");
+                return collapsed || "untitled";
+              };
 
               if (typeof value === "string" && value.trim() !== "") {
                 return slugify(value);
@@ -159,13 +203,6 @@ export const Posts: CollectionConfig = {
       localized: true,
     },
     {
-      name: "date",
-      type: "date",
-      required: true,
-  
-      localized: true,
-    },
-    {
       name: "author",
       type: "relationship",
       relationTo: "users",
@@ -194,30 +231,13 @@ export const Posts: CollectionConfig = {
       name: "metaTitle",
       type: "text",
       localized: true,
-    },{
-    name: "thumbnail",
-    type: "upload",
-    relationTo: "media",
-    admin: { position: "sidebar" },
-    localized: true,
-  }
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      admin: { position: "sidebar" },
+      localized: true,
+    },
   ],
-  // upload: {
-  //   adminThumbnail: "thumbnail",
-  //   mimeTypes: ["image/*"],
-  //   staticDir: "public/blog-media",
-  //   // admin: { position: "sidebar" },
-  //   imageSizes: [
-  //     {
-  //       name: "thumbnail",
-  //       width: 300,
-  //       height: 300,
-  //     },
-  //     {
-  //       name: "banner",
-  //       width: 1024,
-  //       height: 640,
-  //     },
-  //   ],
-  // },
 };

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { posts } from "@/lib/content";
 import { RevealOnScroll } from "@/components/gsap/reveal";
@@ -10,18 +11,62 @@ import { getPayload } from "payload";
 import payloadConfig from "@/payload.config";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
-type Params = { params: { locale: Locale; slug: string } };
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-export const generateMetaData = async ({ params }: Params) => {
+type Params = {
+  params: { locale: Locale; slug: string };
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+export const generateMetadata = async ({
+  params,
+  searchParams,
+}: {
+  params: { locale: Locale; slug: string };
+  searchParams?: Record<string, string | string[] | undefined>;
+}) => {
+  const { isEnabled } = await draftMode();
   const payload = await getPayload({ config: payloadConfig });
-  const { docs: posts } = await payload.find({
-    collection: "posts" as any,
-    limit: 100,
-    locale: params.locale as any,
-  });
 
-  const post = posts.find((p) => p.slug === params.slug);
-  if (!post) return notFound();
+  let post: any | undefined;
+  const previewId =
+    typeof searchParams?.previewId === "string"
+      ? searchParams.previewId
+      : undefined;
+
+  if (isEnabled && previewId) {
+    try {
+      post = await payload.findByID({
+        collection: "posts" as any,
+        id: previewId,
+        locale: params.locale as any,
+        fallbackLocale: false as any,
+        draft: true as any,
+        overrideAccess: true,
+      });
+    } catch {}
+  }
+
+  if (!post) {
+    const result = await payload.find({
+      collection: "posts" as any,
+      where: { slug: { equals: params.slug } },
+      limit: 1,
+      locale: params.locale as any,
+      fallbackLocale: false as any,
+      draft: isEnabled as any,
+      overrideAccess: isEnabled,
+    });
+    post = result.docs?.[0];
+  }
+
+  if (!post) {
+    return {
+      title: "Preview",
+      description: "Previewing draft content",
+    };
+  }
 
   return {
     title: post.title,
@@ -35,17 +80,43 @@ export async function generateStaticParams() {
   );
 }
 
-export default async function PostDetail({ params }: Params) {
+export default async function PostDetail({ params, searchParams }: Params) {
   const dict = await getDictionary(params.locale);
+  const { isEnabled } = await draftMode();
   const payload = await getPayload({ config: payloadConfig });
-  const { docs: posts } = await payload.find({
-    collection: "posts" as any,
-    limit: 100,
-    locale: params.locale as any,
-    fallbackLocale: params.locale as any,
-  });
+  const previewId =
+    typeof searchParams?.previewId === "string"
+      ? searchParams?.previewId
+      : undefined;
+  let post: any | undefined;
 
-  const post = posts.find((p) => p.slug === params.slug);
+  if (isEnabled && previewId) {
+    try {
+      post = await payload.findByID({
+        collection: "posts" as any,
+        id: previewId,
+        locale: params.locale as any,
+        fallbackLocale: false as any,
+        draft: true as any,
+        overrideAccess: true,
+      });
+    } catch (e) {
+      // fallback to slug query below
+    }
+  }
+
+  if (!post) {
+    const { docs: posts } = await payload.find({
+      collection: "posts" as any,
+      where: { slug: { equals: params.slug } },
+      limit: 1,
+      locale: params.locale as any,
+      fallbackLocale: false as any,
+      draft: isEnabled as any,
+      overrideAccess: isEnabled,
+    });
+    post = posts?.[0];
+  }
   if (!post) return notFound();
 
   return (
@@ -71,7 +142,7 @@ export default async function PostDetail({ params }: Params) {
         <div className="lg:col-span-3 order-1 md:order-2">
           <RevealOnScroll>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              {post.title}
+              {post.title || "Untitled"}
             </h1>
           </RevealOnScroll>
 
@@ -79,7 +150,7 @@ export default async function PostDetail({ params }: Params) {
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-1">
                 <CalendarDays className="size-4" />
-                {new Date(post.date).toLocaleDateString()}
+                {new Date(post.createdAt).toLocaleDateString()}
               </span>
               <span className="inline-flex items-center gap-1">
                 <UserRound className="size-4" />
@@ -101,7 +172,7 @@ export default async function PostDetail({ params }: Params) {
 
           <RevealOnScroll className="mt-8">
             <img
-              src={post.thumbnail.url || "/placeholder.svg"}
+              src={post.image?.url || "/placeholder.svg"}
               alt={post.title}
               className="w-full rounded-xl aspect-[2/1] object-cover"
             />
