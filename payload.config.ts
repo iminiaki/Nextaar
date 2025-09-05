@@ -12,6 +12,8 @@ import { Media } from "./collections/Media";
 import { Services } from "./collections/Services";
 import { Posts } from "./collections/Posts";
 import { Categories } from "./collections/PostCat";
+import { PortfolioCategories } from "./collections/PortfolioCat";
+import { Portfolio } from "./collections/Portfolio";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -23,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Services, Posts, Categories],
+  collections: [Users, Media, Services, Posts, Categories, Portfolio, PortfolioCategories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
