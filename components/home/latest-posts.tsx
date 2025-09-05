@@ -1,10 +1,11 @@
-import Link from "next/link"
 import { PostCard } from "@/components/blog/post-card"
 import type { Locale } from "@/lib/i18n"
-import { posts } from "@/lib/content"
 import { RevealOnScroll } from "@/components/gsap/reveal"
+import { getPayload } from "payload"
+import payloadConfig from "@/payload.config"
+import { draftMode } from "next/headers"
 
-export function LatestPosts({
+export async function LatestPosts({
   locale,
   title,
   subtitle,
@@ -15,7 +16,18 @@ export function LatestPosts({
   subtitle: string
   baseHref: string
 }) {
-  const latest = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 3)
+  const payload = await getPayload({ config: payloadConfig })
+  const { isEnabled } = await draftMode()
+  const { docs: posts } = await payload.find({
+    collection: "posts" as any,
+    limit: 3,
+    sort: "-createdAt" as any,
+    locale: locale as any,
+    fallbackLocale: false as any,
+    draft: isEnabled as any,
+    overrideAccess: isEnabled,
+    depth: 2,
+  })
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -25,14 +37,29 @@ export function LatestPosts({
         </div>
         <RevealOnScroll staggerChildren className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((p) => (
+            {posts.map((p) => (
               <PostCard
-                key={p.slug}
-                href={`${baseHref}/blog/${p.slug}`}
-                title={p.title[locale]}
-                excerpt={p.excerpt[locale]}
-                imageUrl={p.image}
-                createdAt={p.date}
+                key={(p as any).slug}
+                href={`${baseHref}/blog/${(p as any).slug}`}
+                title={(p as any).title}
+                excerpt={(p as any).excerpt}
+                imageUrl={(p as any).image?.url}
+                createdAt={(p as any).createdAt}
+                readingTime={(p as any).readingTime}
+                author={{
+                  name: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.name : undefined,
+                  avatar: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.image?.url : undefined,
+                }}
+                categories={Array.isArray((p as any).categories)
+                  ? (p as any).categories.map((c: any) => {
+                      if (c && typeof c === "object") {
+                        const name = c.name
+                        if (name && typeof name === "object" && name[locale]) return name[locale]
+                        if (typeof name === "string") return name
+                      }
+                      return undefined
+                    }).filter(Boolean)
+                  : undefined}
               />
             ))}
           </div>
