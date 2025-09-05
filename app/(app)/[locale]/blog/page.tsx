@@ -55,6 +55,16 @@ export default async function BlogPage({
                   name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
                   avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
                 }}
+                categories={Array.isArray((p as any).categories)
+                  ? (p as any).categories.map((c: any) => {
+                      if (c && typeof c === "object") {
+                        const name = c.name
+                        if (name && typeof name === "object" && name[params.locale]) return name[params.locale]
+                        if (typeof name === "string") return name
+                      }
+                      return undefined
+                    }).filter(Boolean)
+                  : undefined}
               />
             ))}
         </div>

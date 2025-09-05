@@ -192,6 +192,16 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: "categories",
+      type: "relationship",
+      relationTo: "categories" as any,
+      hasMany: true,   // allow multiple categories per post
+      required: false, // set true if you want every post to have at least one category
+      admin: {
+        position: "sidebar",
+      },
+    },
+    {
       name: "excerpt",
       type: "text",
       localized: true,
@@ -229,4 +239,5 @@ export const Posts: CollectionConfig = {
       localized: true,
     },
   ],
+  
 };

@@ -21,6 +21,7 @@ export type PostCardProps = {
   date?: string | Date
   createdAt?: string | Date
   category?: string
+  categories?: string[]
   readTime?: string | number | null
   readingTime?: number | null
   className?: string
@@ -38,6 +39,7 @@ export function PostCard(props: PostCardProps) {
     date,
     createdAt,
     category,
+    categories,
     readTime,
     readingTime,
     className = "",
@@ -59,9 +61,20 @@ export function PostCard(props: PostCardProps) {
             className="h-56 w-full object-cover transition-all duration-700 group-hover:rotate-1 group-hover:scale-110 "
           />
 
-          {category ? (
-            <Badge className="absolute left-4 top-4 border-0 bg-background/95 px-3 py-1 shadow-lg backdrop-blur-md">
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{category}</span>
+          {Array.isArray(categories) && categories.length > 0 ? (
+            <div className="absolute left-4 top-4 flex max-w-[90%] flex-wrap items-center gap-2">
+              {categories.slice(0, 3).map((cat, idx) => (
+                <Badge key={`${cat}-${idx}`} className="border-0 bg-black/20 px-2 py-1 text-xs text-white backdrop-blur-md">
+                  <span className="">{cat}</span>
+                </Badge>
+              ))}
+              {categories.length > 3 ? (
+                <Badge className="border-0 px-2 py-1 text-xs shadow-lg backdrop-blur-md">+{categories.length - 3}</Badge>
+              ) : null}
+            </div>
+          ) : category ? (
+            <Badge className="absolute left-4 !bg-none top-4 border-0 px-3 py-1 shadow-lg backdrop-blur-md">
+              <span className="">{category}</span>
             </Badge>
           ) : null}
 
