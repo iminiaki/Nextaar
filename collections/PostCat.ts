@@ -8,6 +8,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
+    group: "Blog",
   },
   access: {
     read: () => true, // public can read categories

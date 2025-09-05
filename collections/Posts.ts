@@ -115,6 +115,7 @@ export const Posts: CollectionConfig = {
       )}&locale=${encodeURIComponent(loc)}${idParam}`;
     },
     useAsTitle: "title",
+    group: "Blog",
   },
   versions: {
     drafts: {
