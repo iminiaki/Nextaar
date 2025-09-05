@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PostCard } from "@/components/blog/post-card"
 import type { Locale } from "@/lib/i18n"
 import { posts } from "@/lib/content"
 import { RevealOnScroll } from "@/components/gsap/reveal"
@@ -26,22 +26,14 @@ export function LatestPosts({
         <RevealOnScroll staggerChildren className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {latest.map((p) => (
-              <Link key={p.slug} href={`${baseHref}/blog/${p.slug}`} data-animate>
-                <Card className="h-full transition-transform hover:-translate-y-1">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{p.title[locale]}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground">
-                    <img
-                      src={p.image || "/placeholder.svg"}
-                      alt={p.title[locale]}
-                      className="mb-3 w-full rounded-md border object-cover"
-                    />
-                    <p className="mb-2">{p.excerpt[locale]}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(p.date).toLocaleDateString()}</p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PostCard
+                key={p.slug}
+                href={`${baseHref}/blog/${p.slug}`}
+                title={p.title[locale]}
+                excerpt={p.excerpt[locale]}
+                imageUrl={p.image}
+                createdAt={p.date}
+              />
             ))}
           </div>
         </RevealOnScroll>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PostCard } from "@/components/blog/post-card";
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { RevealOnScroll } from "@/components/gsap/reveal";
 import { getPayload } from "payload";
@@ -24,6 +24,7 @@ export default async function BlogPage({
     fallbackLocale: false as any,
     draft: isEnabled as any,
     overrideAccess: isEnabled,
+    depth: 2,
   });
 
   return (
@@ -42,24 +43,19 @@ export default async function BlogPage({
           {posts
             .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
             .map((p) => (
-              <Link key={p.slug} href={`${base}/blog/${p.slug}`} data-animate>
-                <Card className="h-full transition-transform hover:-translate-y-1">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{p.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground">
-                    <img
-                      src={p.image?.url || "/placeholder.svg"}
-                      alt={p.title}
-                      className="mb-3 w-full rounded-md border"
-                    />
-                    <p className="mb-2">{p.excerpt}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(p.createdAt).toLocaleDateString()}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <PostCard
+                key={p.slug}
+                href={`${base}/blog/${p.slug}`}
+                title={p.title}
+                excerpt={p.excerpt}
+                imageUrl={p.image?.url}
+                createdAt={p.createdAt}
+                readingTime={p.readingTime}
+                author={{
+                  name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
+                  avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
+                }}
+              />
             ))}
         </div>
       </RevealOnScroll>

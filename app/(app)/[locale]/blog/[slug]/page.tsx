@@ -43,6 +43,7 @@ export const generateMetadata = async ({
         locale: params.locale as any,
         fallbackLocale: false as any,
         draft: true as any,
+        depth: 2 as any,
         overrideAccess: true,
       });
     } catch {}
@@ -113,6 +114,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
       locale: params.locale as any,
       fallbackLocale: false as any,
       draft: isEnabled as any,
+      depth: 2 as any,
       overrideAccess: isEnabled,
     });
     post = posts?.[0];
