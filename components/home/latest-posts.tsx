@@ -20,7 +20,7 @@ export async function LatestPosts({
   const { isEnabled } = await draftMode()
   const { docs: posts } = await payload.find({
     collection: "posts" as any,
-    limit: 3,
+    limit: 4,
     sort: "-createdAt" as any,
     locale: locale as any,
     fallbackLocale: false as any,
@@ -36,7 +36,7 @@ export async function LatestPosts({
           <p className="mt-3 text-muted-foreground">{subtitle}</p>
         </div>
         <RevealOnScroll staggerChildren className="mt-10">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {posts.map((p) => (
               <PostCard
                 key={(p as any).slug}
