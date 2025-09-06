@@ -103,7 +103,7 @@ export function PostCard(props: PostCardProps) {
 
         <div className="flex items-center justify-between border-t border-border/30 pt-4">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 ring-2 ring-background shadow-md">
+            <Avatar className="h-10 w-10 ring-2 ring-background shadow-md rounded-lg group-hover:rounded-4xl transition-all duration-300">
               <AvatarImage src={author?.avatar} alt={author?.name || "author"} />
               <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10">
                 <User className="h-4 w-4" />
