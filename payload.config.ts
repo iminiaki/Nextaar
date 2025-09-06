@@ -24,6 +24,19 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      views: {
+        // Replace the default login view with our custom component
+        login: {
+          path: '/login',
+          exact: true,
+          Component: {
+            path: '/components/ui/sign-in-card-2',
+            exportName: 'Component',
+          },
+        },
+      },
+    },
   },
   collections: [Users, Media, Services, Posts, Categories, Portfolio, PortfolioCategories],
   editor: lexicalEditor(),
