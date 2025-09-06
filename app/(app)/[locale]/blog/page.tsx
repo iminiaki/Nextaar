@@ -28,7 +28,7 @@ export default async function BlogPage({
   });
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
+    <div className="container mx-auto px-4 py-16 md:py-24 relative">
       <RevealOnScroll>
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           {c.title}
