@@ -39,7 +39,7 @@ export default async function BlogPage({
       </RevealOnScroll>
 
       <RevealOnScroll staggerChildren className="mt-10">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {posts
             .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
             .map((p) => (
