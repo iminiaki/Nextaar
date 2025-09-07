@@ -6,8 +6,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ImageWithFallback } from "./figma/ImageWithFallback"
+import { isRTL, type Locale } from "@/lib/i18n"
 
 type Author = { name: string; avatar?: string }
+type PostCardLabels = { readTimeSuffix: string; authorAlt: string }
 
 export type PostCardProps = {
   id?: string
@@ -25,6 +27,8 @@ export type PostCardProps = {
   readTime?: string | number | null
   readingTime?: number | null
   className?: string
+  locale?: Locale
+  labels?: Partial<PostCardLabels>
 }
 
 export function PostCard(props: PostCardProps) {
@@ -45,11 +49,15 @@ export function PostCard(props: PostCardProps) {
     className = "",
   } = props
 
+  const rtl = props.locale ? isRTL(props.locale) : false
+  const authorAlt = author?.name || props.labels?.authorAlt || "Author"
+
   const content = (
     <Card
       className={`group relative h-full overflow-hidden border-border/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-2xl hover:shadow-black/5 ${className}`}
       style={{ borderRadius: "1.5rem" }}
       data-animate
+      data-cursor-variant="post"
     >
       <div className="absolute inset-0 rounded-[1.5rem] bg-gradient-to-br from-accent/20 via-transparent to-primary/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -62,7 +70,7 @@ export function PostCard(props: PostCardProps) {
           />
 
           {Array.isArray(categories) && categories.length > 0 ? (
-            <div className="absolute left-4 top-4 flex max-w-[90%] flex-wrap items-center gap-2">
+            <div className={`absolute top-4 flex max-w-[90%] flex-wrap items-center gap-2 ${rtl ? "right-4" : "left-4"}`}>
               {categories.slice(0, 3).map((cat, idx) => (
                 <Badge key={`${cat}-${idx}`} className="border-0 bg-black/20 px-2 py-1 text-xs text-white backdrop-blur-md">
                   <span className="">{cat}</span>
@@ -73,17 +81,17 @@ export function PostCard(props: PostCardProps) {
               ) : null}
             </div>
           ) : category ? (
-            <Badge className="absolute left-4 !bg-none top-4 border-0 px-3 py-1 shadow-lg backdrop-blur-md">
+            <Badge className={`absolute !bg-none top-4 border-0 px-3 py-1 shadow-lg backdrop-blur-md ${rtl ? "right-4" : "left-4"}`}>
               <span className="">{category}</span>
             </Badge>
           ) : null}
 
           {readTime ?? readingTime ? (
-            <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-black/20 px-2 py-1 text-xs text-white backdrop-blur-md">
+            <div className={`absolute bottom-4 flex items-center gap-1 rounded-full bg-black/20 px-2 py-1 text-xs text-white backdrop-blur-md ${rtl ? "left-4" : "right-4"}`}>
               <Clock className="h-3 w-3" />
               <span>
                 {typeof (readTime ?? readingTime) === "number"
-                  ? `${readTime ?? readingTime} min`
+                  ? `${readTime ?? readingTime} ${props.labels?.readTimeSuffix ?? "min"}`
                   : (readTime ?? "")}
               </span>
             </div>
@@ -104,7 +112,7 @@ export function PostCard(props: PostCardProps) {
         <div className="flex items-center justify-between border-t border-border/30 pt-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 ring-2 ring-background shadow-md rounded-lg group-hover:rounded-4xl transition-all duration-300">
-              <AvatarImage src={author?.avatar} alt={author?.name || "author"} />
+              <AvatarImage src={author?.avatar} alt={authorAlt} />
               <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/10">
                 <User className="h-4 w-4" />
               </AvatarFallback>
@@ -113,13 +121,13 @@ export function PostCard(props: PostCardProps) {
             <div className="space-y-0.5">
               {author?.name ? <p className="text-sm">{author.name}</p> : null}
               {(date ?? createdAt) ? (
-                <p className="text-xs text-muted-foreground">{new Date(date ?? createdAt as any).toLocaleDateString()}</p>
+                <p className="text-xs text-muted-foreground">{new Date(date ?? createdAt as any).toLocaleDateString(props.locale)}</p>
               ) : null}
             </div>
           </div>
-              <div className="group-hover:bg-primary group-hover:scale-125 rounded-full p-2 transition-all duration-300">
-                <MoveRight className="h-4 w-4 group-hover:text-white transition-all duration-300" />
-              </div>
+          <div className="group-hover:bg-primary group-hover:scale-125 rounded-full p-2 transition-all duration-300">
+            <MoveRight className={`h-4 w-4 group-hover:text-white transition-all duration-300 ${rtl ? "rotate-180" : ""}`} />
+          </div>
           {/* <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/30 transition-colors duration-300 group-hover:bg-primary/10">
             <div className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary" />
           </div> */}
@@ -128,5 +136,5 @@ export function PostCard(props: PostCardProps) {
     </Card>
   )
 
-  return href ? <Link href={href}>{content}</Link> : content
+  return href ? <Link href={href} data-cursor-variant="post">{content}</Link> : content
 }

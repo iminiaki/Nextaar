@@ -6,7 +6,7 @@ export const Users: CollectionConfig = {
     read: () => true,
   },
   admin: {
-    useAsTitle: "email",
+    useAsTitle: "name",
   },
   auth: true,
   fields: [
@@ -16,6 +16,7 @@ export const Users: CollectionConfig = {
       name: "name",
       type: "text",
       required: true,
+      localized: true,
     },
     {
       name: "role",

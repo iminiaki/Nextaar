@@ -31,7 +31,7 @@ export default buildConfig({
           path: '/login',
           exact: true,
           Component: {
-            path: '/components/ui/sign-in-card-2',
+            path: '/components/ui/sign-in-card',
             exportName: 'Component',
           },
         },

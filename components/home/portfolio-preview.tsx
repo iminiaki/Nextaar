@@ -1,11 +1,13 @@
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PortfolioCard } from "@/components/portfolio/portfolio-card"
 import { Button } from "@/components/ui/button"
 import type { Locale } from "@/lib/i18n"
-import { portfolio } from "@/lib/portfolio"
+import { getPayload } from "payload"
+import payloadConfig from "@/payload.config"
+import { draftMode } from "next/headers"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 
-export function PortfolioPreview({
+export async function PortfolioPreview({
   locale,
   title,
   subtitle,
@@ -18,7 +20,18 @@ export function PortfolioPreview({
   viewAll: string
   baseHref: string
 }) {
-  const items = portfolio.slice(0, 3)
+  const payload = await getPayload({ config: payloadConfig })
+  const { isEnabled } = await draftMode()
+  const { docs: items } = await payload.find({
+    collection: "portfolio" as any,
+    limit: 3,
+    sort: "-createdAt" as any,
+    locale: locale as any,
+    fallbackLocale: false as any,
+    draft: isEnabled as any,
+    overrideAccess: isEnabled,
+    depth: 2,
+  })
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -34,22 +47,26 @@ export function PortfolioPreview({
 
         <RevealOnScroll staggerChildren className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((it) => (
-              <Link key={it.slug} href={`${baseHref}/portfolio/${it.slug}`} data-animate>
-                <Card className="h-full transition-transform hover:-translate-y-1">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{it.title[locale]}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground">
-                    <img
-                      src={it.image || "/placeholder.svg"}
-                      alt={it.title[locale]}
-                      className="mb-3 w-full rounded-md border object-cover"
-                    />
-                    <p>{it.excerpt[locale]}</p>
-                  </CardContent>
-                </Card>
-              </Link>
+            {items.map((it: any) => (
+              <PortfolioCard
+                key={it.slug}
+                href={`${baseHref}/portfolio/${it.slug}`}
+                title={it.title}
+                categories={Array.isArray(it.categories)
+                  ? it.categories
+                      .map((c: any) => {
+                        if (c && typeof c === "object") {
+                          const name = c.name
+                          if (name && typeof name === "object" && name[locale]) return name[locale]
+                          if (typeof name === "string") return name
+                        }
+                        return undefined
+                      })
+                      .filter(Boolean)
+                  : undefined}
+                image={it.image?.url}
+                imageAlt={it.title}
+              />
             ))}
           </div>
         </RevealOnScroll>

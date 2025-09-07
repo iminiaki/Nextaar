@@ -11,6 +11,9 @@ export function isRTL(locale: Locale) {
 }
 
 type Dict = {
+  common?: {
+    authorAlt: string
+  }
   brand: { name: string }
   nav: {
     home: string
@@ -84,6 +87,7 @@ type Dict = {
 
 const dictionaries: Record<Locale, Dict> = {
   en: {
+    common: { authorAlt: "Author" },
     brand: { name: "Lastaar" },
     nav: {
       home: "Home",
@@ -234,6 +238,7 @@ const dictionaries: Record<Locale, Dict> = {
     },
   },
   fa: {
+    common: { authorAlt: "نویسنده" },
     brand: { name: "لستار" },
     nav: {
       home: "خانه",
@@ -384,6 +389,7 @@ const dictionaries: Record<Locale, Dict> = {
     },
   },
   ar: {
+    common: { authorAlt: "الكاتب" },
     brand: { name: "لستار" },
     nav: {
       home: "الرئيسية",

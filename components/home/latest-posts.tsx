@@ -4,6 +4,7 @@ import { RevealOnScroll } from "@/components/gsap/reveal"
 import { getPayload } from "payload"
 import payloadConfig from "@/payload.config"
 import { draftMode } from "next/headers"
+import { getDictionary } from "@/lib/i18n"
 
 export async function LatestPosts({
   locale,
@@ -28,6 +29,7 @@ export async function LatestPosts({
     overrideAccess: isEnabled,
     depth: 2,
   })
+  const dict = await getDictionary(locale)
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -46,6 +48,8 @@ export async function LatestPosts({
                 imageUrl={(p as any).image?.url}
                 createdAt={(p as any).createdAt}
                 readingTime={(p as any).readingTime}
+                locale={locale}
+                labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
                 author={{
                   name: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.name : undefined,
                   avatar: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.image?.url : undefined,

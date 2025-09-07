@@ -51,6 +51,8 @@ export default async function BlogPage({
                 imageUrl={p.image?.url}
                 createdAt={p.createdAt}
                 readingTime={p.readingTime}
+                locale={params.locale}
+                labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
                 author={{
                   name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
                   avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,

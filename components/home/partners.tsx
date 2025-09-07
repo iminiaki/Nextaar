@@ -1,6 +1,10 @@
+"use client"
 import { RevealOnScroll } from "@/components/gsap/reveal"
+import { useTheme } from "next-themes"
 
 export function Partners({ title }: { title: string }) {
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
   const logos = [
     "/techs/Backbone.js.svg",
     "/techs/Bootstrap.svg",
@@ -40,7 +44,7 @@ export function Partners({ title }: { title: string }) {
                 <img
                   src={src || "/placeholder.svg"}
                   alt={"Partner logo " + (i + 1)}
-                  className="h-10 grayscale hover:grayscale-0 transition-grayscale duration-300"
+                  className={`h-10 grayscale hover:grayscale-0 transition-grayscale duration-300 ${isDark ? "invert-100" : ""}`}
                 />
               </div>
             ))}

@@ -32,7 +32,7 @@ export function ServicesFeatures({
         <RevealOnScroll staggerChildren className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {items.map((it, i) => (
-              <Card key={i} className="h-full" data-animate>
+              <Card key={i} className="h-full py-6" data-animate>
                 <CardHeader>
                   <CardTitle className="text-lg">{it.title}</CardTitle>
                 </CardHeader>
