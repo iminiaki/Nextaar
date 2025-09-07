@@ -44,7 +44,7 @@ export function Partners({ title }: { title: string }) {
                 <img
                   src={src || "/placeholder.svg"}
                   alt={"Partner logo " + (i + 1)}
-                  className={`h-10 grayscale hover:grayscale-0 transition-grayscale duration-300 ${isDark ? "invert-100" : ""}`}
+                  className={`h-10 grayscale hover:grayscale-0 transition-grayscale duration-300 ${isDark ? "invert-100 hover:invert-0" : ""}`}
                 />
               </div>
             ))}
