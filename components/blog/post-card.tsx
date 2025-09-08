@@ -136,5 +136,5 @@ export function PostCard(props: PostCardProps) {
     </Card>
   )
 
-  return href ? <Link href={href} data-cursor-variant="post">{content}</Link> : content
+  return href ? <Link href={href} data-cursor-variant="post" className="cursor-none">{content}</Link> : content
 }

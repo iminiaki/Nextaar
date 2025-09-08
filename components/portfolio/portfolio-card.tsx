@@ -29,11 +29,11 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
       />
 
       {/* Gradient overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
+      {/* <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" /> */}
 
       {/* Blurred info box */}
       <div className="absolute bottom-4 left-4 right-4 group-hover:translate-y-2 group-hover:scale-105 transition-transform duration-500">
-        <div className="rounded-xl bg-black/45 p-4 text-white backdrop-blur-xl">
+        <div className="rounded-xl bg-black/45 p-4 text-white backdrop-blur-lg">
           <div className="line-clamp-1 text-lg font-semibold tracking-tight">{title}</div>
           {renderedCategories ? (
             <div className="mt-1 line-clamp-1 text-sm opacity-90">{renderedCategories}</div>
@@ -44,7 +44,7 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
   )
 
   return href ? (
-    <Link href={href} data-animate data-cursor-variant="portfolio">
+    <Link href={href} data-animate data-cursor-variant="portfolio" className="cursor-none">
       {content}
     </Link>
   ) : (
