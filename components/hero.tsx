@@ -104,14 +104,6 @@ export function Hero({
           >
             <Link href={`${baseHref}/contact`}>
               <Button size="lg" className="w-full">{ctaPrimary}</Button>
-              <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1}
-          particleDensity={1200}
-          className="h-20 absolute -top-3 -mx-2 flex left-2 -z-10"
-          particleColor="#a30098"
-        />
             </Link>
             
             <Link href={`${baseHref}/services`}>
@@ -127,11 +119,20 @@ export function Hero({
             ref={imgRef as any}
             src="/assi.jpg"
             alt="Product preview"
-            width={700}
+            width={500}
             height={500}
-            className="mx-auto rounded-4xl bg-background object-cover will-change-transform"
+            className="mx-auto bg-background  aspect-[1/1] object-cover will-change-transform rounded-[33%_67%_70%_30%/30%_30%_70%_70%]"
             priority
+            
           />
+          <SparklesCore
+          background="transparent"
+          minSize={0.4}
+          maxSize={1}
+          particleDensity={1200}
+          className="absolute -inset-2 flex -z-10 h-full w-full rounded-[33%_67%_70%_30%/30%_30%_70%_70%] overflow-hidden" 
+          particleColor="#a30098"
+        />
         </div>
       </div>
     </section>

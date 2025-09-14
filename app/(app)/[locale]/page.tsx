@@ -73,14 +73,14 @@ export default async function Page({
       <Partners title={dict.home.partners.title} />
 
       {/* Keep a contact prompt on home */}
-      <ContactForm
+      {/* <ContactForm
         title={dict.contact.title}
         subtitle={dict.contact.subtitle}
         emailLabel={dict.contact.emailLabel}
         messageLabel={dict.contact.messageLabel}
         send={dict.contact.send}
         success={dict.contact.success}
-      />
+      /> */}
     </>
   );
 }

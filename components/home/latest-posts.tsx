@@ -31,13 +31,13 @@ export async function LatestPosts({
   })
   const dict = await getDictionary(locale)
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16 md:py-24" style={{ contentVisibility: "auto", containIntrinsicSize: "1000px" }}>
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
           <p className="mt-3 text-muted-foreground">{subtitle}</p>
         </div>
-        <RevealOnScroll staggerChildren className="mt-10">
+        <RevealOnScroll className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {posts.map((p) => (
               <PostCard

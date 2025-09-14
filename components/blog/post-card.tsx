@@ -54,7 +54,7 @@ export function PostCard(props: PostCardProps) {
 
   const content = (
     <Card
-      className={`group relative h-full overflow-hidden border-border/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-2xl hover:shadow-black/5 ${className}`}
+      className={`group relative h-full overflow-hidden border-border/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-border hover:shadow-2xl hover:shadow-black/5 will-change-transform ${className}`}
       style={{ borderRadius: "1.5rem" }}
       data-animate
       data-cursor-variant="post"
@@ -66,7 +66,8 @@ export function PostCard(props: PostCardProps) {
           <ImageWithFallback
             src={imageUrl || "/placeholder.svg"}
             alt={imageAlt || title}
-            className="h-56 w-full object-cover transition-all duration-700 group-hover:rotate-1 group-hover:scale-110 "
+            className="h-56 w-full object-cover transition-all duration-700 group-hover:rotate-1 group-hover:scale-110 will-change-transform"
+            fetchPriority="low"
           />
 
           {Array.isArray(categories) && categories.length > 0 ? (

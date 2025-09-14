@@ -34,6 +34,8 @@ export function AboutTeaser({
             <img
               src="/lastaar-team-collaboration.png"
               alt="About Lastaar"
+              loading="lazy"
+              decoding="async"
               className="mx-auto rounded-xl border bg-background object-cover shadow"
             />
           </div>

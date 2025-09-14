@@ -19,6 +19,9 @@ export function ImageWithFallback({ fallbackSrc = "/placeholder.svg", onError, .
     <img
       {...props}
       src={src || fallbackSrc}
+      loading={props.loading ?? "lazy"}
+      decoding={props.decoding ?? "async"}
+      fetchPriority={props.fetchPriority ?? "low"}
       onError={(e) => {
         setSrc(fallbackSrc)
         onError?.(e as any)

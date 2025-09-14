@@ -36,6 +36,7 @@ export function RevealOnScroll({ children, y = 24, duration = 0.8, staggerChildr
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
+            once: true,
           },
         },
       )

@@ -12,7 +12,10 @@ export function ContactForm({
   id = "contact",
   title,
   subtitle,
+  nameLabel,
+  companyLabel,
   emailLabel,
+  phoneLabel,
   messageLabel,
   send,
   success,
@@ -20,7 +23,10 @@ export function ContactForm({
   id?: string
   title: string
   subtitle: string
+  nameLabel: string
+  companyLabel: string
   emailLabel: string
+  phoneLabel: string
   messageLabel: string
   send: string
   success: string
@@ -37,18 +43,38 @@ export function ContactForm({
   return (
     <section id={id} className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <Card className="mx-auto max-w-2xl">
+        <Card className="mx-auto max-w-2xl py-8 gap-8">
           <CardHeader>
             <CardTitle className="text-2xl">{title}</CardTitle>
             <p className="text-muted-foreground">{subtitle}</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={onSubmit} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <label htmlFor="name" className="text-sm font-medium">
+                    {nameLabel}
+                  </label>
+                  <Input id="name" name="name" required />
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="company" className="text-sm font-medium">
+                    {companyLabel}
+                  </label>
+                  <Input id="company" name="company" required />
+                </div>
+              </div>
               <div className="grid gap-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   {emailLabel}
                 </label>
                 <Input id="email" name="email" type="email" required />
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="phone" className="text-sm font-medium">
+                  {phoneLabel}
+                </label>
+                <Input id="phone" name="phone" type="tel" required />
               </div>
               <div className="grid gap-2">
                 <label htmlFor="message" className="text-sm font-medium">

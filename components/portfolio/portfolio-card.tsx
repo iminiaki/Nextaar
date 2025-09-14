@@ -25,6 +25,8 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
       <img
         src={image || "/placeholder.svg"}
         alt={imageAlt || title}
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
 

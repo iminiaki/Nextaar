@@ -47,17 +47,30 @@ type Dict = {
     partners: { title: string }
   }
   pages: {
-    about: { title: string; subtitle: string; body: string }
+    about: {
+      title: string
+      subtitle: string
+      body: string
+      mission: { title: string; body: string[] }
+      vision: { title: string; body: string[] }
+      team: { title: string; members: { name: string; role: string; photo?: string; socials?: { github?: string; linkedin?: string; instagram?: string; twitter?: string } }[] }
+      aboutDescription: { title: string; body: string[] }
+    }
     services: { title: string; subtitle: string }
     blog: { title: string; subtitle: string; readMore: string }
   }
   contact: {
     title: string
     subtitle: string
+    nameLabel: string
+    companyLabel: string
     emailLabel: string
+    phoneLabel: string
     messageLabel: string
     send: string
     success: string
+    locationsTitle: string
+    locations: { city: string; address: string; phone: string }[]
   }
   blogDetail: {
     tocTitle: string
@@ -167,6 +180,36 @@ const dictionaries: Record<Locale, Dict> = {
         title: "About Lastaar",
         subtitle: "Design‑driven engineering for modern brands.",
         body: "We focus on speed, accessibility, and delightful experiences.",
+        mission: {
+          title: "Mission",
+          body: [
+            "Deliver world‑class digital products that are fast, accessible, and beautiful.",
+            "Blend design and engineering to create measurable business outcomes.",
+          ],
+        },
+        vision: {
+          title: "Vision",
+          body: [
+            "Shape the future of the web with craftsmanship and empathy.",
+            "Build lasting partnerships through transparency and reliability.",
+          ],
+        },
+        team: {
+          title: "Team",
+          members: [
+            { name: "Ari A.", role: "Design Lead", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
+            { name: "Iman K.", role: "Engineering Lead", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
+            { name: "Sara M.", role: "Product Designer", photo: "/sara.jpg", socials: { instagram: "#" } },
+            { name: "Amir R.", role: "Frontend Engineer", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+          ],
+        },
+        aboutDescription: {
+          title: "About Lastaar",
+          body: [
+            "Lastaar is a design and engineering studio focused on building delightful web experiences.",
+            "We practice performance‑first development, scalable design systems, and clean TypeScript.",
+          ],
+        },
       },
       services: {
         title: "Services",
@@ -181,10 +224,23 @@ const dictionaries: Record<Locale, Dict> = {
     contact: {
       title: "Contact",
       subtitle: "We’ll get back within 1–2 business days.",
+      nameLabel: "Name",
+      companyLabel: "Company Name",
       emailLabel: "Email",
+      phoneLabel: "Phone",
       messageLabel: "Message",
       send: "Send",
       success: "Thanks! We received your message.",
+      locationsTitle: "Our locations",
+      locations: [
+        { city: "Tehran, Iran", address: "No. 50, Mousavi, Heravi, Tehran", phone: "021-22954114" },
+        { city: "Menlo Park, USA", address: "1374 Willow Rd, Menlo Park, CA 94025, USA", phone: "+14792792424" },
+        {
+          city: "Muscat, Oman",
+          address: "Office No. 20, Bin Hayl-1, Musqat 133, Oman",
+          phone: "+97145842838",
+        },
+      ],
     },
     blogDetail: {
       tocTitle: "Table of contents",
@@ -213,7 +269,7 @@ const dictionaries: Record<Locale, Dict> = {
       rights: "All rights reserved.",
       office: {
         title: "Lastaar HQ",
-        address: ["Tehran, Heravi, Mousavi, No. 50"],
+        address: ["No. 50, Mousavi, Heravi, Tehran"],
         email: "info@lastaar.com",
         phone: "021-22954114",
         mobile: "0919-9274196",
@@ -318,6 +374,36 @@ const dictionaries: Record<Locale, Dict> = {
         title: "درباره لستار",
         subtitle: "مهندسی مبتنی بر طراحی برای برندهای مدرن.",
         body: "تمرکز ما سرعت، دسترس‌پذیری و تجربه‌های دلنشین است.",
+        mission: {
+          title: "ماموریت",
+          body: [
+            "ساخت محصولات دیجیتال در سطح جهانی؛ سریع، دسترس‌پذیر و زیبا.",
+            "ترکیب طراحی و مهندسی برای خلق نتایج قابل اندازه‌گیری.",
+          ],
+        },
+        vision: {
+          title: "چشم‌انداز",
+          body: [
+            "شکل‌دادن آینده وب با دقت و همدلی.",
+            "ایجاد همکاری‌های ماندگار با شفافیت و قابل‌اعتمادی.",
+          ],
+        },
+        team: {
+          title: "تیم",
+          members: [
+            { name: "آری", role: "رهبر طراحی", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
+            { name: "ایمان", role: "رهبر مهندسی", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
+            { name: "سارا", role: "طراح محصول", photo: "/sara.jpg", socials: { instagram: "#" } },
+            { name: "امیر", role: "مهندس فرانت‌اند", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+          ],
+        },
+        aboutDescription: {
+          title: "درباره لستار",
+          body: [
+            "لستار استودیو طراحی و مهندسی برای ساخت تجربه‌های لذت‌بخش وب است.",
+            "رویکرد ما: توسعه مبتنی بر کارایی، سیستم‌های طراحی مقیاس‌پذیر و TypeScript تمیز.",
+          ],
+        },
       },
       services: {
         title: "خدمات",
@@ -332,10 +418,23 @@ const dictionaries: Record<Locale, Dict> = {
     contact: {
       title: "تماس",
       subtitle: "۱ تا ۲ روز کاری بعد پاسخ می‌دهیم.",
+      nameLabel: "نام",
+      companyLabel: "نام شرکت",
       emailLabel: "ایمیل",
+      phoneLabel: "تلفن",
       messageLabel: "پیام",
       send: "ارسال",
       success: "متشکریم! پیام شما دریافت شد.",
+      locationsTitle: "دفاتر ما",
+      locations: [
+        { city: "تهران، ایران", address: "تهران، هروی، موسوی، پ 50", phone: "021-22954114" },
+        { city: "منلو پارک، آمریکا", address: "1374 Willow Rd, Menlo Park, CA 94025, USA", phone: "+14792792424" },
+        {
+          city: "مسقط، عمان",
+          address: "2nd Floor, Office No. 20, Bin Hayl-1, Musqat 133, Oman",
+          phone: "+97145842838",
+        },
+      ],
     },
     blogDetail: {
       tocTitle: "فهرست مطالب",
@@ -461,6 +560,36 @@ const dictionaries: Record<Locale, Dict> = {
         title: "من نحن",
         subtitle: "هندسة مدفوعة بالتصميم للعلامات الحديثة.",
         body: "نركز على السرعة وإمكانية الوصول وتجارب ممتعة.",
+        mission: {
+          title: "المهمة",
+          body: [
+            "تقديم منتجات رقمية عالمية المستوى: سريعة وسهلة الوصول وجميلة.",
+            "دمج التصميم والهندسة لتحقيق نتائج ملموسة.",
+          ],
+        },
+        vision: {
+          title: "الرؤية",
+          body: [
+            "تشكيل مستقبل الويب بحرفية وتعاطف.",
+            "بناء شراكات دائمة من خلال الشفافية والموثوقية.",
+          ],
+        },
+        team: {
+          title: "الفريق",
+          members: [
+            { name: "آري", role: "قائد التصميم", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
+            { name: "إيمان", role: "قائد الهندسة", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
+            { name: "سارة", role: "مصممة منتج", photo: "/media/sara.jpg", socials: { instagram: "#" } },
+            { name: "أمير", role: "مهندس واجهات أمامية", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+          ],
+        },
+        aboutDescription: {
+          title: "عن لستار",
+          body: [
+            "لستار استوديو تصميم وهندسة يركز على تجارب ويب ممتعة.",
+            "نمارس الأداء أولًا، وأنظمة تصميم قابلة للتوسع، وTypeScript نظيف.",
+          ],
+        },
       },
       services: { title: "الخدمات", subtitle: "الاستراتيجية والتصميم والتطوير تحت سقف واحد." },
       blog: { title: "المدونة", subtitle: "أفكار من حرفتنا.", readMore: "اقرأ المزيد" },
@@ -468,10 +597,23 @@ const dictionaries: Record<Locale, Dict> = {
     contact: {
       title: "اتصل بنا",
       subtitle: "سنرد خلال 1–2 يوم عمل.",
+      nameLabel: "الاسم",
+      companyLabel: "اسم الشركة",
       emailLabel: "البريد الإلكتروني",
+      phoneLabel: "الهاتف",
       messageLabel: "الرسالة",
       send: "إرسال",
       success: "شكرًا لك! استلمنا رسالتك.",
+      locationsTitle: "مواقعنا",
+      locations: [
+        { city: "طهران، إيران", address: "طهران، هروي، موسوي، رقم 50", phone: "021-22954114" },
+        { city: "مينلو بارك، الولايات المتحدة", address: "1374 Willow Rd, Menlo Park, CA 94025, USA", phone: "+14792792424" },
+        {
+          city: "مسقط، عُمان",
+          address: "2nd Floor, Office No. 20, Bin Hayl-1, Musqat 133, Oman",
+          phone: "+97145842838",
+        },
+      ],
     },
     blogDetail: {
       tocTitle: "جدول المحتويات",
