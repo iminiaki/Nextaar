@@ -37,13 +37,21 @@ export default async function ContactPage({ params }: { params: { locale: Locale
                 key={idx}
                 className="group relative overflow-hidden rounded-xl border p-4 aspect-[4/3] flex items-end transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30 ring-1 ring-transparent group-hover:ring-primary/20"
               >
-                <h2 className="absolute left-2 top-2 font-extrabold text-9xl text-white/30">{shorthand}</h2>
+                
                 <div aria-hidden className="absolute inset-0 -z-10">
                   <div
-                    className="h-full w-full bg-center bg-cover transform-gpu transition-all duration-700 ease-out group-hover:scale-110 group-hover:rotate-1 filter brightness-100 saturate-110 group-hover:brightness-110 group-hover:saturate-125"
+                    className="h-full w-full bg-center bg-cover transform-gpu transition-all grayscale duration-1000 ease-out group-hover:scale-110  group-hover:grayscale-0 filter brightness-100 saturate-110 group-hover:brightness-110 group-hover:saturate-125"
                     style={{ backgroundImage: `url('${backgroundImageUrl}')` }}
                   />
                 </div>
+                {/* Masked colorful heading using the original image, rest stays grayscale */}
+                <h2
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center p-2 font-extrabold text-[150px] leading-none tracking-tight bg-clip-text text-transparent drop-shadow-sm transform-gpu transition-transform duration-1000 ease-out group-hover:scale-110 group-hover:grayscale"
+                  style={{ backgroundImage: `url('${backgroundImageUrl}')`, backgroundSize: "cover", backgroundPosition: "center" }}
+                >
+                  {shorthand}
+                </h2>
                 <div aria-hidden className="absolute inset-0 z-0 pointer-events-none opacity-10 [mask-image:radial-gradient(60%_60%_at_50%_50%,#000,transparent)] bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:16px_16px] group-hover:opacity-20 transition-opacity" />
                 <div aria-hidden className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-t from-black/60 via-black/35 to-black/20 transition-colors group-hover:from-black/50 group-hover:via-black/25 group-hover:to-black/10" />
                 <div className="relative z-10 text-white translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
