@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import type { Locale } from "@/lib/i18n"
 import { RevealOnScroll } from "@/components/gsap/reveal"
+import { GlobeNxt } from "../ui/globe/globenxt"
 
 export function CallToAction({
   locale,
@@ -17,8 +18,9 @@ export function CallToAction({
   return (
     <section className="py-8 md:py-24">
       <div className="relative container mx-auto px-4">
-        <div className="absolute inset-0 -z-10 rounded-2xl bg-primary/10 blur-2xl"></div>
-        <div className="container mx-auto px-4 py-8 rounded-2xl bg-background border">
+      
+        <div className="container overflow-visible mx-auto px-4 py-8 rounded-2xl bg-background flex flex-col lg:flex-row items-center justify-center ">
+        <GlobeNxt className="max-w-md h-[512px]"/>
         <RevealOnScroll className="mx-auto max-w-2xl text-center">
           <h3 className="text-2xl font-semibold sm:text-3xl">{title}</h3>
           <p className="mt-3 text-muted-foreground">{subtitle}</p>

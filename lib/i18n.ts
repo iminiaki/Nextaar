@@ -169,7 +169,7 @@ const dictionaries: Record<Locale, Dict> = {
       },
       aboutTeaser: {
         title: "About Lastaar",
-        body: "We’re a design and engineering studio delivering world‑class web experiences.",
+        body: "We’re a design and engineering studio delivering world‑class web experiences. By blending cutting-edge technology with creative design, we craft digital solutions that engage, inspire, and drive results. From intuitive websites and seamless applications to strategic digital products, we turn ideas into experiences that connect businesses with their audiences on a global scale.",
         button: "More about us",
       },
       latestPosts: { title: "Latest posts", subtitle: "Thoughts on design, code, and product." },
@@ -363,7 +363,7 @@ const dictionaries: Record<Locale, Dict> = {
       },
       aboutTeaser: {
         title: "درباره لستار",
-        body: "استودیو طراحی و مهندسی برای ساخت تجربه‌های وب در سطح جهانی.",
+        body: "ما یک استودیو طراحی و مهندسی هستیم که تجربه‌های وب جهانی را ارائه می‌دهیم. با تلفیق فناوری پیشرفته و طراحی خلاقانه، راهکارهای دیجیتال خلق می‌کنیم که مخاطب را جذب، الهام‌بخش و به نتیجه می‌رساند. از وب‌سایت‌های کاربرپسند و برنامه‌های بدون نقص گرفته تا محصولات دیجیتال استراتژیک، ایده‌ها را به تجربه‌هایی تبدیل می‌کنیم که کسب‌وکارها را با مخاطبانشان در سطح جهانی متصل می‌کند.",
         button: "بیشتر بدانید",
       },
       latestPosts: { title: "آخرین پست‌ها", subtitle: "نگاهی از طراحی، کدنویسی و محصول." },
@@ -551,7 +551,7 @@ const dictionaries: Record<Locale, Dict> = {
           "أنظمة تصميم قابلة للتوسع",
         ],
       },
-      aboutTeaser: { title: "عن لستار", body: "استوديو تصميم وهندسة لتجارب ويب عالمية.", button: "المزيد عنا" },
+      aboutTeaser: { title: "عن لستار", body: "نحن استوديو للتصميم والهندسة نقدم تجارب ويب عالمية المستوى. من خلال دمج التكنولوجيا المتقدمة مع التصميم الإبداعي، نبتكر حلولًا رقمية تجذب الجمهور، وتلهمه، وتحقق النتائج. من المواقع التفاعلية والتطبيقات السلسة إلى المنتجات الرقمية الاستراتيجية، نحول الأفكار إلى تجارب تربط الشركات بجماهيرها على نطاق عالمي.", button: "المزيد عنا" },
       latestPosts: { title: "أحدث المقالات", subtitle: "أفكار حول التصميم والبرمجة والمنتج." },
       partners: { title: "موثوق به من علامات طموحة" },
     },

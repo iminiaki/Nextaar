@@ -7,7 +7,7 @@ import { WhyChoose } from "@/components/home/why-choose";
 import { AboutTeaser } from "@/components/home/about-teaser";
 import { LatestPosts } from "@/components/home/latest-posts";
 import { Partners } from "@/components/home/partners";
-import { ContactForm } from "@/components/contact-form";
+import { GlobeNxt } from "@/components/ui/globe/globenxt";
 
 export default async function Page({
   params,
