@@ -212,6 +212,7 @@ export const Posts: CollectionConfig = {
       name: "body",
       type: "richText",
       localized: true,
+      // Uses root editor (payload.config.ts) with Table + FAQ + FixedToolbar
     },
     {
       name: "author",

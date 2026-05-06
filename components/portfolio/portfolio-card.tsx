@@ -46,7 +46,7 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
   )
 
   return href ? (
-    <Link href={href} data-animate data-cursor-variant="portfolio" className="cursor-none">
+    <Link href={href} key={`card-${title}`} data-animate data-cursor-variant="portfolio" className="cursor-none">
       {content}
     </Link>
   ) : (

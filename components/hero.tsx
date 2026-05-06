@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { SparklesCore } from "./ui/sparkles"
+import Spline from "@splinetool/react-spline"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -79,7 +80,7 @@ export function Hero({
       <div
         ref={rootRef}
         className={cn(
-          "container mx-auto grid items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24"
+          "container mx-auto grid items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24 "
         )}
       >
         <div className="space-y-5 flex flex-col items-center md:items-start ">
@@ -114,7 +115,8 @@ export function Hero({
           </div>
         </div>
 
-        <div className="relative">
+        <Spline scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full border rounded-2xl shadow-[inset_0_1px_4px_rgba(0,0,0,0.15)]" />
+        {/* <div className="relative">
           <Image
             ref={imgRef as any}
             src="/assi.jpg"
@@ -133,7 +135,7 @@ export function Hero({
           className="absolute -inset-2 flex -z-10 h-full w-full rounded-[33%_67%_70%_30%/30%_30%_70%_70%] overflow-hidden" 
           particleColor="#a30098"
         />
-        </div>
+        </div> */}
       </div>
     </section>
   )

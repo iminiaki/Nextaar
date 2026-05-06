@@ -1,10 +1,7 @@
-"use client"
 import { RevealOnScroll } from "@/components/gsap/reveal"
-import { useTheme } from "next-themes"
+import Image from "next/image"
 
 export function Partners({ title }: { title: string }) {
-  const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === "dark"
   const logos = [
     "/techs/Backbone.js.svg",
     "/techs/Bootstrap.svg",
@@ -41,12 +38,14 @@ export function Partners({ title }: { title: string }) {
           <div className="grid grid-cols-2 items-center justify-center gap-6 sm:grid-cols-3 md:grid-cols-6">
             {logos.map((src, i) => (
               <div key={i} className="flex items-center justify-center" data-animate>
-                <img
+                <Image
+                  width={100}
+                  height={100}
                   src={src || "/placeholder.svg"}
                   alt={"Partner logo " + (i + 1)}
                   loading="lazy"
                   decoding="async"
-                  className={`h-10 grayscale hover:grayscale-0 transition-grayscale duration-300 ${isDark ? "invert-100 hover:invert-0" : ""}`}
+                  className="h-10 grayscale transition duration-300 hover:grayscale-0 dark:invert dark:hover:invert-0"
                 />
               </div>
             ))}

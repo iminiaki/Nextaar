@@ -48,7 +48,8 @@ export function BlogTOC({ containerId, locale }: { containerId: string; locale?:
     <nav className={`text-sm ${rtl ? "text-right" : "text-left"}`}>
       <ul className="space-y-2">
         {headings.map((h) => (
-          <li key={h.id} className={h.level > 1 ? (rtl ? "me-3" : "ms-3") : undefined}>
+          // <li key={h.id} className={h.level > 1 ? (rtl ? "me-3" : "ms-3") : undefined}>
+            <li key={h.id}>
             <a
               href={`#${h.id}`}
               className={`block truncate hover:text-foreground ${activeId === h.id ? "text-foreground" : "text-muted-foreground"}`}

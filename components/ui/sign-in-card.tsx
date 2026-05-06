@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
@@ -24,15 +24,20 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   )
 }
 
-export function Component() {
+type ComponentProps = {
+  mode?: 'login' | 'forgot-password';
+}
+
+export function Component({ mode = 'login' }: ComponentProps) {
+  const isForgotPassword = mode === 'forgot-password';
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [rememberMe, setRememberMe] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
 
   // For 3D card effect - increased rotation range for more pronounced 3D effect
@@ -45,7 +50,6 @@ export function Component() {
     const rect = e.currentTarget.getBoundingClientRect();
     mouseX.set(e.clientX - rect.left - rect.width / 2);
     mouseY.set(e.clientY - rect.top - rect.height / 2);
-    setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
   const handleMouseLeave = () => {
@@ -53,11 +57,30 @@ export function Component() {
     mouseY.set(0);
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage(null);
+    setSuccessMessage(null);
     setIsLoading(true);
     try {
+      if (isForgotPassword) {
+        const res = await fetch('/api/users/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          const message = data?.errors?.[0]?.message || 'Could not send reset link';
+          throw new Error(message);
+        }
+
+        setSuccessMessage('If an account exists for this email, a password reset link has been sent.');
+        return;
+      }
+
       const res = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -360,7 +383,9 @@ export function Component() {
                     {/* Logo placeholder - would be an SVG in practice */}
                     {/* <!-- SVG_LOGO --> */}
                     <span className="">
+                    <Link href='/en' className='group/link'>
                     <Image src="/Nextaar.png" alt="Lastaar" width={64} height={64} />
+                    </Link>
                     </span>
                     
                     {/* Inner lighting effect */}
@@ -373,7 +398,7 @@ export function Component() {
                     transition={{ delay: 0.2 }}
                     className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80"
                   >
-                    Welcome Back
+                    {isForgotPassword ? 'Forgot Password' : 'Welcome Back'}
                   </motion.h1>
                   
                   <motion.p
@@ -382,15 +407,22 @@ export function Component() {
                     transition={{ delay: 0.3 }}
                     className="text-white/60 text-xs"
                   >
-                    Sign in to Lastaar dashboard
+                    {isForgotPassword
+                      ? 'Enter your email to receive a password reset link'
+                      : 'Sign in to Lastaar dashboard'}
                   </motion.p>
                 </div>
 
                 {/* Login form */}
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   {errorMessage && (
                     <div className="text-xs px-3 py-2 rounded-md bg-destructive/20 text-destructive border border-destructive/30">
                       {errorMessage}
+                    </div>
+                  )}
+                  {successMessage && (
+                    <div className="text-xs px-3 py-2 rounded-md bg-emerald-500/20 text-emerald-200 border border-emerald-400/40">
+                      {successMessage}
                     </div>
                   )}
                   <motion.div className="space-y-3">
@@ -432,93 +464,101 @@ export function Component() {
                       </div>
                     </motion.div>
 
-                    {/* Password input */}
-                    <motion.div 
-                      className={`relative ${focusedInput === "password" ? 'z-10' : ''}`}
-                      whileFocus={{ scale: 1.02 }}
-                      whileHover={{ scale: 1.01 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                    >
-                      <div className="absolute -inset-[0.5px] bg-gradient-to-r from-white/10 via-white/5 to-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                      
-                      <div className="relative flex items-center overflow-hidden rounded-lg">
-                        <Lock className={`absolute left-3 w-4 h-4 transition-all duration-300 ${
-                          focusedInput === "password" ? 'text-white' : 'text-white/40'
-                        }`} />
+                    {!isForgotPassword && (
+                      <motion.div 
+                        className={`relative ${focusedInput === "password" ? 'z-10' : ''}`}
+                        whileFocus={{ scale: 1.02 }}
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      >
+                        <div className="absolute -inset-[0.5px] bg-gradient-to-r from-white/10 via-white/5 to-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
                         
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          onFocus={() => setFocusedInput("password" as any)}
-                          onBlur={() => setFocusedInput(null)}
-                          className="w-full bg-white/5 border-transparent focus:border-white/20 text-white placeholder:text-white/30 h-10 transition-all duration-300 pl-10 pr-10 focus:bg-white/10"
-                        />
-                        
-                        {/* Toggle password visibility */}
-                        <div 
-                          onClick={() => setShowPassword(!showPassword)} 
-                          className="absolute right-3 cursor-pointer"
-                        >
-                          {showPassword ? (
-                            <Eye className="w-4 h-4 text-white/40 hover:text-white transition-colors duration-300" />
-                          ) : (
-                            <EyeClosed className="w-4 h-4 text-white/40 hover:text-white transition-colors duration-300" />
+                        <div className="relative flex items-center overflow-hidden rounded-lg">
+                          <Lock className={`absolute left-3 w-4 h-4 transition-all duration-300 ${
+                            focusedInput === "password" ? 'text-white' : 'text-white/40'
+                          }`} />
+                          
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onFocus={() => setFocusedInput("password" as any)}
+                            onBlur={() => setFocusedInput(null)}
+                            className="w-full bg-white/5 border-transparent focus:border-white/20 text-white placeholder:text-white/30 h-10 transition-all duration-300 pl-10 pr-10 focus:bg-white/10"
+                          />
+                          
+                          {/* Toggle password visibility */}
+                          <div 
+                            onClick={() => setShowPassword(!showPassword)} 
+                            className="absolute right-3 cursor-pointer"
+                          >
+                            {showPassword ? (
+                              <Eye className="w-4 h-4 text-white/40 hover:text-white transition-colors duration-300" />
+                            ) : (
+                              <EyeClosed className="w-4 h-4 text-white/40 hover:text-white transition-colors duration-300" />
+                            )}
+                          </div>
+                          
+                          {/* Input highlight effect */}
+                          {focusedInput === "password" && (
+                            <motion.div 
+                              layoutId="input-highlight"
+                              className="absolute inset-0 bg-white/5 -z-10"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                            />
                           )}
                         </div>
-                        
-                        {/* Input highlight effect */}
-                        {focusedInput === "password" && (
-                          <motion.div 
-                            layoutId="input-highlight"
-                            className="absolute inset-0 bg-white/5 -z-10"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                          />
-                        )}
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    )}
                   </motion.div>
 
-                  {/* Remember me & Forgot password */}
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="flex items-center space-x-2">
-                      <div className="relative">
-                        <input
-                          id="remember-me"
-                          name="remember-me"
-                          type="checkbox"
-                          checked={rememberMe}
-                          onChange={() => setRememberMe(!rememberMe)}
-                          className="appearance-none h-4 w-4 rounded border border-white/20 bg-white/5 checked:bg-white checked:border-white focus:outline-none focus:ring-1 focus:ring-white/30 transition-all duration-200"
-                        />
-                        {rememberMe && (
-                          <motion.div 
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="absolute inset-0 flex items-center justify-center text-black pointer-events-none"
-                          >
-                            {/* <!-- SVG_CHECKMARK --> */}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </motion.div>
-                        )}
+                  {!isForgotPassword ? (
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex items-center space-x-2">
+                        <div className="relative">
+                          <input
+                            id="remember-me"
+                            name="remember-me"
+                            type="checkbox"
+                            checked={rememberMe}
+                            onChange={() => setRememberMe(!rememberMe)}
+                            className="appearance-none h-4 w-4 rounded border border-white/20 bg-white/5 checked:bg-white checked:border-white focus:outline-none focus:ring-1 focus:ring-white/30 transition-all duration-200"
+                          />
+                          {rememberMe && (
+                            <motion.div 
+                              initial={{ opacity: 0, scale: 0.5 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="absolute inset-0 flex items-center justify-center text-black pointer-events-none"
+                            >
+                              {/* <!-- SVG_CHECKMARK --> */}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            </motion.div>
+                          )}
+                        </div>
+                        <label htmlFor="remember-me" className="text-xs text-white/60 hover:text-white/80 transition-colors duration-200">
+                          Remember me
+                        </label>
                       </div>
-                      <label htmlFor="remember-me" className="text-xs text-white/60 hover:text-white/80 transition-colors duration-200">
-                        Remember me
-                      </label>
+                      
+                      <div className="text-xs relative group/link">
+                        <Link href="/admin/forgot" className="text-white/60 hover:text-white transition-colors duration-200">
+                          Forgot password?
+                        </Link>
+                      </div>
                     </div>
-                    
-                    <div className="text-xs relative group/link">
-                      <Link href="/admin/forgot" className="text-white/60 hover:text-white transition-colors duration-200">
-                        Forgot password?
+                  ) : (
+                    <div className="text-xs pt-1 relative group/link">
+                      <Link href="/admin/login" className="text-white/60 hover:text-white transition-colors duration-200">
+                        Back to login
                       </Link>
                     </div>
-                  </div>
+                  )}
 
                   {/* Sign in button */}
                   <motion.button
@@ -569,7 +609,7 @@ export function Component() {
                             exit={{ opacity: 0 }}
                             className="flex items-center justify-center gap-1 text-sm font-medium"
                           >
-                            Sign In
+                            {isForgotPassword ? 'Send reset link' : 'Sign In'}
                             <ArrowRight className="w-3 h-3 group-hover/button:translate-x-1 transition-transform duration-300" />
                           </motion.span>
                         )}

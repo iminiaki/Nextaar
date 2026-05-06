@@ -4,9 +4,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { LanguageSwitcher } from "./language-switcher"
-import { Menu } from "lucide-react"
+import { Menu, XIcon } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
-import type { Locale } from "@/lib/i18n"
+import { isRTL, type Locale } from "@/lib/i18n"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -18,9 +18,10 @@ export function Navbar({
   nav,
 }: {
   locale: Locale
-  nav: { home: string; about: string; services: string; portfolio: string; blog: string; contact: string }
+  nav: { home: string; about: string; services: string; portfolio: string; blog: string; contact: string; nextaar: string; }
 }) {
   const base = `/${locale}`
+  const rtl = locale ? isRTL(locale) : false
   const pathname = usePathname()
   const [isSticky, setIsSticky] = useState(false)
   const navRef = useRef<HTMLDivElement | null>(null)
@@ -86,6 +87,7 @@ export function Navbar({
           && "border backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm sticky top-2 z-20 rounded-2xl"
           
       )}
+      dir="ltr"
       data-sticky={isSticky ? "true" : undefined}
     >
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3 ">
@@ -94,7 +96,7 @@ export function Navbar({
             <Image src="/Nextaar.png" alt="Lastaar" width={64} height={64} />
           </Link>
         </div>
-        <nav ref={navRef} className="hidden items-center gap-6 md:flex">
+        <nav ref={navRef} className="hidden items-center gap-6 md:flex" dir={rtl ? "rtl" : "ltr"}>
           <Link
             href={`${base}`}
             className={cn(
@@ -168,12 +170,16 @@ export function Navbar({
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0">
-              <div className="p-4 border-b">
+            <SheetContent side={rtl ? "right" : "left" } className="p-0">
+              <div className="p-4 border-b flex items-center justify-between">
                 <Link href={base} className="flex items-center gap-2">
                   <Image src="/Nextaar.png" alt="Lastaar" width={40} height={40} />
-                  <span className="font-semibold">Nextaar</span>
+                  <span className="font-semibold">{nav.nextaar}</span>
                 </Link>
+                <SheetClose className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary  top-4 ltr:right-4 rtl:left-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+          <XIcon className="size-4" />
+          <span className="sr-only">Close</span>
+        </SheetClose>
               </div>
               <nav className="flex flex-col gap-1 p-2">
                 <SheetClose asChild>
@@ -182,7 +188,7 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveExact(base)
-                        ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                        ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
                         : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveExact(base) ? "page" : undefined}
@@ -196,7 +202,8 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveStartsWith(`${base}/about`)
-                      ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                                              ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
+
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveStartsWith(`${base}/about`) ? "page" : undefined}
@@ -210,7 +217,8 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveStartsWith(`${base}/services`)
-                      ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                                              ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
+
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveStartsWith(`${base}/services`) ? "page" : undefined}
@@ -224,7 +232,8 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveStartsWith(`${base}/portfolio`)
-                      ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                                              ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
+
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveStartsWith(`${base}/portfolio`) ? "page" : undefined}
@@ -238,7 +247,8 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveStartsWith(`${base}/blog`)
-                      ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                                              ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
+
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveStartsWith(`${base}/blog`) ? "page" : undefined}
@@ -252,7 +262,8 @@ export function Navbar({
                     className={cn(
                       "rounded-md px-3 py-2 text-base",
                       isActiveStartsWith(`${base}/contact`)
-                      ? "bg-accent/80 text-foreground before:absolute before:-left-1 before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded"
+                                              ? `bg-accent/80 text-foreground before:absolute ${rtl ? "before:-right-1" : "before:-left-1"} before:bg-[#a30098] before:w-2 before:h-6 before:-z-10 before:rounded`
+
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     aria-current={isActiveStartsWith(`${base}/contact`) ? "page" : undefined}

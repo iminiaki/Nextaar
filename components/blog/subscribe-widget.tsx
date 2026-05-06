@@ -23,7 +23,7 @@ export function SubscribeWidget({ locale, labels }: { locale?: Locale; labels?: 
     <div className="rounded-xl border p-4">
       <h3 className="mb-2 text-sm font-semibold">{t.title}</h3>
       <p className="mb-3 text-xs text-muted-foreground">{t.help}</p>
-      <form action={formAction} className={`flex gap-2 ${rtl ? "flex row-reverse" : ""}`}>
+      <form action={formAction} className={`flex gap-2  items-center ${rtl ? "flex row-reverse" : ""}`}>
         <Input type="email" name="email" required placeholder={t.placeholder} className="max-w-[220px]" dir={rtl ? "rtl" : "ltr"} />
         <Button type="submit" size="sm" disabled={pending} aria-label={t.buttonAria}>
           <Send className={`size-4 ${rtl ? "rotate-270" : ""}`} />

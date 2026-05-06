@@ -1,3 +1,5 @@
+import { portfolio } from "./portfolio"
+
 export const locales = ["en", "fa", "ar"] as const
 export type Locale = (typeof locales)[number]
 
@@ -22,6 +24,7 @@ type Dict = {
     portfolio: string
     blog: string
     contact: string
+    nextaar: string
     enLangName: string
     faLangName: string
     arLangName: string
@@ -56,6 +59,7 @@ type Dict = {
       team: { title: string; members: { name: string; role: string; photo?: string; socials?: { github?: string; linkedin?: string; instagram?: string; twitter?: string } }[] }
       aboutDescription: { title: string; body: string[] }
     }
+    portfolio: {title: string; subtitle:string}
     services: { title: string; subtitle: string }
     blog: { title: string; subtitle: string; readMore: string }
   }
@@ -109,6 +113,7 @@ const dictionaries: Record<Locale, Dict> = {
       portfolio: "Portfolio",
       blog: "Blog",
       contact: "Contact",
+      nextaar: "Nextaar",
       enLangName: "English",
       faLangName: "Persian",
       arLangName: "Arabic",
@@ -176,6 +181,10 @@ const dictionaries: Record<Locale, Dict> = {
       partners: { title: "Trusted by forward‑thinking brands" },
     },
     pages: {
+      portfolio: {
+        title: "portfolio",
+        subtitle: "Check what we created",
+      },
       about: {
         title: "About Lastaar",
         subtitle: "Design‑driven engineering for modern brands.",
@@ -303,6 +312,7 @@ const dictionaries: Record<Locale, Dict> = {
       portfolio: "نمونه کارها",
       blog: "بلاگ",
       contact: "تماس",
+      nextaar: "نکستار",
       enLangName: "انگلیسی",
       faLangName: "فارسی",
       arLangName: "عربی",
@@ -370,6 +380,7 @@ const dictionaries: Record<Locale, Dict> = {
       partners: { title: "مورد اعتماد برندهای پیشرو" },
     },
     pages: {
+      portfolio: { title: "نمونه کارها", subtitle: "گزیده‌ای از پروژه‌ها"},
       about: {
         title: "درباره لستار",
         subtitle: "مهندسی مبتنی بر طراحی برای برندهای مدرن.",
@@ -497,6 +508,7 @@ const dictionaries: Record<Locale, Dict> = {
       portfolio: "الأعمال",
       blog: "المدونة",
       contact: "اتصل",
+      nextaar: "نـکستار",
       enLangName: "إنجليزي",
       faLangName: "الفارسية",
       arLangName: "عربي",
@@ -556,6 +568,7 @@ const dictionaries: Record<Locale, Dict> = {
       partners: { title: "موثوق به من علامات طموحة" },
     },
     pages: {
+      portfolio: { title: "نمونه کارها", subtitle: "گزیده‌ای از پروژه‌ها."},
       about: {
         title: "من نحن",
         subtitle: "هندسة مدفوعة بالتصميم للعلامات الحديثة.",
