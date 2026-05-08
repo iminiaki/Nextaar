@@ -82,10 +82,9 @@ export function Navbar({
     <header
       ref={headerRef}
       className={cn(
-        "relative z-30 max-w-7xl w-[calc(100%-2rem)] mx-auto",
-        isSticky
-          && "border backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm sticky top-2 z-20 rounded-2xl"
-          
+        "z-30 max-w-7xl w-[calc(100%-2rem)] mx-auto",
+        !isSticky && "absolute inset-x-0 top-0",
+        isSticky && "fixed top-2 inset-x-0 border backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm rounded-2xl",
       )}
       dir="ltr"
       data-sticky={isSticky ? "true" : undefined}

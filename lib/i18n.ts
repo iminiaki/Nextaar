@@ -35,6 +35,8 @@ type Dict = {
     subtitle: string
     ctaPrimary: string
     ctaSecondary: string
+    stats: { value: string; label: string }[]
+    scroll: string
   }
   home: {
     servicesFeatures: {
@@ -42,7 +44,7 @@ type Dict = {
       subtitle: string
       items: { title: string; desc: string; cta: string; href: string }[]
     }
-    cta: { title: string; subtitle: string; button: { label: string } }
+    cta: { badge: string; title: string; subtitle: string; button: { label: string } }
     portfolio: { title: string; subtitle: string; viewAll: string }
     why: { title: string; bullets: string[] }
     aboutTeaser: { title: string; body: string; button: string }
@@ -125,6 +127,12 @@ const dictionaries: Record<Locale, Dict> = {
         "A trilingual site built with Next.js, Tailwind, and shadcn/ui. Clean, accessible, and RTL‑ready — with light and dark modes.",
       ctaPrimary: "Start a Project",
       ctaSecondary: "View Services",
+      stats: [
+        { value: "50+", label: "Projects" },
+        { value: "8+",  label: "Years" },
+        { value: "98%", label: "Satisfaction" },
+      ],
+      scroll: "Scroll",
     },
     home: {
       servicesFeatures: {
@@ -158,6 +166,7 @@ const dictionaries: Record<Locale, Dict> = {
         ],
       },
       cta: {
+        badge: "Let's build together",
         title: "Ready to build with Lastaar?",
         subtitle: "Tell us about your goals.",
         button: { label: "Contact us" },
@@ -166,10 +175,10 @@ const dictionaries: Record<Locale, Dict> = {
       why: {
         title: "Why choose Lastaar",
         bullets: [
-          "Design‑driven engineering",
-          "Performance and accessibility first",
-          "Clean TypeScript codebase",
-          "Scalable design systems",
+          "Senior product and engineering team in one workflow",
+          "Core Web Vitals first builds with measurable speed gains",
+          "Accessibility and SEO built in from the first sprint",
+          "Modular architecture that scales with your business",
         ],
       },
       aboutTeaser: {
@@ -324,6 +333,12 @@ const dictionaries: Record<Locale, Dict> = {
         "سایتی سه‌زبانه با Next.js، Tailwind و shadcn/ui — تمیز، دسترس‌پذیر و سازگار با راست‌به‌چپ، همراه با حالت تیره و روشن.",
       ctaPrimary: "شروع پروژه",
       ctaSecondary: "مشاهده خدمات",
+      stats: [
+        { value: "۵۰+", label: "پروژه" },
+        { value: "۸+",  label: "سال" },
+        { value: "۹۸٪", label: "رضایت" },
+      ],
+      scroll: "اسکرول",
     },
     home: {
       servicesFeatures: {
@@ -357,6 +372,7 @@ const dictionaries: Record<Locale, Dict> = {
         ],
       },
       cta: {
+        badge: "با هم بسازیم",
         title: "آماده‌اید با لستار بسازید؟",
         subtitle: "از اهداف خود بگویید.",
         button: { label: "تماس با ما" },
@@ -365,10 +381,10 @@ const dictionaries: Record<Locale, Dict> = {
       why: {
         title: "چرا لستار",
         bullets: [
-          "مهندسی مبتنی بر طراحی",
-          "تمرکز بر عملکرد و دسترس‌پذیری",
-          "کد TypeScript تمیز",
-          "سیستم‌های طراحی مقیاس‌پذیر",
+          "تیم یکپارچه محصول و مهندسی در یک مسیر کاری",
+          "ساخت بر پایه Core Web Vitals با بهبود قابل اندازه‌گیری سرعت",
+          "دسترس‌پذیری و سئو از همان اسپرینت اول",
+          "معماری ماژولار و توسعه‌پذیر همگام با رشد کسب‌وکار",
         ],
       },
       aboutTeaser: {
@@ -520,6 +536,12 @@ const dictionaries: Record<Locale, Dict> = {
         "موقع بثلاث لغات باستخدام Next.js وTailwind وshadcn/ui — نظيف وسهل الوصول ويدعم RTL مع الوضعين الداكن والفاتح.",
       ctaPrimary: "ابدأ مشروعك",
       ctaSecondary: "استعرض الخدمات",
+      stats: [
+        { value: "٥٠+", label: "مشروع" },
+        { value: "٨+",  label: "سنوات" },
+        { value: "٩٨٪", label: "رضا العملاء" },
+      ],
+      scroll: "مرر",
     },
     home: {
       servicesFeatures: {
@@ -552,15 +574,15 @@ const dictionaries: Record<Locale, Dict> = {
           },
         ],
       },
-      cta: { title: "جاهز للبناء مع لستار؟", subtitle: "أخبرنا بأهدافك.", button: { label: "اتصل بنا" } },
+      cta: { badge: "لنبنِ معًا", title: "جاهز للبناء مع لستار؟", subtitle: "أخبرنا بأهدافك.", button: { label: "اتصل بنا" } },
       portfolio: { title: "الأعمال", subtitle: "مختارات من المشاريع ودراسات الحالة.", viewAll: "اعرض الكل" },
       why: {
         title: "لماذا تختار لستار",
         bullets: [
-          "هندسة مدفوعة بالتصميم",
-          "الأداء وإمكانية الوصول أولاً",
-          "كود TypeScript نظيف",
-          "أنظمة تصميم قابلة للتوسع",
+          "فريق موحّد للمنتج والهندسة ضمن مسار عمل واحد",
+          "بناء يعتمد على Core Web Vitals مع تحسينات سرعة قابلة للقياس",
+          "إمكانية الوصول وSEO مدمجان من أول سباق تطوير",
+          "معمارية مرنة قابلة للتوسع مع نمو أعمالك",
         ],
       },
       aboutTeaser: { title: "عن لستار", body: "نحن استوديو للتصميم والهندسة نقدم تجارب ويب عالمية المستوى. من خلال دمج التكنولوجيا المتقدمة مع التصميم الإبداعي، نبتكر حلولًا رقمية تجذب الجمهور، وتلهمه، وتحقق النتائج. من المواقع التفاعلية والتطبيقات السلسة إلى المنتجات الرقمية الاستراتيجية، نحول الأفكار إلى تجارب تربط الشركات بجماهيرها على نطاق عالمي.", button: "المزيد عنا" },

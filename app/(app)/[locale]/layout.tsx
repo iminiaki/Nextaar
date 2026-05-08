@@ -32,8 +32,10 @@ export default async function LocaleLayout({
       <LocaleProvider locale={locale}>
         <SmoothScroll />
         <FancyCursor />
-        <Navbar locale={locale} nav={dict.nav} />
-        <main className="min-h-[calc(100vh-140px)]">{children}</main>
+        <div className="relative">
+          <Navbar locale={locale} nav={dict.nav} />
+          <main>{children}</main>
+        </div>
         <SiteFooter
           locale={locale}
           office={dict.footer.office}

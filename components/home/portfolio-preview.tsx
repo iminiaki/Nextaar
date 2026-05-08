@@ -36,7 +36,7 @@ export async function PortfolioPreview({
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="text-center sm:text-left">
+          <div className="text-center sm:text-start">
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
             <p className="mt-3 text-muted-foreground">{subtitle}</p>
           </div>

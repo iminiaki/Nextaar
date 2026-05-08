@@ -28,6 +28,8 @@ export default async function Page({
         subtitle={dict.hero.subtitle}
         ctaPrimary={dict.hero.ctaPrimary}
         ctaSecondary={dict.hero.ctaSecondary}
+        stats={dict.hero.stats}
+        scroll={dict.hero.scroll}
         baseHref={base}
       />
 
@@ -40,6 +42,7 @@ export default async function Page({
 
       <CallToAction
         locale={params.locale}
+        badge={dict.home.cta.badge}
         title={dict.home.cta.title}
         subtitle={dict.home.cta.subtitle}
         button={{ label: dict.home.cta.button.label, href: `${base}/contact` }}
