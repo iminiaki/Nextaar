@@ -48,6 +48,14 @@ type Dict = {
     portfolio: { title: string; subtitle: string; viewAll: string }
     why: { title: string; bullets: string[] }
     aboutTeaser: { title: string; body: string; button: string }
+    process: {
+      eyebrow: string
+      title: string
+      subtitle: string
+      steps: { title: string; body: string }[]
+      primaryCta: string
+      secondaryCta: string
+    }
     latestPosts: { title: string; subtitle: string }
     partners: { title: string }
   }
@@ -204,12 +212,40 @@ const dictionaries: Record<Locale, Dict> = {
           "Fast delivery with production-grade code quality",
           "SEO, accessibility, and performance from day one",
           "Long-term support to scale after launch",
+          "Transparent process with clear milestones and reporting",
+          "Business-focused decisions, not just beautiful interfaces",
         ],
       },
       aboutTeaser: {
         title: "Meet Lastaar",
         body: "We are a design and engineering studio helping brands launch faster, communicate better, and convert more. Every project is crafted to balance aesthetics, speed, and business impact.",
         button: "Learn About Us",
+      },
+      process: {
+        eyebrow: "From idea to launch",
+        title: "A clear process before a single line of code",
+        subtitle:
+          "The homepage already explains what we build and why teams choose us. This is the missing part: how your project moves safely from first conversation to measurable launch.",
+        steps: [
+          {
+            title: "1. Discover the real goal",
+            body: "We clarify your audience, offer, business model, content, and success metrics so the project starts with a useful brief.",
+          },
+          {
+            title: "2. Map the roadmap",
+            body: "We define pages, user flows, technical needs, SEO priorities, milestones, and what should be built first.",
+          },
+          {
+            title: "3. Design, build, and review",
+            body: "Design and development move together with structured reviews, so decisions stay fast and quality stays visible.",
+          },
+          {
+            title: "4. Launch, measure, improve",
+            body: "We deploy, check performance, monitor the first signals, and help you plan the next growth iteration.",
+          },
+        ],
+        primaryCta: "Start with a roadmap",
+        secondaryCta: "Explore services",
       },
       latestPosts: { title: "Insights & Articles", subtitle: "Practical ideas on web strategy, design systems, and product growth." },
       partners: { title: "Trusted by growing teams and modern tech stacks" },
@@ -628,12 +664,40 @@ const dictionaries: Record<Locale, Dict> = {
           "تحویل سریع با کیفیت فنی در سطح Production",
           "سئو، دسترس‌پذیری و کارایی از روز اول",
           "همراهی بلندمدت برای توسعه پس از لانچ",
+          "فرایند شفاف با مراحل مشخص و گزارش‌دهی روشن",
+          "تصمیم‌های متمرکز بر کسب‌وکار، نه فقط رابط‌های زیبا",
         ],
       },
       aboutTeaser: {
         title: "لستار را بهتر بشناسید",
         body: "ما یک استودیوی طراحی و مهندسی هستیم که به برندها کمک می‌کنیم سریع‌تر لانچ کنند، بهتر دیده شوند و نرخ تبدیل بالاتری بگیرند. در هر پروژه، زیبایی، سرعت و اثر تجاری را هم‌زمان می‌سازیم.",
         button: "درباره ما",
+      },
+      process: {
+        eyebrow: "از ایده تا لانچ",
+        title: "یک مسیر شفاف، قبل از حتی یک خط کد",
+        subtitle:
+          "صفحه اصلی حالا می‌گوید چه می‌سازیم و چرا برندها ما را انتخاب می‌کنند. بخش مهم بعدی این است: پروژه شما چطور امن و قابل اندازه‌گیری از گفت‌وگوی اول به لانچ می‌رسد.",
+        steps: [
+          {
+            title: "1. کشف هدف واقعی",
+            body: "مخاطب، پیشنهاد، مدل کسب‌وکار، محتوا و معیارهای موفقیت را شفاف می‌کنیم تا پروژه با بریف کاربردی شروع شود.",
+          },
+          {
+            title: "2. طراحی نقشه راه",
+            body: "صفحات، مسیرهای کاربر، نیازهای فنی، اولویت‌های سئو، مراحل تحویل و نسخه اول محصول را مشخص می‌کنیم.",
+          },
+          {
+            title: "3. طراحی، توسعه و بازبینی",
+            body: "طراحی و توسعه با بازبینی‌های ساختارمند جلو می‌روند تا تصمیم‌ها سریع و کیفیت کار قابل مشاهده بماند.",
+          },
+          {
+            title: "4. لانچ، اندازه‌گیری، بهبود",
+            body: "پروژه را منتشر می‌کنیم، عملکرد را بررسی می‌کنیم، سیگنال‌های اولیه را می‌سنجیم و قدم بعدی رشد را برنامه‌ریزی می‌کنیم.",
+          },
+        ],
+        primaryCta: "شروع با نقشه راه",
+        secondaryCta: "مشاهده خدمات",
       },
       latestPosts: { title: "بینش‌ها و مقالات", subtitle: "ایده‌های کاربردی درباره استراتژی وب، دیزاین سیستم و رشد محصول." },
       partners: { title: "مورد اعتماد تیم‌های در حال رشد و تکنولوژی‌های مدرن" },
@@ -1044,9 +1108,37 @@ const dictionaries: Record<Locale, Dict> = {
           "تنفيذ سريع بجودة تقنية جاهزة للإنتاج",
           "الأداء وإمكانية الوصول وSEO منذ اليوم الأول",
           "دعم مستمر للتوسع بعد الإطلاق",
+          "عملية شفافة بمراحل واضحة وتقارير مفهومة",
+          "قرارات تركز على العمل، وليس فقط واجهات جميلة",
         ],
       },
       aboutTeaser: { title: "تعرّف على لستار", body: "نحن استوديو تصميم وهندسة نساعد العلامات على الإطلاق أسرع، والتواصل أوضح، وتحقيق تحويل أعلى. في كل مشروع نوازن بين الجمال والسرعة والأثر التجاري.", button: "عنّا" },
+      process: {
+        eyebrow: "من الفكرة إلى الإطلاق",
+        title: "مسار واضح قبل كتابة أي سطر كود",
+        subtitle:
+          "الصفحة الرئيسية تشرح ما نبنيه ولماذا تختارنا الفرق. الجزء الأهم التالي هو كيف ينتقل مشروعك بأمان من أول محادثة إلى إطلاق قابل للقياس.",
+        steps: [
+          {
+            title: "1. اكتشاف الهدف الحقيقي",
+            body: "نوضح الجمهور والعرض ونموذج العمل والمحتوى ومؤشرات النجاح حتى يبدأ المشروع بملخص مفيد.",
+          },
+          {
+            title: "2. رسم خارطة الطريق",
+            body: "نحدد الصفحات ومسارات المستخدم والاحتياجات التقنية وأولويات SEO والمراحل وما يجب بناؤه أولا.",
+          },
+          {
+            title: "3. التصميم والتطوير والمراجعة",
+            body: "يتقدم التصميم والتطوير معا مع مراجعات منظمة حتى تبقى القرارات سريعة والجودة واضحة.",
+          },
+          {
+            title: "4. الإطلاق والقياس والتحسين",
+            body: "ننشر المشروع ونفحص الأداء ونراقب الإشارات الأولى ونساعدك في تخطيط خطوة النمو التالية.",
+          },
+        ],
+        primaryCta: "ابدأ بخارطة طريق",
+        secondaryCta: "استعرض الخدمات",
+      },
       latestPosts: { title: "رؤى ومقالات", subtitle: "أفكار عملية حول استراتيجية الويب وأنظمة التصميم ونمو المنتجات." },
       partners: { title: "موثوق به من فرق تنمو بسرعة وتقنيات حديثة" },
     },

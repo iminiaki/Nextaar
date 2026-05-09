@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import { ChevronRight, Home } from "lucide-react"
 import { isRTL, type Locale } from "@/lib/i18n"
@@ -61,25 +62,123 @@ function getSegmentLabel(segment: string, locale: Locale) {
   return routeLabels[locale][segment] ?? toTitleCase(decodeURIComponent(segment))
 }
 
+type BreadcrumbItem = {
+  label: string
+  href: string
+}
+
+type BlogPostBreadcrumb = {
+  title?: string
+  category?: {
+    label: string
+    slug?: string
+  }
+}
+
+function getLocalizedField(value: unknown, locale: Locale) {
+  if (typeof value === "string") return value
+  if (value && typeof value === "object") {
+    const localized = (value as Record<string, unknown>)[locale]
+    if (typeof localized === "string") return localized
+  }
+  return undefined
+}
+
 export function Breadcrumbs({ locale }: { locale: Locale }) {
   const pathname = usePathname()
+  const [blogPost, setBlogPost] = useState<BlogPostBreadcrumb | null>(null)
   const rtl = isRTL(locale)
   const segments = pathname.split("/").filter(Boolean)
   const pathLocale = segments[0]
   const routeSegments = pathLocale === locale ? segments.slice(1) : segments
+  const isBlogPost = routeSegments[0] === "blog" && routeSegments.length === 2
+  const postSlug = isBlogPost ? routeSegments[1] : undefined
 
-  if (routeSegments.length === 0) return null
+  useEffect(() => {
+    if (!postSlug) {
+      setBlogPost(null)
+      return
+    }
 
-  const items = [
-    {
+    const controller = new AbortController()
+
+    async function fetchPostBreadcrumb() {
+      try {
+        const params = new URLSearchParams({
+          limit: "1",
+          depth: "2",
+          locale,
+        })
+        params.set("where[slug][equals]", postSlug)
+
+        const response = await fetch(`/api/posts?${params.toString()}`, {
+          signal: controller.signal,
+        })
+        if (!response.ok) return
+
+        const result = await response.json()
+        const post = result?.docs?.[0]
+        if (!post) return
+
+        const firstCategory = Array.isArray(post.categories) ? post.categories[0] : undefined
+        const categoryLabel = firstCategory ? getLocalizedField(firstCategory.name, locale) : undefined
+
+        setBlogPost({
+          title: getLocalizedField(post.title, locale),
+          category: categoryLabel
+            ? {
+                label: categoryLabel,
+                slug: typeof firstCategory?.slug === "string" ? firstCategory.slug : undefined,
+              }
+            : undefined,
+        })
+      } catch (error) {
+        if (!controller.signal.aborted) setBlogPost(null)
+      }
+    }
+
+    fetchPostBreadcrumb()
+
+    return () => controller.abort()
+  }, [locale, postSlug])
+
+  const items = useMemo<BreadcrumbItem[]>(() => {
+    const homeItem = {
       label: routeLabels[locale].home,
       href: `/${locale}`,
-    },
-    ...routeSegments.map((segment, index) => ({
-      label: getSegmentLabel(segment, locale),
-      href: `/${locale}/${routeSegments.slice(0, index + 1).join("/")}`,
-    })),
-  ]
+    }
+
+    if (isBlogPost && postSlug) {
+      const blogItem = {
+        label: routeLabels[locale].blog,
+        href: `/${locale}/blog`,
+      }
+      const categoryItem = blogPost?.category
+        ? {
+            label: blogPost.category.label,
+            href: blogPost.category.slug
+              ? `/${locale}/blog?category=${encodeURIComponent(blogPost.category.slug)}`
+              : `/${locale}/blog`,
+          }
+        : undefined
+      const postItem = {
+        label: blogPost?.title ?? getSegmentLabel(postSlug, locale),
+        href: `/${locale}/blog/${postSlug}`,
+      }
+
+      return [homeItem, blogItem, ...(categoryItem ? [categoryItem] : []), postItem]
+    }
+
+    return [
+      homeItem,
+      ...routeSegments.map((segment, index) => ({
+        label: getSegmentLabel(segment, locale),
+        href: `/${locale}/${routeSegments.slice(0, index + 1).join("/")}`,
+      })),
+    ]
+  }, [blogPost, isBlogPost, locale, postSlug, routeSegments])
+
+  if (routeSegments.length === 0) return null
 
   return (
     <nav

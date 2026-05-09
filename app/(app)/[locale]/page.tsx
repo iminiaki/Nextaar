@@ -4,9 +4,10 @@ import { ServicesFeatures } from "@/components/home/services-features";
 import { CallToAction } from "@/components/home/cta";
 import { PortfolioPreview } from "@/components/home/portfolio-preview";
 import { WhyChoose } from "@/components/home/why-choose";
-import { AboutTeaser } from "@/components/home/about-teaser";
+import { ProcessSection } from "@/components/home/process-section";
 import { LatestPosts } from "@/components/home/latest-posts";
 import { Partners } from "@/components/home/partners";
+import { GoogleReviews } from "@/components/home/google-reviews";
 import { GlobeNxt } from "@/components/ui/globe/globenxt";
 
 export default async function Page({
@@ -58,11 +59,14 @@ export default async function Page({
 
       <WhyChoose title={dict.home.why.title} bullets={dict.home.why.bullets} />
 
-      <AboutTeaser
+      <ProcessSection
         locale={params.locale}
-        title={dict.home.aboutTeaser.title}
-        body={dict.home.aboutTeaser.body}
-        button={dict.home.aboutTeaser.button}
+        eyebrow={dict.home.process.eyebrow}
+        title={dict.home.process.title}
+        subtitle={dict.home.process.subtitle}
+        steps={dict.home.process.steps}
+        primaryCta={dict.home.process.primaryCta}
+        secondaryCta={dict.home.process.secondaryCta}
         baseHref={base}
       />
 
@@ -72,6 +76,8 @@ export default async function Page({
         subtitle={dict.home.latestPosts.subtitle}
         baseHref={base}
       />
+
+      <GoogleReviews locale={params.locale} />
 
       <Partners title={dict.home.partners.title} />
 

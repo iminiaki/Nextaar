@@ -138,7 +138,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      className="overflow-hidden pt-2"
       data-slot="carousel-content"
     >
       <div
@@ -178,6 +178,7 @@ function CarouselPrevious({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  const isRTL = typeof document !== "undefined" && document.dir === "rtl"
 
   return (
     <Button
@@ -195,7 +196,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      {isRTL ? <ArrowRight /> : <ArrowLeft />}
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -208,6 +209,7 @@ function CarouselNext({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
+  const isRTL = typeof document !== "undefined" && document.dir === "rtl"
 
   return (
     <Button
@@ -225,7 +227,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      {isRTL ? <ArrowLeft /> : <ArrowRight />}
       <span className="sr-only">Next slide</span>
     </Button>
   )
