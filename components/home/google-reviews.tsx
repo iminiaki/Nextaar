@@ -37,6 +37,10 @@ const labels: Record<
     fullReview: string
     yearAgo: string
     sevenMonthsAgo: string
+    recently: string
+    fiveYearsAgo: string
+    threeYearsAgo: string
+    fourYearsAgo: string
   }
 > = {
   en: {
@@ -52,6 +56,10 @@ const labels: Record<
     fullReview: "Full Google review",
     yearAgo: "a year ago",
     sevenMonthsAgo: "7 months ago",
+    recently: "Recently",
+    fiveYearsAgo: "5 years ago",
+    threeYearsAgo: "3 years ago",
+    fourYearsAgo: "4 years ago",
   },
   fa: {
     eyebrow: "نظرات گوگل",
@@ -66,6 +74,10 @@ const labels: Record<
     fullReview: "نظر کامل گوگل",
     yearAgo: "یک سال پیش",
     sevenMonthsAgo: "۷ ماه پیش",
+    recently: "به‌تازگی",
+    fiveYearsAgo: "۵ سال پیش",
+    threeYearsAgo: "۳ سال پیش",
+    fourYearsAgo: "۴ سال پیش",
   },
   ar: {
     eyebrow: "مراجعات Google",
@@ -80,16 +92,34 @@ const labels: Record<
     fullReview: "مراجعة Google كاملة",
     yearAgo: "قبل سنة",
     sevenMonthsAgo: "قبل 7 أشهر",
+    recently: "مؤخرا",
+    fiveYearsAgo: "قبل 5 سنوات",
+    threeYearsAgo: "قبل 3 سنوات",
+    fourYearsAgo: "قبل 4 سنوات",
   },
 }
 
 const reviews = [
   {
-    name: { en: "Ramin Ajami", fa: "رامین عجمی", ar: "رامین عجمي" },
+    name: { en: "Mahtab Kheiri", fa: "مهتاب خیری", ar: "مهتاب خيري" },
     meta: {
-      en: "Local Guide · 20 reviews · 4 photos",
-      fa: "راهنمای محلی · ۲۰ نظر · ۴ عکس",
-      ar: "مرشد محلي · 20 مراجعة · 4 صور",
+      en: "CEO, DanaTrips",
+      fa: "مدیر عامل داناتریپس",
+      ar: "الرئيس التنفيذي، DanaTrips",
+    },
+    timeKey: "fiveYearsAgo",
+    text: {
+      en: "I am always satisfied with your services! I have known you for many years and greatly appreciate your professionalism, punctuality, and attention to detail. They truly make a difference!",
+      fa: "همیشه از خدمات شما راضی هستم! سال‌هاست شما را می‌شناسم و حرفه‌ای بودن، وقت‌شناسی و توجه شما به جزئیات را عمیقاً قدر می‌کنم. واقعاً فرق می‌گذارند!",
+      ar: "أنا راض دائما عن خدماتكم! أعرفكم منذ سنوات عديدة وأقدّر كثيرا احترافكم والتزامكم بالمواعيد واهتمامكم بالتفاصيل. إنها تصنع الفرق حقا!",
+    },
+  },
+  {
+    name: { en: "Dr Ramin Ajami", fa: "دکتر رامین عجمی", ar: "د. رامين عجمي" },
+    meta: {
+      en: "CEO, Omid Genetics",
+      fa: "مدیر عامل امید ژنتیک",
+      ar: "الرئيس التنفيذي، Omid Genetics",
     },
     timeKey: "yearAgo",
     text: {
@@ -99,8 +129,40 @@ const reviews = [
     },
   },
   {
+    name: { en: "Dr. Lahouti", fa: "دکتر لاهوتی", ar: "د. لاهوتي" },
+    meta: {
+      en: "Surgeon & OB-GYN specialist",
+      fa: "جراح و متخصص زنان و زایمان",
+      ar: "جراح وأخصائي أمراض النساء والتوليد",
+    },
+    timeKey: "threeYearsAgo",
+    text: {
+      en: "The Lastaar team is young, goal-driven, fair, receptive to feedback, growing, and delivers high-quality work. I am very happy to collaborate with this group.",
+      fa: "تیم لستار یک تیم جوان، هدفمند، منصف، انتقاد پذیر رو به رشد و با کیفیت کاری خوب هستند و از همکاری با این گروه بسیار خرسندم.",
+      ar: "فريق لستار شاب وموجه للأهداف وعادل ومنفتح على النقد وفي نمو وجودة عمل جيدة، وسعيد جدا بالتعاون مع هذه المجموعة.",
+    },
+  },
+  {
+    name: { en: "Sepehr Rajabi", fa: "سپهر رجبی", ar: "سپهر رجبي" },
+    meta: {
+      en: "CEO, Arantouch",
+      fa: "مدیر عامل آران‌تاچ",
+      ar: "الرئيس التنفيذي، آرانتوتش",
+    },
+    timeKey: "fourYearsAgo",
+    text: {
+      en: "Thank you very much for the care and attention you invested in the website; this project is—and will remain—indebted to the Lastaar team’s effort and dedication.",
+      fa: "بسیار از توجه و دقت‌نظری که در وب‌سایت به کار بردید سپاسگزارم؛ این پروژه قطعاً مدیون تلاش‌ها و توجه تیم لستار است.",
+      ar: "شكرا جزيلا على العناية والاهتمام الذي بذلتموه في الموقع؛ هذا المشروع مدين بلا شك لجهود فريق لستار واهتمامه.",
+    },
+  },
+  {
     name: { en: "Farzad Forouhi", fa: "فرزاد فروهی", ar: "فرزاد فروهي" },
-    meta: { en: "2 reviews", fa: "۲ نظر", ar: "مراجعتان" },
+    meta: {
+      en: "CEO, Penohyd",
+      fa: "مدیر عامل پنو هید",
+      ar: "الرئيس التنفيذي، Penohyd",
+    },
     timeKey: "sevenMonthsAgo",
     text: {
       en: "This is the best team i have ever work. They work basicly and structural on your site. I am truly satisfied.",
@@ -109,8 +171,12 @@ const reviews = [
     },
   },
   {
-    name: { en: "Saman N", fa: "سامان ن", ar: "سامان ن" },
-    meta: { en: "1 review", fa: "۱ نظر", ar: "مراجعة واحدة" },
+    name: { en: "Saman Nooraei", fa: "سامان نورایی", ar: "سامان نورائي" },
+    meta: {
+      en: "Senior Graphic Designer",
+      fa: "طراح گرافیک ارشد",
+      ar: "مصمم جرافيك كبير",
+    },
     timeKey: "yearAgo",
     text: {
       en: "I have known Iman for years and had an excellent, seamless experience working with him on my personal website development few years ago. He and his team in Lastaar are highly professional and skilled in their work.",
@@ -119,8 +185,12 @@ const reviews = [
     },
   },
   {
-    name: { en: "salar azmoon", fa: "سالار آزمون", ar: "سالار آزمون" },
-    meta: { en: "1 review", fa: "۱ نظر", ar: "مراجعة واحدة" },
+    name: { en: "Salar Azmoon", fa: "سالار آزمون", ar: "سالار آزمون" },
+    meta: {
+      en: "Architecture Engineer",
+      fa: "مهندس معمار",
+      ar: "مهندس معماري",
+    },
     timeKey: "yearAgo",
     text: {
       en: "We worked with many companies, but the difference with the Lestar team was that they manage and engineer the project, and I didn't see this discipline and principles in any of the previous companies. Thanks to dear engineer Akrami and their efforts",
@@ -129,8 +199,12 @@ const reviews = [
     },
   },
   {
-    name: { en: "mohammadjavad moslehi", fa: "محمدجواد مصلحی", ar: "محمد جواد مصلحي" },
-    meta: { en: "3 reviews", fa: "۳ نظر", ar: "3 مراجعات" },
+    name: { en: "Mohammad Javad Moslehi", fa: "محمدجواد مصلحی", ar: "محمد جواد مصلحي" },
+    meta: {
+      en: "CEO, Sanat Palayesh",
+      fa: "مدیر عامل صنعت پالایش",
+      ar: "الرئيس التنفيذي، Sanat Palayesh",
+    },
     timeKey: "yearAgo",
     text: {
       en: "The knowledgeable team is fully aware of the world of web and SEO. They are attentive and work together to get the job done in the best way. We have been in contact with this team for more than 4 years and are completely satisfied. Goodluck",
@@ -139,8 +213,12 @@ const reviews = [
     },
   },
   {
-    name: { en: "sam ravanbakhsh", fa: "سام روان‌بخش", ar: "سام روان‌بخش" },
-    meta: { en: "1 review", fa: "۱ نظر", ar: "مراجعة واحدة" },
+    name: { en: "Sam Ravanbakhsh", fa: "سام روان‌بخش", ar: "سام روان‌بخش" },
+    meta: {
+      en: "CEO, CocoFamily",
+      fa: "مدیر عامل CocoFamily",
+      ar: "الرئيس التنفيذي، CocoFamily",
+    },
     timeKey: "yearAgo",
     text: {
       en: "Professional team and excellent support. I have been working with them for almost 3 years and I am very satisfied.",
@@ -150,7 +228,11 @@ const reviews = [
   },
   {
     name: { en: "Reza Mehrabian", fa: "رضا مهرابیان", ar: "رضا مهرابيان" },
-    meta: { en: "1 review", fa: "۱ نظر", ar: "مراجعة واحدة" },
+    meta: {
+      en: "Senior Sound Engineer",
+      fa: "مهندس صدای ارشد",
+      ar: "مهندس صوت أول",
+    },
     timeKey: "yearAgo",
     text: {
       en: "How different and fascinating everything is. I really wish this was my website. Thank you so much.",
@@ -160,22 +242,16 @@ const reviews = [
   },
   {
     name: { en: "Hamidreza Bahrami", fa: "حمیدرضا بهرامی", ar: "حميدرضا بهرامي" },
-    meta: { en: "1 review · 5 photos", fa: "۱ نظر · ۵ عکس", ar: "مراجعة واحدة · 5 صور" },
+    meta: {
+      en: "CEO, Arka Ceramic",
+      fa: "مدیر عامل آرکا سرامیک",
+      ar: "الرئيس التنفيذي، أركا سيراميك",
+    },
     timeKey: "yearAgo",
     text: {
       en: "It was great working with you, thank you for your great team.",
       fa: "همکاری با شما عالی بود، از تیم فوق‌العاده‌تان ممنونم.",
       ar: "كان العمل معكم رائعا، شكرا لفريقكم الرائع.",
-    },
-  },
-  {
-    name: { en: "Mohamad Ak", fa: "محمد اک", ar: "محمد أك" },
-    meta: { en: "2 reviews", fa: "۲ نظر", ar: "مراجعتان" },
-    timeKey: "yearAgo",
-    text: {
-      en: "Excellent and wonderful, very strong team and good work.",
-      fa: "عالی و فوق‌العاده، تیمی بسیار قوی و کار خوب.",
-      ar: "ممتاز ورائع، فريق قوي جدا وعمل جيد.",
     },
   },
 ] as const
