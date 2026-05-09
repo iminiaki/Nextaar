@@ -66,7 +66,15 @@ type Dict = {
       body: string
       mission: { title: string; body: string[] }
       vision: { title: string; body: string[] }
-      team: { title: string; members: { name: string; role: string; photo?: string; socials?: { github?: string; linkedin?: string; instagram?: string; twitter?: string } }[] }
+      team: {
+        title: string
+        members: {
+          name: string
+          role: string
+          photo?: string
+          socials?: { github?: string; linkedin?: string; instagram?: string; twitter?: string }
+        }[]
+      }
       aboutDescription: { title: string; body: string[] }
     }
     portfolio: {title: string; subtitle:string}
@@ -276,10 +284,30 @@ const dictionaries: Record<Locale, Dict> = {
         team: {
           title: "Team",
           members: [
-            { name: "Ari A.", role: "Design Lead", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
-            { name: "Iman K.", role: "Engineering Lead", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
-            { name: "Sara M.", role: "Product Designer", photo: "/sara.jpg", socials: { instagram: "#" } },
-            { name: "Amir R.", role: "Frontend Engineer", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+            {
+              name: "Iman Akrami",
+              role: "CEO, Developer",
+              photo: "/media/iman.jpeg",
+              socials: { github: "#", linkedin: "#" },
+            },
+            {
+              name: "Atena Mohammadi",
+              role: "Creative Director",
+              photo: "/media/atena.jpg",
+              socials: { instagram: "#", linkedin: "#" },
+            },
+            {
+              name: "Reza Mehrabian",
+              role: "Head of Growth",
+              photo: "/media/reza.jpg",
+              socials: { linkedin: "#", twitter: "#" },
+            },
+            {
+              name: "Ali Shirzad",
+              role: "CTO",
+              photo: "/media/ali.jpg",
+              socials: { github: "#", linkedin: "#" },
+            },
           ],
         },
         aboutDescription: {
@@ -725,10 +753,30 @@ const dictionaries: Record<Locale, Dict> = {
         team: {
           title: "تیم",
           members: [
-            { name: "آری", role: "رهبر طراحی", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
-            { name: "ایمان", role: "رهبر مهندسی", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
-            { name: "سارا", role: "طراح محصول", photo: "/sara.jpg", socials: { instagram: "#" } },
-            { name: "امیر", role: "مهندس فرانت‌اند", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+            {
+              name: "ایمان اکرمی",
+              role: "مدیرعامل · توسعه‌دهنده",
+              photo: "/media/iman.jpeg",
+              socials: { github: "#", linkedin: "#" },
+            },
+            {
+              name: "آتنا محمدی",
+              role: "مدیر خلاقیت",
+              photo: "/media/atena.jpg",
+              socials: { instagram: "#", linkedin: "#" },
+            },
+            {
+              name: "رضا مهرابیان",
+              role: "رهبر رشد",
+              photo: "/media/reza.jpg",
+              socials: { linkedin: "#", twitter: "#" },
+            },
+            {
+              name: "علی شیرزاد",
+              role: "مدیر فنی",
+              photo: "/media/ali.jpg",
+              socials: { github: "#", linkedin: "#" },
+            },
           ],
         },
         aboutDescription: {
@@ -1165,10 +1213,30 @@ const dictionaries: Record<Locale, Dict> = {
         team: {
           title: "الفريق",
           members: [
-            { name: "آري", role: "قائد التصميم", photo: "/placeholder-user.jpg", socials: { linkedin: "#", instagram: "#" } },
-            { name: "إيمان", role: "قائد الهندسة", photo: "/assi.jpg", socials: { github: "#", linkedin: "#" } },
-            { name: "سارة", role: "مصممة منتج", photo: "/media/sara.jpg", socials: { instagram: "#" } },
-            { name: "أمير", role: "مهندس واجهات أمامية", photo: "/media/emile-perron-xrVDYZRGdw4-unsplash.jpg", socials: { github: "#" } },
+            {
+              name: "إيمان أكرمي",
+              role: "الرئيس التنفيذي · مطوّر",
+              photo: "/media/iman.jpeg",
+              socials: { github: "#", linkedin: "#" },
+            },
+            {
+              name: "أثينا محمدي",
+              role: "مديرة الإبداع",
+              photo: "/media/atena.jpg",
+              socials: { instagram: "#", linkedin: "#" },
+            },
+            {
+              name: "رضا مهرابيان",
+              role: "رئيس النمو",
+              photo: "/media/reza.jpg",
+              socials: { linkedin: "#", twitter: "#" },
+            },
+            {
+              name: "علي شيرزاد",
+              role: "المدير التقني",
+              photo: "/media/ali.jpg",
+              socials: { github: "#", linkedin: "#" },
+            },
           ],
         },
         aboutDescription: {
