@@ -1,5 +1,6 @@
 import { getDictionary, type Locale } from "@/lib/i18n"
 import { ContactForm } from "@/components/contact-form"
+import { RevealOnScroll } from "@/components/gsap/reveal"
 import { MapPinHouse, Phone, MailCheck } from "lucide-react"
 import Link from "next/link"
 
@@ -10,8 +11,11 @@ export default async function ContactPage({ params }: { params: { locale: Locale
     <div className="container mx-auto px-4 py-16 md:py-24">
       {/* Locations */}
       <section className="mb-10">
-        <h2 className="mb-6 text-2xl font-semibold">{dict.contact.locationsTitle}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealOnScroll>
+          <h2 className="mb-6 text-2xl font-semibold">{dict.contact.locationsTitle}</h2>
+        </RevealOnScroll>
+        <RevealOnScroll staggerChildren>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {(() => {
             const orderPhones = ["+14792792424", "+97145842838", "021-22954114"]
             const shorthandByPhone: Record<string, string> = {
@@ -35,6 +39,7 @@ export default async function ContactPage({ params }: { params: { locale: Locale
               return (
               <div
                 key={idx}
+                data-animate
                 className="group relative overflow-hidden rounded-xl border p-4 aspect-[4/3] flex items-end transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30 ring-1 ring-transparent group-hover:ring-primary/20"
               >
                 
@@ -83,19 +88,22 @@ export default async function ContactPage({ params }: { params: { locale: Locale
             })
           })()}
         </div>
+        </RevealOnScroll>
       </section>
 
-      <ContactForm
-        title={dict.contact.title}
-        subtitle={dict.contact.subtitle}
-        nameLabel={dict.contact.nameLabel}
-        companyLabel={dict.contact.companyLabel}
-        emailLabel={dict.contact.emailLabel}
-        phoneLabel={dict.contact.phoneLabel}
-        messageLabel={dict.contact.messageLabel}
-        send={dict.contact.send}
-        success={dict.contact.success}
-      />
+      <RevealOnScroll>
+        <ContactForm
+          title={dict.contact.title}
+          subtitle={dict.contact.subtitle}
+          nameLabel={dict.contact.nameLabel}
+          companyLabel={dict.contact.companyLabel}
+          emailLabel={dict.contact.emailLabel}
+          phoneLabel={dict.contact.phoneLabel}
+          messageLabel={dict.contact.messageLabel}
+          send={dict.contact.send}
+          success={dict.contact.success}
+        />
+      </RevealOnScroll>
     </div>
   )
 }

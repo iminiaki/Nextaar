@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Github, Instagram, Linkedin, Twitter } from "lucide-react"
+import { isRTL, type Locale } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 export type TeamMemberSocials = {
@@ -11,6 +12,7 @@ export type TeamMemberSocials = {
 }
 
 export type TeamMemberCardProps = {
+  locale: Locale
   name: string
   role: string
   photo?: string
@@ -18,13 +20,16 @@ export type TeamMemberCardProps = {
   className?: string
 }
 
-export function TeamMemberCard({ name, role, photo, socials, className }: TeamMemberCardProps) {
+export function TeamMemberCard({ locale, name, role, photo, socials, className }: TeamMemberCardProps) {
   const s = socials
+  const rtl = isRTL(locale)
+  const roleBadgeMono = locale === "en"
 
   return (
     <div
+      dir={rtl ? "rtl" : "ltr"}
       className={cn(
-        "group relative aspect-square w-full overflow-hidden rounded-[1.35rem] border border-white/10 bg-muted shadow-sm transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/10 md:rounded-[1.75rem]",
+        "group relative aspect-[3/4] w-full overflow-hidden rounded-[1.35rem] border border-white/10 bg-muted shadow-sm transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/10 md:rounded-[1.75rem]",
         className
       )}
     >
@@ -41,7 +46,12 @@ export function TeamMemberCard({ name, role, photo, socials, className }: TeamMe
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/78 via-black/35 to-transparent"
       />
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-start p-5 text-start md:p-6">
-        <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3 py-1.5 font-mono text-[11px] font-medium leading-snug tracking-wide text-white shadow-sm backdrop-blur-md">
+        <span
+          className={cn(
+            "inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3 py-1.5 text-[11px] font-medium leading-snug text-white shadow-sm backdrop-blur-md sm:text-xs",
+            roleBadgeMono ? "font-mono tracking-wide" : "font-sans tracking-normal"
+          )}
+        >
           <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.65)]" aria-hidden />
           <span className="truncate">{role}</span>
         </span>

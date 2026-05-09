@@ -26,9 +26,9 @@ export const services: Service[] = [
       ar: "تطوير الويب",
     },
     excerpt: {
-      en: "Modern websites, apps, and web apps built with reliable, scalable technology.",
-      fa: "طراحی و توسعه وب‌سایت، اپلیکیشن و وب‌اپ با تکنولوژی‌های قابل اعتماد و مقیاس‌پذیر.",
-      ar: "مواقع وتطبيقات وWeb Apps حديثة بتقنيات موثوقة وقابلة للتوسع.",
+      en: "Modern websites and web apps built with reliable, scalable technology.",
+      fa: "طراحی و توسعه وب‌سایت و وب‌اپ با تکنولوژی‌های قابل اعتماد و مقیاس‌پذیر.",
+      ar: "مواقع وWeb Apps حديثة بتقنيات موثوقة وقابلة للتوسع.",
     },
     body: {
       en: "We design and build fast, maintainable digital products, from brand websites to custom dashboards and web applications. Every project is structured around performance, accessibility, security, and a clean user experience.",

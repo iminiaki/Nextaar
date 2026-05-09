@@ -181,8 +181,8 @@ const dictionaries: Record<Locale, Dict> = {
         subtitle: "From brand websites to scalable platforms, we create digital products focused on conversion and growth.",
         items: [
           {
-            title: "Web Development (Websites, Apps, Web Apps)",
-            desc: "Modern websites and apps using the latest tech.",
+            title: "Web Development (Websites, Web Apps)",
+            desc: "Modern websites and web apps using the latest tech.",
             cta: "Learn more",
             href: "/en/services/web-development",
           },
@@ -653,8 +653,8 @@ const dictionaries: Record<Locale, Dict> = {
         subtitle: "از وب‌سایت برند تا پلتفرم‌های مقیاس‌پذیر؛ محصولاتی می‌سازیم که روی رشد و تبدیل تمرکز دارند.",
         items: [
           {
-            title: "توسعه وب (وب‌سایت‌، اپلیکیشن، وب‌اَپ)",
-            desc: "طراحی و برنامه‌نویسی وب‌سایت‌ و اَپ با استفاده از جدید‌ترین تکنولوژی‌ها",
+            title: "توسعه وب (وب‌سایت، وب‌اَپ)",
+            desc: "طراحی و برنامه‌نویسی وب‌سایت و وب‌اَپ با جدیدترین تکنولوژی‌ها",
             cta: "اطلاعات بیشتر",
             href: "/fa/services/web-development",
           },
@@ -1122,8 +1122,8 @@ const dictionaries: Record<Locale, Dict> = {
         subtitle: "من مواقع العلامة إلى المنصات القابلة للتوسع؛ نبني منتجات رقمية تركّز على النمو والتحويل.",
         items: [
           {
-            title: "تطوير الويب (مواقع، تطبيقات، Web Apps)",
-            desc: "مواقع وتطبيقات حديثة بأحدث التقنيات.",
+            title: "تطوير الويب (مواقع، Web Apps)",
+            desc: "مواقع وWeb Apps حديثة بأحدث التقنيات.",
             cta: "المزيد",
             href: "/ar/services/web-development",
           },

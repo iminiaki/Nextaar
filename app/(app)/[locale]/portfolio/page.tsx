@@ -1,6 +1,4 @@
-import Link from "next/link"
 import { PortfolioCard } from "@/components/portfolio/portfolio-card"
-import { portfolio } from "@/lib/portfolio"
 import type { Locale } from "@/lib/i18n"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { getPayload } from "payload"
@@ -24,7 +22,9 @@ export default async function PortfolioPage({ params }: { params: { locale: Loca
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{"Portfolio"}</h1>
+      <RevealOnScroll>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{"Portfolio"}</h1>
+      </RevealOnScroll>
       <RevealOnScroll staggerChildren className="mt-10">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((it: any) => (
