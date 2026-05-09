@@ -195,7 +195,7 @@ export function Hero({
           {/* Glow behind card: #a30098 → blue */}
           <div
             aria-hidden
-            className="absolute inset-4 -z-10 rounded-3xl blur-2xl"
+            className="absolute inset-4 -z-10 blur-2xl"
             style={{
               background:
                 "radial-gradient(ellipse at center, rgb(163 0 152 / 0.22) 0%, rgb(37 99 235 / 0.14) 55%, transparent 80%)",
@@ -203,9 +203,13 @@ export function Hero({
           />
 
           {/* Card frame */}
-          <div className="w-full overflow-hidden rounded-3xl border border-border/50 bg-background/40 shadow-2xl shadow-black/10 backdrop-blur-md dark:border-border/30 dark:shadow-black/30">
+          <div className="w-full overflow-hidden border border-border/50 bg-background/40 shadow-2xl shadow-black/10 backdrop-blur-md dark:border-border/30 dark:shadow-black/30" style={{
+    borderRadius: "88% 12% 86% 14% / 24% 78% 22% 76%",
+  }}>
             {/* Thin inner highlight */}
-            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10" />
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10"  style={{
+    borderRadius: "88% 12% 86% 14% / 24% 78% 22% 76%",
+  }}/>
 
             <div className="aspect-[4/3] w-full lg:aspect-square">
               <Spline

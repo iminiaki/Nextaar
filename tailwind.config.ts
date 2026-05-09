@@ -53,6 +53,7 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        blob: "30% 70% 70% 30% / 30% 30% 70% 70% "
       },
       keyframes: {
         "accordion-down": {

@@ -92,7 +92,7 @@ The PostgreSQL database will be available at:
 On first run, Payload CMS will automatically:
 1. Create necessary database tables
 2. Set up the admin interface
-3. Configure collections (Users, Media, Services, Posts)
+3. Configure collections (Users, Media, Posts, Categories, Portfolio)
 
 ### 6. Run the Development Server
 
@@ -130,7 +130,6 @@ Nextaar/
 ├── collections/           # Payload CMS collections
 │   ├── Media.ts
 │   ├── Posts.ts
-│   ├── Services.ts
 │   └── Users.ts
 ├── components/            # React components
 ├── lib/                   # Utility functions
@@ -192,7 +191,6 @@ docker exec -i nextaar-postgres psql -U nextaar nextaar < backup.sql
 
 ### Content Management
 - **Posts**: Blog articles with rich text editing
-- **Services**: Service offerings
 - **Media**: Image and file management
 - **Users**: User authentication and management
 

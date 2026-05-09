@@ -9,7 +9,6 @@ import sharp from "sharp";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
-import { Services } from "./collections/Services";
 import { Posts } from "./collections/Posts";
 import { Categories } from "./collections/PostCat";
 import { PortfolioCategories } from "./collections/PortfolioCat";
@@ -38,7 +37,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media, Services, Posts, Categories, Portfolio, PortfolioCategories],
+  collections: [Users, Media, Posts, Categories, Portfolio, PortfolioCategories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

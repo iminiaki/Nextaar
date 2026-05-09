@@ -19,49 +19,80 @@ export type Post = {
 
 export const services: Service[] = [
   {
-    slug: "brand-websites",
-    title: { en: "Brand Websites", fa: "وب‌سایت‌های برند", ar: "مواقع العلامات التجارية" },
+    slug: "design-development",
+    title: {
+      en: "Web Development",
+      fa: "توسعه وب",
+      ar: "تطوير الويب",
+    },
     excerpt: {
-      en: "Pixel-perfect marketing sites optimized for conversions.",
-      fa: "سایت‌های مارکتینگ پیکسل‌پرفکت با تمرکز بر تبدیل.",
-      ar: "مواقع تسويقية مُحكمة التصميم ومحسّنة للتحويل.",
+      en: "Modern websites, apps, and web apps built with reliable, scalable technology.",
+      fa: "طراحی و توسعه وب‌سایت، اپلیکیشن و وب‌اپ با تکنولوژی‌های قابل اعتماد و مقیاس‌پذیر.",
+      ar: "مواقع وتطبيقات وWeb Apps حديثة بتقنيات موثوقة وقابلة للتوسع.",
     },
     body: {
-      en: "We design and build fast brand websites with robust SEO and delightful micro‑interactions.",
-      fa: "ما وب‌سایت‌های برند سریع با سئوی قوی و ریزتعامل‌های جذاب طراحی و پیاده‌سازی می‌کنیم.",
-      ar: "نُصمّم ونُطوّر مواقع علامات سريعة مع SEO قوي وتفاعلات دقيقة ممتعة.",
+      en: "We design and build fast, maintainable digital products, from brand websites to custom dashboards and web applications. Every project is structured around performance, accessibility, security, and a clean user experience.",
+      fa: "ما محصولات دیجیتال سریع و قابل نگهداری می‌سازیم؛ از وب‌سایت برند تا داشبورد اختصاصی و وب‌اپلیکیشن. هر پروژه با تمرکز بر عملکرد، دسترس‌پذیری، امنیت و تجربه کاربری تمیز اجرا می‌شود.",
+      ar: "نصمم ونطور منتجات رقمية سريعة وقابلة للصيانة، من مواقع العلامات إلى لوحات التحكم والتطبيقات المخصصة. يركز كل مشروع على الأداء وإمكانية الوصول والأمان وتجربة استخدام واضحة.",
     },
-    image: "/brand-website-preview-purple.png",
+    image: "/services/code.png",
   },
   {
-    slug: "web-apps",
-    title: { en: "Web Applications", fa: "اپلیکیشن‌های وب", ar: "تطبيقات الويب" },
+    slug: "design",
+    title: {
+      en: "Design",
+      fa: "طراحی",
+      ar: "التصميم",
+    },
     excerpt: {
-      en: "Accessible, robust apps with modern stacks.",
-      fa: "اپلیکیشن‌های دسترس‌پذیر و قدرتمند با پشته‌های مدرن.",
-      ar: "تطبيقات متاحة وقوية باستخدام تقنيات حديثة.",
+      en: "UI/UX, graphic design, brand identity, and motion design for stronger digital presence.",
+      fa: "طراحی UI/UX، گرافیک، هویت بصری و موشن برای حضور دیجیتال قوی‌تر.",
+      ar: "تصميم UI/UX وجرافيك وهوية بصرية وموشن لحضور رقمي أقوى.",
     },
     body: {
-      en: "From dashboards to complex workflows, we ship scalable apps with excellent UX.",
-      fa: "از داشبورد تا فرایندهای پیچیده؛ اپلیکیشن‌هایی مقیاس‌پذیر با تجربه کاربری عالی ارائه می‌دهیم.",
-      ar: "من لوحات التحكم إلى التدفقات المعقدة — نبني تطبيقات قابلة للتوسع بتجربة مستخدم ممتازة.",
+      en: "We shape the visual and interaction layer of your product, from research and wireframes to polished interfaces, brand systems, graphics, and motion assets that keep your message consistent.",
+      fa: "لایه بصری و تعاملی محصول شما را از تحقیق و وایرفریم تا رابط کاربری نهایی، سیستم برند، گرافیک و موشن طراحی می‌کنیم تا پیام برند یکپارچه بماند.",
+      ar: "نصمم الطبقة البصرية والتفاعلية لمنتجك، من البحث والوايرفريم حتى الواجهات النهائية وأنظمة الهوية والجرافيك والموشن للحفاظ على رسالة متسقة.",
     },
-    image: "/purple-web-app-dashboard.png",
+    image: "/services/Design.png",
   },
   {
-    slug: "design-systems",
-    title: { en: "Design Systems", fa: "سیستم‌های طراحی", ar: "أنظمة التصميم" },
+    slug: "seo-aeo-geo",
+    title: {
+      en: "SEO, AEO and GEO",
+      fa: "خدمات SEO، AEO و GEO",
+      ar: "خدمات SEO وAEO وGEO",
+    },
     excerpt: {
-      en: "Token-based systems and component libraries.",
-      fa: "سیستم‌های مبتنی بر توکن و کتابخانه‌های کامپوننت.",
-      ar: "أنظمة تعتمد على التوكنات ومكتبات المكوّنات.",
+      en: "Search and answer-engine optimization based on brand-fit keywords and content strategy.",
+      fa: "بهینه‌سازی برای موتورهای جستجو و پاسخ بر اساس کلمات کلیدی متناسب با برند و استراتژی محتوا.",
+      ar: "تحسين لمحركات البحث ومحركات الإجابة اعتمادا على كلمات مناسبة للعلامة واستراتيجية محتوى.",
     },
     body: {
-      en: "We craft scalable design systems that power consistent interfaces across products.",
-      fa: "سیستم‌های طراحی مقیاس‌پذیر برای رابط‌های یکپارچه در سراسر محصولات می‌سازیم.",
-      ar: "نُنشئ أنظمة تصميم قابلة للتوسع لواجهات متسقة عبر المنتجات.",
+      en: "We improve technical SEO, content structure, metadata, schema, and discoverability for both search engines and AI answer experiences. The goal is qualified visibility, not just traffic.",
+      fa: "سئوی فنی، ساختار محتوا، متادیتا، اسکیما و قابلیت دیده شدن در موتورهای جستجو و تجربه‌های پاسخ هوش مصنوعی را بهبود می‌دهیم. هدف، دیده شدن باکیفیت است نه صرفا ترافیک.",
+      ar: "نحسن SEO التقني وبنية المحتوى والبيانات الوصفية والاسكيما وقابلية الظهور في محركات البحث وتجارب الإجابة بالذكاء الاصطناعي. الهدف هو ظهور مؤهل، وليس مجرد زيارات.",
     },
-    image: "/design-system-tokens-library.png",
+    image: "/services/SEO.png",
+  },
+  {
+    slug: "ad-campaigns",
+    title: {
+      en: "Ad Campaigns",
+      fa: "کمپین تبلیغاتی",
+      ar: "حملات إعلانية",
+    },
+    excerpt: {
+      en: "Targeted Google and Meta campaigns designed around measurable business outcomes.",
+      fa: "کمپین‌های هدفمند در گوگل و متا با تمرکز بر نتایج قابل اندازه‌گیری کسب‌وکار.",
+      ar: "حملات مستهدفة على Google وMeta مبنية حول نتائج أعمال قابلة للقياس.",
+    },
+    body: {
+      en: "We plan, launch, and optimize campaigns across Google, Facebook, and Instagram, from audience research and creative direction to conversion tracking and reporting.",
+      fa: "کمپین‌ها را در گوگل، فیسبوک و اینستاگرام برنامه‌ریزی، اجرا و بهینه‌سازی می‌کنیم؛ از تحقیق مخاطب و جهت‌دهی خلاقه تا ردیابی تبدیل و گزارش‌دهی.",
+      ar: "نخطط ونطلق ونحسن الحملات عبر Google وفيسبوك وإنستغرام، من بحث الجمهور والتوجيه الإبداعي إلى تتبع التحويلات والتقارير.",
+    },
+    image: "/services/ADs.png",
   },
 ]
 

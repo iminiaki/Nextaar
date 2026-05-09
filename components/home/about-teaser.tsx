@@ -33,7 +33,7 @@ export function AboutTeaser({
             {/* <div className="absolute inset-0 -z-10 rounded-2xl bg-primary/10 blur-2xl" /> */}
             <img
               src="/vision.webp"
-              alt="About Lastaar"
+              alt={title}
               loading="lazy"
               decoding="async"
               className="mx-auto -scale-x-100" />
