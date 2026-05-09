@@ -19,7 +19,7 @@ export type Post = {
 
 export const services: Service[] = [
   {
-    slug: "design-development",
+    slug: "web-development",
     title: {
       en: "Web Development",
       fa: "توسعه وب",

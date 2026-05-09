@@ -5,6 +5,7 @@ import { LocaleProvider } from "@/components/locale-provider"
 import { Navbar } from "@/components/navbar"
 import { SiteFooter } from "@/components/site-footer"
 import { CookieConsent } from "@/components/cookie-consent"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import { SmoothScroll } from "@/components/gsap/smooth-scroll"
 import { FancyCursor } from "@/components/gsap/cursor"
 import { getDictionary } from "@/lib/i18n"
@@ -35,7 +36,10 @@ export default async function LocaleLayout({
         <FancyCursor />
         <div className="relative">
           <Navbar locale={locale} nav={dict.nav} servicesMenu={dict.home.servicesFeatures.items} />
-          <main>{children}</main>
+          <main>
+            <Breadcrumbs locale={locale} />
+            {children}
+          </main>
         </div>
         <SiteFooter
           locale={locale}
