@@ -155,9 +155,9 @@ export function CallToAction({
     return isDark
       ? {
           markerColor: [0.58, 0.68, 1] as [number, number, number],
-          baseColor: [0.2, 0.3, 0.78] as [number, number, number],
+          baseColor: [0.15, 0.15, 0.15] as [number, number, number],
           arcColor: [0.78, 0.56, 1] as [number, number, number],
-          glowColor: [0.48, 0.55, 0.95] as [number, number, number],
+          glowColor: [0.2, 0.2, 0.2] as [number, number, number],
           dark: 0.95,
           mapBrightness: 6.5,
           diffuse: 2,

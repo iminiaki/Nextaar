@@ -8,7 +8,6 @@ import { ProcessSection } from "@/components/home/process-section";
 import { LatestPosts } from "@/components/home/latest-posts";
 import { Partners } from "@/components/home/partners";
 import { GoogleReviews } from "@/components/home/google-reviews";
-import { GlobeNxt } from "@/components/ui/globe/globenxt";
 
 export default async function Page({
   params,
