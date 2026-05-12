@@ -248,3 +248,58 @@ html.theme-transition::view-transition-new(root) {
 html.theme-transition::view-transition-old(root) {
   animation: theme-circle-hide 420ms ease-out;
 }
+
+/* react-international-phone: map library variables to shadcn theme tokens */
+.phone-input-shadcn {
+  unicode-bidi: isolate;
+  --react-international-phone-height: 2.25rem;
+  --react-international-phone-border-radius: calc(var(--radius) - 2px);
+  --react-international-phone-border-color: var(--border);
+  --react-international-phone-background-color: transparent;
+  --react-international-phone-text-color: var(--foreground);
+  --react-international-phone-font-size: 0.875rem;
+  --react-international-phone-country-selector-border-color: var(--border);
+  --react-international-phone-country-selector-background-color: transparent;
+  --react-international-phone-country-selector-background-color-hover: color-mix(
+    in oklch,
+    var(--accent) 55%,
+    transparent
+  );
+  --react-international-phone-country-selector-arrow-color: var(--muted-foreground);
+  --react-international-phone-dropdown-item-background-color: var(--popover);
+  --react-international-phone-dropdown-item-text-color: var(--popover-foreground);
+  --react-international-phone-dropdown-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08),
+    0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --react-international-phone-dropdown-item-dial-code-color: var(--muted-foreground);
+  --react-international-phone-selected-dropdown-item-background-color: var(--accent);
+  --react-international-phone-selected-dropdown-item-text-color: var(--accent-foreground);
+  --react-international-phone-selected-dropdown-item-dial-code-color: var(--muted-foreground);
+}
+
+.dark .phone-input-shadcn {
+  --react-international-phone-background-color: color-mix(in oklch, var(--input) 30%, transparent);
+  --react-international-phone-country-selector-background-color: color-mix(
+    in oklch,
+    var(--input) 30%,
+    transparent
+  );
+}
+
+/* Country list: scrollable panel (width stays library default 300px); stays above form fields */
+.phone-input-shadcn .react-international-phone-country-selector-dropdown {
+  position: absolute !important;
+  z-index: 40;
+  max-height: min(16rem, 45dvh) !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.phone-input-shadcn .react-international-phone-country-selector-dropdown:focus {
+  outline: none;
+}
+.react-international-phone-input-container .react-international-phone-country-selector-button {
+  padding: 0 4px;
+}

@@ -273,7 +273,7 @@ export function GoogleReviews({ locale }: { locale: Locale }) {
   return (
     <section className="py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4">
-        <RevealOnScroll>
+        <RevealOnScroll start="top 92%" end="bottom 16%">
           <div className="relative overflow-hidden rounded-3xl border bg-card/60 p-6 shadow-sm backdrop-blur md:p-8">
             <div aria-hidden className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
             <div aria-hidden className="absolute -bottom-24 left-1/3 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
@@ -307,7 +307,7 @@ export function GoogleReviews({ locale }: { locale: Locale }) {
           </div>
         </RevealOnScroll>
 
-        <RevealOnScroll className="mt-8">
+        <RevealOnScroll className="mt-8" start="top 92%" end="bottom 16%">
           <Carousel
             opts={{
               align: "start",

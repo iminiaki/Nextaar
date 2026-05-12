@@ -96,10 +96,14 @@ export default async function ContactPage({ params }: { params: { locale: Locale
           title={dict.contact.title}
           subtitle={dict.contact.subtitle}
           nameLabel={dict.contact.nameLabel}
+          namePlaceholder={dict.contact.namePlaceholder}
           companyLabel={dict.contact.companyLabel}
+          companyPlaceholder={dict.contact.companyPlaceholder}
           emailLabel={dict.contact.emailLabel}
+          emailPlaceholder={dict.contact.emailPlaceholder}
           phoneLabel={dict.contact.phoneLabel}
           messageLabel={dict.contact.messageLabel}
+          messagePlaceholder={dict.contact.messagePlaceholder}
           send={dict.contact.send}
           success={dict.contact.success}
         />

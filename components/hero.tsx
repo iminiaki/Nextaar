@@ -146,7 +146,7 @@ export function Hero({
           {/* Headline */}
           <h1
             data-hero-title
-            className="text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
+            className="text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl rtl:leading-normal"
           >
             {title}
           </h1>

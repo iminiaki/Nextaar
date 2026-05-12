@@ -23,6 +23,12 @@ type Props = {
   /** ScrollTrigger start (default matches portfolio / services sections). */
   start?: string
   end?: string
+  /**
+   * ScrollTrigger toggleActions (onEnter, onLeave, onEnterBack, onLeaveBack).
+   * Default re-hides when scrolling past; use `"play none none none"` for one-shot reveal
+   * (e.g. forms with expanding UI so leave-back does not reset opacity).
+   */
+  toggleActions?: string
 }
 
 export function RevealOnScroll({
@@ -34,6 +40,7 @@ export function RevealOnScroll({
   className,
   start = DEFAULT_START,
   end = DEFAULT_END,
+  toggleActions = "play reverse play reverse",
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -62,14 +69,14 @@ export function RevealOnScroll({
             trigger: el,
             start,
             end,
-            toggleActions: "play reverse play reverse",
+            toggleActions,
           },
         },
       )
     }, el)
 
     return () => ctx.revert()
-  }, [y, duration, staggerChildren, stagger, start, end])
+  }, [y, duration, staggerChildren, stagger, start, end, toggleActions])
 
   return (
     <div ref={ref} className={cn(!staggerChildren && "opacity-0", className)}>

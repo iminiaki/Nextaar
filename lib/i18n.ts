@@ -110,10 +110,14 @@ type Dict = {
     title: string
     subtitle: string
     nameLabel: string
+    namePlaceholder: string
     companyLabel: string
+    companyPlaceholder: string
     emailLabel: string
+    emailPlaceholder: string
     phoneLabel: string
     messageLabel: string
+    messagePlaceholder: string
     send: string
     success: string
     locationsTitle: string
@@ -546,12 +550,17 @@ const dictionaries: Record<Locale, Dict> = {
     },
     contact: {
       title: "Contact",
-      subtitle: "We’ll get back within 1–2 business days.",
-      nameLabel: "Name",
+      subtitle:
+        "Your roadmap to launch starts here—send a message and we’ll come back with clear next steps that move you forward, not jargon.",
+      nameLabel: "Full Name",
+      namePlaceholder: "e.g. Alex Johnson",
       companyLabel: "Company Name",
+      companyPlaceholder: "e.g. Lastaar Studio",
       emailLabel: "Email",
+      emailPlaceholder: "e.g. alex@company.com",
       phoneLabel: "Phone",
       messageLabel: "Message",
+      messagePlaceholder: "e.g. We’d like a new marketing website and a rough timeline.",
       send: "Send",
       success: "Thanks! We received your message.",
       locationsTitle: "Our locations",
@@ -635,7 +644,7 @@ const dictionaries: Record<Locale, Dict> = {
     },
     hero: {
       eyebrow: "استراتژی • طراحی • توسعه",
-      title: "وب‌سایت‌هایی می‌سازیم که کسب‌وکار شما را رشد می‌دهند",
+      title: "وب‌سایت حرفه‌ای، رشد واقعی",
       subtitle:
         "لستار با ترکیب برندینگ، تجربه کاربری و مهندسی مدرن، وب‌سایت‌ و وب‌اپ‌های سریع و نتیجه‌محور برای برندهای بلندپرواز می‌سازد.",
       ctaPrimary: "رزرو مشاوره رایگان",
@@ -1015,12 +1024,17 @@ const dictionaries: Record<Locale, Dict> = {
     },
     contact: {
       title: "تماس",
-      subtitle: "۱ تا ۲ روز کاری بعد پاسخ می‌دهیم.",
-      nameLabel: "نام",
+      subtitle:
+        "نقشهٔ راه تا اجرا از همین‌جا شروع می‌شود—پیام بدهید تا با قدم‌های بعدی شفاف جلو ببریمتان، نه شعار تبلیغاتی.",
+      nameLabel: "نام و نام خانوادگی",
+      namePlaceholder: "مثال: علی رضایی",
       companyLabel: "نام شرکت",
+      companyPlaceholder: "مثال: شرکت نمونه",
       emailLabel: "ایمیل",
+      emailPlaceholder: "مثال: ali@company.com",
       phoneLabel: "تلفن",
       messageLabel: "پیام",
+      messagePlaceholder: "مثال: می‌خواهیم برای وب‌سایت جدید و زمان‌بندی با شما صحبت کنیم.",
       send: "ارسال",
       success: "متشکریم! پیام شما دریافت شد.",
       locationsTitle: "دفاتر ما",
@@ -1472,12 +1486,17 @@ const dictionaries: Record<Locale, Dict> = {
     },
     contact: {
       title: "اتصل بنا",
-      subtitle: "سنرد خلال 1–2 يوم عمل.",
-      nameLabel: "الاسم",
+      subtitle:
+        "خارطة طريقكم إلى الإطلاق تبدأ من هنا—أرسلوا رسالةً فنعود إليكم بخطواتٍ واضحةٍ تقودكم للأمام، لا بشعاراتٍ فارغةٍ.",
+      nameLabel: "الاسم الكامل",
+      namePlaceholder: "مثال: أحمد محمد",
       companyLabel: "اسم الشركة",
+      companyPlaceholder: "مثال: شركة الأمل",
       emailLabel: "البريد الإلكتروني",
+      emailPlaceholder: "مثال: ahmed@company.com",
       phoneLabel: "الهاتف",
       messageLabel: "الرسالة",
+      messagePlaceholder: "مثال: نرغب في موقع تسويقي جديد ومناقشة الجدول الزمني.",
       send: "إرسال",
       success: "شكرًا لك! استلمنا رسالتك.",
       locationsTitle: "مواقعنا",

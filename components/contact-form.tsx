@@ -4,8 +4,8 @@ import type React from "react"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { PhoneInput } from "@/components/ui/phone-input"
 import { Textarea } from "@/components/ui/textarea"
 
 export function ContactForm({
@@ -13,10 +13,14 @@ export function ContactForm({
   title,
   subtitle,
   nameLabel,
+  namePlaceholder,
   companyLabel,
+  companyPlaceholder,
   emailLabel,
+  emailPlaceholder,
   phoneLabel,
   messageLabel,
+  messagePlaceholder,
   send,
   success,
 }: {
@@ -24,14 +28,19 @@ export function ContactForm({
   title: string
   subtitle: string
   nameLabel: string
+  namePlaceholder: string
   companyLabel: string
+  companyPlaceholder: string
   emailLabel: string
+  emailPlaceholder: string
   phoneLabel: string
   messageLabel: string
+  messagePlaceholder: string
   send: string
   success: string
 }) {
   const [done, setDone] = useState(false)
+  const [phone, setPhone] = useState("")
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -43,52 +52,71 @@ export function ContactForm({
   return (
     <section id={id} className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <Card className="mx-auto max-w-2xl py-8 gap-8">
-          <CardHeader>
-            <CardTitle className="text-2xl">{title}</CardTitle>
-            <p className="text-muted-foreground">{subtitle}</p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={onSubmit} className="space-y-4">
+        <div className="relative mx-auto max-w-2xl rounded-3xl border bg-card/60 p-6 shadow-sm backdrop-blur md:p-8">
+          {/* Clip glows only so the phone country list can overflow without hiding the heading */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl"
+          >
+            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+            <div className="absolute -bottom-24 left-1/3 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+          </div>
+          <div className="relative flex flex-col gap-8">
+            <div className="relative z-20">
+              <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+              <p className="mt-2 text-muted-foreground">{subtitle}</p>
+            </div>
+            <form onSubmit={onSubmit} className="relative z-0 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
                   <label htmlFor="name" className="text-sm font-medium">
                     {nameLabel}
                   </label>
-                  <Input id="name" name="name" required />
+                  <Input id="name" name="name" required placeholder={namePlaceholder} />
                 </div>
                 <div className="grid gap-2">
                   <label htmlFor="company" className="text-sm font-medium">
                     {companyLabel}
                   </label>
-                  <Input id="company" name="company" required />
+                  <Input id="company" name="company" required placeholder={companyPlaceholder} />
                 </div>
               </div>
               <div className="grid gap-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   {emailLabel}
                 </label>
-                <Input id="email" name="email" type="email" required />
+                <Input id="email" name="email" type="email" required placeholder={emailPlaceholder} />
               </div>
               <div className="grid gap-2">
                 <label htmlFor="phone" className="text-sm font-medium">
                   {phoneLabel}
                 </label>
-                <Input id="phone" name="phone" type="tel" required />
+                <PhoneInput
+                  defaultCountry="us"
+                  value={phone}
+                  onChange={setPhone}
+                  forceDialCode
+                  inputProps={{
+                    id: "phone",
+                    name: "phone",
+                    required: true,
+                    "aria-label": phoneLabel,
+                  }}
+                />
               </div>
               <div className="grid gap-2">
                 <label htmlFor="message" className="text-sm font-medium">
                   {messageLabel}
                 </label>
-                <Textarea id="message" name="message" required rows={5} />
+                <Textarea id="message" name="message" required rows={5} placeholder={messagePlaceholder} />
               </div>
               <Button type="submit" className="w-full sm:w-auto">
                 {send}
               </Button>
               {done ? <p className="pt-2 text-sm text-green-600 dark:text-green-400">{success}</p> : null}
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </section>
   )
