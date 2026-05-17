@@ -291,7 +291,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "Iman Akrami",
               role: "CEO, Developer",
-              photo: "/media/iman.jpeg",
+              photo: "/media/iman.jpg",
               socials: { github: "#", linkedin: "#" },
             },
             {
