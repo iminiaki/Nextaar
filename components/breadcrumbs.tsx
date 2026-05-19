@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { ChevronRight, Home } from "lucide-react"
 import { isRTL, type Locale } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -86,13 +86,18 @@ function getLocalizedField(value: unknown, locale: Locale) {
 
 export function Breadcrumbs({ locale }: { locale: Locale }) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [blogPost, setBlogPost] = useState<BlogPostBreadcrumb | null>(null)
+  const [blogCategory, setBlogCategory] = useState<{ label: string; slug: string } | null>(null)
   const rtl = isRTL(locale)
   const segments = pathname.split("/").filter(Boolean)
   const pathLocale = segments[0]
   const routeSegments = pathLocale === locale ? segments.slice(1) : segments
   const isBlogPost = routeSegments[0] === "blog" && routeSegments.length === 2
   const postSlug = isBlogPost ? routeSegments[1] : undefined
+  const categorySlug = searchParams.get("category") ?? undefined
+  const isBlogCategory =
+    routeSegments[0] === "blog" && routeSegments.length === 1 && Boolean(categorySlug)
 
   useEffect(() => {
     if (!postSlug) {
@@ -142,6 +147,45 @@ export function Breadcrumbs({ locale }: { locale: Locale }) {
     return () => controller.abort()
   }, [locale, postSlug])
 
+  useEffect(() => {
+    if (!isBlogCategory || !categorySlug) {
+      setBlogCategory(null)
+      return
+    }
+
+    const controller = new AbortController()
+
+    async function fetchCategoryBreadcrumb() {
+      try {
+        const params = new URLSearchParams({
+          limit: "1",
+          locale,
+        })
+        params.set("where[slug][equals]", categorySlug)
+
+        const response = await fetch(`/api/categories?${params.toString()}`, {
+          signal: controller.signal,
+        })
+        if (!response.ok) return
+
+        const result = await response.json()
+        const category = result?.docs?.[0]
+        if (!category) return
+
+        const label = getLocalizedField(category.name, locale)
+        if (!label) return
+
+        setBlogCategory({ label, slug: categorySlug })
+      } catch {
+        if (!controller.signal.aborted) setBlogCategory(null)
+      }
+    }
+
+    fetchCategoryBreadcrumb()
+
+    return () => controller.abort()
+  }, [categorySlug, isBlogCategory, locale])
+
   const items = useMemo<BreadcrumbItem[]>(() => {
     const homeItem = {
       label: routeLabels[locale].home,
@@ -169,6 +213,19 @@ export function Breadcrumbs({ locale }: { locale: Locale }) {
       return [homeItem, blogItem, ...(categoryItem ? [categoryItem] : []), postItem]
     }
 
+    if (isBlogCategory && categorySlug) {
+      const blogItem = {
+        label: routeLabels[locale].blog,
+        href: `/${locale}/blog`,
+      }
+      const categoryItem = {
+        label: blogCategory?.label ?? getSegmentLabel(categorySlug, locale),
+        href: `/${locale}/blog?category=${encodeURIComponent(categorySlug)}`,
+      }
+
+      return [homeItem, blogItem, categoryItem]
+    }
+
     return [
       homeItem,
       ...routeSegments.map((segment, index) => ({
@@ -176,7 +233,7 @@ export function Breadcrumbs({ locale }: { locale: Locale }) {
         href: `/${locale}/${routeSegments.slice(0, index + 1).join("/")}`,
       })),
     ]
-  }, [blogPost, isBlogPost, locale, postSlug, routeSegments])
+  }, [blogCategory, blogPost, categorySlug, isBlogCategory, isBlogPost, locale, postSlug, routeSegments])
 
   if (routeSegments.length === 0) return null
 
