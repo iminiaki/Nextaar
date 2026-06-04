@@ -37,34 +37,35 @@ export async function LatestPosts({
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
           <p className="mt-3 text-muted-foreground">{subtitle}</p>
         </div>
-        <RevealOnScroll className="mt-10">
+        <RevealOnScroll className="mt-10" staggerChildren stagger={0.11} start="top 88%">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {posts.map((p) => (
-              <PostCard
-                key={(p as any).slug}
-                href={`${baseHref}/blog/${(p as any).slug}`}
-                title={(p as any).title}
-                excerpt={(p as any).excerpt}
-                imageUrl={(p as any).image?.url}
-                createdAt={(p as any).createdAt}
-                readingTime={(p as any).readingTime}
-                locale={locale}
-                labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
-                author={{
-                  name: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.name : undefined,
-                  avatar: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.image?.url : undefined,
-                }}
-                categories={Array.isArray((p as any).categories)
-                  ? (p as any).categories.map((c: any) => {
-                      if (c && typeof c === "object") {
-                        const name = c.name
-                        if (name && typeof name === "object" && name[locale]) return name[locale]
-                        if (typeof name === "string") return name
-                      }
-                      return undefined
-                    }).filter(Boolean)
-                  : undefined}
-              />
+              <div key={(p as any).slug} data-animate className="h-full">
+                <PostCard
+                  href={`${baseHref}/blog/${(p as any).slug}`}
+                  title={(p as any).title}
+                  excerpt={(p as any).excerpt}
+                  imageUrl={(p as any).image?.url}
+                  createdAt={(p as any).createdAt}
+                  readingTime={(p as any).readingTime}
+                  locale={locale}
+                  labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
+                  author={{
+                    name: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.name : undefined,
+                    avatar: ((p as any).author && typeof (p as any).author === "object") ? (p as any).author.image?.url : undefined,
+                  }}
+                  categories={Array.isArray((p as any).categories)
+                    ? (p as any).categories.map((c: any) => {
+                        if (c && typeof c === "object") {
+                          const name = c.name
+                          if (name && typeof name === "object" && name[locale]) return name[locale]
+                          if (typeof name === "string") return name
+                        }
+                        return undefined
+                      }).filter(Boolean)
+                    : undefined}
+                />
+              </div>
             ))}
           </div>
         </RevealOnScroll>

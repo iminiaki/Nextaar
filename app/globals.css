@@ -216,6 +216,81 @@ body {
   }
 }
 
+/* Idle (non-hover) button interactivity: a looping shine sweep + breathing sheen */
+@keyframes btn-shine {
+  0% {
+    left: -60%;
+  }
+  35% {
+    left: 150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes btn-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="button"]::before,
+  [data-slot="button"]::after {
+    animation: none !important;
+  }
+}
+
+/* Interactive button effects: cursor-following spotlight + click ripple */
+.btn-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    7rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklch, currentColor 22%, transparent),
+    transparent 60%
+  );
+}
+
+.btn-spotlight:hover::before {
+  opacity: 1;
+}
+
+.button-ripple {
+  position: absolute;
+  z-index: -1;
+  border-radius: 9999px;
+  transform: scale(0);
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.25;
+  animation: button-ripple 600ms ease-out forwards;
+}
+
+@keyframes button-ripple {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-ripple {
+    display: none;
+  }
+}
+
 /* Theme switch circular reveal using View Transitions API */
 html {
   view-transition-name: root;

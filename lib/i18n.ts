@@ -260,7 +260,7 @@ const dictionaries: Record<Locale, Dict> = {
         secondaryCta: "Explore services",
       },
       latestPosts: { title: "Insights & Articles", subtitle: "Practical ideas on web strategy, design systems, and product growth." },
-      partners: { title: "Trusted by growing teams and modern tech stacks" },
+      partners: { title: "The technologies we build with" },
     },
     pages: {
       portfolio: {
@@ -737,7 +737,7 @@ const dictionaries: Record<Locale, Dict> = {
         secondaryCta: "مشاهده خدمات",
       },
       latestPosts: { title: "بینش‌ها و مقالات", subtitle: "ایده‌های کاربردی درباره استراتژی وب، دیزاین سیستم و رشد محصول." },
-      partners: { title: "مورد اعتماد تیم‌های در حال رشد و تکنولوژی‌های مدرن" },
+      partners: { title: "تکنولوژی‌هایی که با آن‌ها می‌سازیم" },
     },
     pages: {
       portfolio: { title: "نمونه کارها", subtitle: "گزیده‌ای از پروژه‌ها"},
@@ -1202,7 +1202,7 @@ const dictionaries: Record<Locale, Dict> = {
         secondaryCta: "استعرض الخدمات",
       },
       latestPosts: { title: "رؤى ومقالات", subtitle: "أفكار عملية حول استراتيجية الويب وأنظمة التصميم ونمو المنتجات." },
-      partners: { title: "موثوق به من فرق تنمو بسرعة وتقنيات حديثة" },
+      partners: { title: "التقنيات التي نبني بها" },
     },
     pages: {
       portfolio: { title: "نمونه کارها", subtitle: "گزیده‌ای از پروژه‌ها."},

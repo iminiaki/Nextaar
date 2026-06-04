@@ -32,8 +32,8 @@ export function ServicesFeatures({
 }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const serviceImages = [
-    "/services/Design.png",
     "/services/code.png",
+    "/services/Design.png",
     "/services/SEO.png",
     "/services/ADs.png",
   ] as const;
