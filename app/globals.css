@@ -229,6 +229,30 @@ body {
   }
 }
 
+@keyframes btn-shine-rtl {
+  0% {
+    right: -60%;
+  }
+  35% {
+    right: 150%;
+  }
+  100% {
+    right: 150%;
+  }
+}
+
+[dir="rtl"] [data-slot="button"]::after,
+[dir="rtl"] [data-slot="button"]:hover::after,
+html[dir="rtl"] [data-slot="button"]::after,
+html[dir="rtl"] [data-slot="button"]:hover::after,
+[data-slot="button"][data-shine-dir="rtl"]::after,
+[data-slot="button"][data-shine-dir="rtl"]:hover::after {
+  left: auto !important;
+  right: -60% !important;
+  transform: skewX(-12deg) !important;
+  animation-name: btn-shine-rtl !important;
+}
+
 @keyframes btn-breathe {
   0%,
   100% {

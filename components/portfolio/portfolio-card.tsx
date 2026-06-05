@@ -35,7 +35,7 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
 
       {/* Blurred info box */}
       <div className="absolute bottom-4 left-4 right-4 group-hover:translate-y-2 group-hover:scale-105 transition-transform duration-500">
-        <div className="rounded-xl bg-black/45 p-4 text-white backdrop-blur-lg">
+        <div className="rounded-xl bg-black/45 p-4 text-white backdrop-blur-xl">
           <div className="line-clamp-1 text-lg font-semibold tracking-tight">{title}</div>
           {renderedCategories ? (
             <div className="mt-1 line-clamp-1 text-sm opacity-90">{renderedCategories}</div>

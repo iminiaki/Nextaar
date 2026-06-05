@@ -41,6 +41,8 @@ function PhoneInput({ className, inputProps, ...props }: PhoneInputProps) {
           "[&_.react-international-phone-input-container]:flex [&_.react-international-phone-input-container]:w-full [&_.react-international-phone-input-container]:min-w-0",
           "[&_.react-international-phone-input-container]:divide-x [&_.react-international-phone-input-container]:divide-input",
           "[&_.react-international-phone-country-selector]:shrink-0",
+          "[&_.react-international-phone-country-selector-dropdown]:z-[70]",
+          "[&_.react-international-phone-country-selector-dropdown]:max-h-[min(18rem,calc(100vh-8rem))]",
           "[&_.react-international-phone-input]:min-w-0 [&_.react-international-phone-input]:flex-1 [&_.react-international-phone-input]:w-auto"
         )}
         inputClassName={cn(

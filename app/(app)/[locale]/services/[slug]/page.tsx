@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight, CheckCircle2, HelpCircle, Layers3, Sparkles, Target } from "lucide-react"
-import { isRTL, type Locale } from "@/lib/i18n"
+import { getDictionary, isRTL, type Locale } from "@/lib/i18n"
 import { services } from "@/lib/content"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { Button } from "@/components/ui/button"
+import { PlanContactDialog } from "@/components/plan-contact-dialog"
 
 type Params = { params: { locale: Locale; slug: string } }
 type Localized = Record<Locale, string>
@@ -121,8 +122,8 @@ const details: Record<
     pricing: [
       {
         name: { en: "Launch Site", fa: "سایت لانچ", ar: "موقع إطلاق" },
-        price: { en: "From $1,500", fa: "شروع از ۱۵۰۰ دلار", ar: "ابتداء من 1500$" },
-        monthlyPrice: { en: "From $149", fa: "شروع از ۱۴۹ دلار", ar: "ابتداء من 149$" },
+        price: { en: "From $1,500", fa: "شروع از 135M تومان", ar: "ابتداء من AED 5,500" },
+        monthlyPrice: { en: "From $149", fa: "شروع از 13.5M تومان", ar: "ابتداء من AED 550" },
         description: { en: "For polished company websites and landing pages.", fa: "برای سایت شرکتی و لندینگ حرفه‌ای.", ar: "للمواقع التعريفية وصفحات الهبوط الاحترافية." },
         features: {
           en: ["Up to 5 core pages", "Responsive implementation", "Basic SEO setup", "Contact form"],
@@ -132,8 +133,8 @@ const details: Record<
       },
       {
         name: { en: "Growth Website", fa: "وب‌سایت رشد", ar: "موقع نمو" },
-        price: { en: "From $3,500", fa: "شروع از ۳۵۰۰ دلار", ar: "ابتداء من 3500$" },
-        monthlyPrice: { en: "From $299", fa: "شروع از ۲۹۹ دلار", ar: "ابتداء من 299$" },
+        price: { en: "From $3,500", fa: "شروع از 315M تومان", ar: "ابتداء من AED 12,900" },
+        monthlyPrice: { en: "From $299", fa: "شروع از 27M تومان", ar: "ابتداء من AED 1,100" },
         description: { en: "For content-rich websites with CMS and integrations.", fa: "برای سایت‌های محتوایی با CMS و اتصال سرویس‌ها.", ar: "للمواقع الغنية بالمحتوى مع CMS وتكاملات." },
         features: {
           en: ["CMS integration", "Blog or portfolio system", "Advanced SEO structure", "Analytics and deployment"],
@@ -197,15 +198,15 @@ const details: Record<
     pricing: [
       {
         name: { en: "UI Starter", fa: "شروع UI", ar: "بداية UI" },
-        price: { en: "From $900", fa: "شروع از ۹۰۰ دلار", ar: "ابتداء من 900$" },
-        monthlyPrice: { en: "From $89", fa: "شروع از ۸۹ دلار", ar: "ابتداء من 89$" },
+        price: { en: "From $900", fa: "شروع از 81M تومان", ar: "ابتداء من AED 3,300" },
+        monthlyPrice: { en: "From $89", fa: "شروع از 8M تومان", ar: "ابتداء من AED 330" },
         description: { en: "For focused landing pages or small product flows.", fa: "برای لندینگ یا مسیرهای کوچک محصول.", ar: "لصفحات الهبوط أو مسارات منتج صغيرة." },
         features: { en: ["UX review", "Wireframe", "1 landing page design", "Developer handoff"], fa: ["بررسی UX", "وایرفریم", "طراحی ۱ لندینگ", "تحویل به توسعه‌دهنده"], ar: ["مراجعة UX", "وايرفريم", "تصميم صفحة هبوط", "تسليم للمطور"] },
       },
       {
         name: { en: "Brand + Website", fa: "برند + وب‌سایت", ar: "هوية + موقع" },
-        price: { en: "From $2,400", fa: "شروع از ۲۴۰۰ دلار", ar: "ابتداء من 2400$" },
-        monthlyPrice: { en: "From $199", fa: "شروع از ۱۹۹ دلار", ar: "ابتداء من 199$" },
+        price: { en: "From $2,400", fa: "شروع از 216M تومان", ar: "ابتداء من AED 8,800" },
+        monthlyPrice: { en: "From $199", fa: "شروع از 18M تومان", ar: "ابتداء من AED 730" },
         description: { en: "For brands that need a complete visual foundation.", fa: "برای برندهایی که پایه بصری کامل می‌خواهند.", ar: "للعلامات التي تحتاج أساسا بصريا كاملا." },
         features: { en: ["Visual direction", "Core brand kit", "Up to 6 page designs", "Reusable components"], fa: ["مسیر بصری", "کیت پایه برند", "تا ۶ طراحی صفحه", "کامپوننت‌های قابل استفاده"], ar: ["اتجاه بصري", "عدة هوية أساسية", "حتى 6 صفحات", "مكونات قابلة لإعادة الاستخدام"] },
         featured: true,
@@ -261,15 +262,15 @@ const details: Record<
     pricing: [
       {
         name: { en: "SEO Audit", fa: "ممیزی سئو", ar: "تدقيق SEO" },
-        price: { en: "From $700", fa: "شروع از ۷۰۰ دلار", ar: "ابتداء من 700$" },
-        monthlyPrice: { en: "From $79", fa: "شروع از ۷۹ دلار", ar: "ابتداء من 79$" },
+        price: { en: "From $700", fa: "شروع از 63M تومان", ar: "ابتداء من AED 2,600" },
+        monthlyPrice: { en: "From $79", fa: "شروع از 7M تومان", ar: "ابتداء من AED 290" },
         description: { en: "A clear roadmap for technical and content improvements.", fa: "نقشه راه روشن برای بهبود فنی و محتوایی.", ar: "خارطة طريق واضحة للتحسين التقني والمحتوى." },
         features: { en: ["Technical crawl", "Keyword snapshot", "Priority fixes", "Action report"], fa: ["خزش فنی", "نمای کلمات کلیدی", "اصلاحات اولویت‌دار", "گزارش اقدام"], ar: ["فحص تقني", "لقطة كلمات", "إصلاحات أولوية", "تقرير إجراءات"] },
       },
       {
         name: { en: "Growth SEO", fa: "سئوی رشد", ar: "SEO للنمو" },
-        price: { en: "From $1,200/mo", fa: "شروع از ۱۲۰۰ دلار ماهانه", ar: "ابتداء من 1200$ شهريا" },
-        monthlyPrice: { en: "From $1,200", fa: "شروع از ۱۲۰۰ دلار", ar: "ابتداء من 1200$" },
+        price: { en: "From $1,200/mo", fa: "شروع از 108M تومان ماهانه", ar: "ابتداء من AED 4,400 شهريا" },
+        monthlyPrice: { en: "From $1,200", fa: "شروع از 108M تومان", ar: "ابتداء من AED 4,400" },
         description: { en: "Monthly optimization for brands ready to grow organic demand.", fa: "بهینه‌سازی ماهانه برای رشد تقاضای ارگانیک.", ar: "تحسين شهري لنمو الطلب العضوي." },
         features: { en: ["Technical fixes", "Content strategy", "Schema optimization", "Monthly reporting"], fa: ["اصلاحات فنی", "استراتژی محتوا", "بهینه‌سازی اسکیما", "گزارش ماهانه"], ar: ["إصلاحات تقنية", "استراتيجية محتوى", "تحسين اسكيما", "تقرير شهري"] },
         featured: true,
@@ -325,15 +326,15 @@ const details: Record<
     pricing: [
       {
         name: { en: "Campaign Setup", fa: "راه‌اندازی کمپین", ar: "إعداد حملة" },
-        price: { en: "From $600", fa: "شروع از ۶۰۰ دلار", ar: "ابتداء من 600$" },
-        monthlyPrice: { en: "From $69", fa: "شروع از ۶۹ دلار", ar: "ابتداء من 69$" },
+        price: { en: "From $600", fa: "شروع از 54M تومان", ar: "ابتداء من AED 2,200" },
+        monthlyPrice: { en: "From $69", fa: "شروع از 6.2M تومان", ar: "ابتداء من AED 250" },
         description: { en: "For new campaigns that need a clean launch.", fa: "برای کمپین‌های جدید که لانچ تمیز می‌خواهند.", ar: "للحملات الجديدة التي تحتاج إطلاقا منظما." },
         features: { en: ["Account structure", "Tracking checklist", "Initial ads", "Launch support"], fa: ["ساختار اکانت", "چک‌لیست ردیابی", "تبلیغات اولیه", "پشتیبانی لانچ"], ar: ["هيكل الحساب", "قائمة تتبع", "إعلانات أولية", "دعم إطلاق"] },
       },
       {
         name: { en: "Monthly Management", fa: "مدیریت ماهانه", ar: "إدارة شهرية" },
-        price: { en: "From $900/mo", fa: "شروع از ۹۰۰ دلار ماهانه", ar: "ابتداء من 900$ شهريا" },
-        monthlyPrice: { en: "From $900", fa: "شروع از ۹۰۰ دلار", ar: "ابتداء من 900$" },
+        price: { en: "From $900/mo", fa: "شروع از 81M تومان ماهانه", ar: "ابتداء من AED 3,300 شهريا" },
+        monthlyPrice: { en: "From $900", fa: "شروع از 81M تومان", ar: "ابتداء من AED 3,300" },
         description: { en: "For ongoing campaigns with weekly optimization.", fa: "برای کمپین‌های فعال با بهینه‌سازی هفتگی.", ar: "للحملات المستمرة مع تحسين أسبوعي." },
         features: { en: ["Weekly optimization", "Ad copy testing", "Budget pacing", "Performance report"], fa: ["بهینه‌سازی هفتگی", "تست متن تبلیغ", "کنترل بودجه", "گزارش عملکرد"], ar: ["تحسين أسبوعي", "اختبار نصوص", "ضبط الميزانية", "تقرير أداء"] },
         featured: true,
@@ -383,6 +384,7 @@ export default async function ServiceDetail({ params }: Params) {
   const locale = params.locale
   const rtl = isRTL(locale)
   const t = labels[locale]
+  const dict = await getDictionary(locale)
 
   return (
     <main className="container mx-auto px-4 py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
@@ -534,18 +536,13 @@ export default async function ServiceDetail({ params }: Params) {
                     ))}
                   </ul>
 
-                  <Button
-                    asChild
-                    className={`mt-auto w-full rounded-xl ${
-                      plan.featured ? "shadow-lg shadow-primary/25" : "bg-background text-foreground hover:bg-accent"
-                    }`}
-                    variant={plan.featured ? "default" : "outline"}
-                  >
-                    <Link href={`/${locale}/contact`}>
-                      {t.viewDetails}
-                      <ArrowRight className={`h-4 w-4 ${rtl ? "rotate-180" : ""}`} />
-                    </Link>
-                  </Button>
+                  <PlanContactDialog
+                    id={`plan-contact-${index}`}
+                    triggerLabel={t.viewDetails}
+                    featured={plan.featured}
+                    rtl={rtl}
+                    contact={dict.contact}
+                  />
                 </div>
               </div>
             ))}
