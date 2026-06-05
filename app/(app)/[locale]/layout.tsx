@@ -8,6 +8,7 @@ import { CookieConsent } from "@/components/cookie-consent"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { SmoothScroll } from "@/components/gsap/smooth-scroll"
 import { FancyCursor } from "@/components/gsap/cursor"
+import { SupportChatbot } from "@/components/support-chatbot"
 import { getDictionary } from "@/lib/i18n"
 import { isLocale, type Locale } from "@/lib/i18n"
 
@@ -63,6 +64,7 @@ export default async function LocaleLayout({
           rights={dict.footer.rights}
         />
         <CookieConsent locale={locale} />
+        <SupportChatbot locale={locale} services={dict.home.servicesFeatures.items} office={dict.footer.office} />
       </LocaleProvider>
     </AccentProvider>
   )
