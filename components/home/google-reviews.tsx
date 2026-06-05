@@ -349,30 +349,43 @@ export function GoogleReviews({ locale }: { locale: Locale }) {
                       </button>
                     </DialogTrigger>
                     <DialogContent
-                      className="max-h-[min(760px,calc(100vh-2rem))] overflow-y-auto rounded-2xl sm:max-w-2xl"
+                      className="max-h-[min(760px,calc(100vh-2rem))] overflow-y-auto border-0 bg-transparent p-0 shadow-none sm:max-w-2xl"
                       dir={rtl ? "rtl" : "ltr"}
                     >
-                      <DialogHeader className={cn("text-start", rtl && "sm:text-right")}>
-                        <DialogTitle>{review.name[locale]}</DialogTitle>
-                        <DialogDescription>{t.fullReview}</DialogDescription>
-                      </DialogHeader>
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary ring-1 ring-primary/20">
-                          {initials(review.name[locale])}
+                      <div className="relative rounded-3xl border bg-card p-6 shadow-sm backdrop-blur md:p-8">
+                        <div
+                          aria-hidden
+                          className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl"
+                        >
+                          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-fuchsia-500/15 blur-3xl" />
+                          <div className="absolute -bottom-24 left-1/3 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-sm text-muted-foreground">{review.meta[locale]}</p>
-                          <div className={cn("mt-1 flex items-center gap-2", rtl && "flex-row-reverse justify-end")}>
-                            <div className="flex items-center gap-0.5 text-yellow-500">
-                              {Array.from({ length: 5 }).map((_, starIndex) => (
-                                <Star key={starIndex} className="h-4 w-4 fill-current" />
-                              ))}
+                        <div className="relative flex flex-col gap-6">
+                          <DialogHeader className={cn("text-start", rtl && "sm:text-right")}>
+                            <DialogTitle>{review.name[locale]}</DialogTitle>
+                            <DialogDescription>{t.fullReview}</DialogDescription>
+                          </DialogHeader>
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary ring-1 ring-primary/20">
+                              {initials(review.name[locale])}
                             </div>
-                            <span className="text-xs text-muted-foreground">{t[review.timeKey]}</span>
+                            <div className="min-w-0">
+                              <p className="text-sm text-muted-foreground">{review.meta[locale]}</p>
+                              <div className={cn("mt-1 flex items-center gap-2", rtl && "flex-row-reverse justify-end")}>
+                                <div className="flex items-center gap-0.5 text-yellow-500">
+                                  {Array.from({ length: 5 }).map((_, starIndex) => (
+                                    <Star key={starIndex} className="h-4 w-4 fill-current" />
+                                  ))}
+                                </div>
+                                <span className="text-xs text-muted-foreground">{t[review.timeKey]}</span>
+                              </div>
+                            </div>
                           </div>
+                          <p className={cn("text-sm leading-8 text-muted-foreground", rtl && "text-right")}>
+                            {review.text[locale]}
+                          </p>
                         </div>
                       </div>
-                      <p className={cn("text-sm leading-8 text-muted-foreground", rtl && "text-right")}>{review.text[locale]}</p>
                     </DialogContent>
                   </Dialog>
                 </CarouselItem>

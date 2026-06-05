@@ -38,8 +38,6 @@ export function PortfolioPreviewSection({
 
       if (!grid || cards.length === 0) return
 
-      gsap.set(grid, { transformStyle: "preserve-3d", perspective: 1100 })
-
       gsap
         .timeline({
           defaults: { ease: "power2.out" },
@@ -57,16 +55,12 @@ export function PortfolioPreviewSection({
             y: 36,
             opacity: 0,
             scale: 0.88,
-            z: -140,
-            rotationX: 6,
             transformOrigin: "50% 100%",
           },
           {
             y: 0,
             opacity: 1,
             scale: 1,
-            z: 0,
-            rotationX: 0,
             duration: 0.52,
             stagger: 0.11,
             ease: "power2.out",
@@ -100,7 +94,7 @@ export function PortfolioPreviewSection({
 
         <div
           data-portfolio-grid
-          className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [&>*]:transform-gpu"
+          className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {children}
         </div>
