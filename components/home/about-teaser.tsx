@@ -30,15 +30,16 @@ export function AboutTeaser({
         </RevealOnScroll>
         <RevealOnScroll>
           <div className="relative">
-            <div className="absolute inset-0 -z-10 rounded-2xl bg-primary/10 blur-2xl" />
+            {/* <div className="absolute inset-0 -z-10 rounded-2xl bg-primary/10 blur-2xl" /> */}
             <img
-              src="/lastaar-team-collaboration.png"
-              alt="About Lastaar"
-              className="mx-auto rounded-xl border bg-background object-cover shadow"
-            />
+              src="/vision.webp"
+              alt={title}
+              loading="lazy"
+              decoding="async"
+              className="mx-auto -scale-x-100" />
           </div>
         </RevealOnScroll>
       </div>
     </section>
-  )
+  );
 }

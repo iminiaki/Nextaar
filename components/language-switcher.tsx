@@ -1,12 +1,10 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { type Locale, locales } from "@/lib/i18n"
-import { Globe } from "lucide-react"
-import { getDictionary } from "@/lib/i18n"
+import { Languages } from "lucide-react"
 
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const router = useRouter()
@@ -22,30 +20,25 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
     }
   }
 
-  const label = locale === "en" ? "English" : locale === "fa" ? "فارسی" : "العربية"
-  const [dict, setDict] = useState<any>(null)
-
-  useEffect(() => {
-    getDictionary(locale).then(setDict)
-  }, [locale])
+  const label = locale.toUpperCase()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="shrink-0 bg-transparent flex gap-2 w-9 md:w-auto">
-          <Globe className="h-4 w-4" />
+          <Languages className="h-4 w-4" />
           <span className="hidden md:inline">{label}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[105px]">
-        <DropdownMenuItem onClick={() => switchTo("en")}>
-          {dict ? dict.nav.enLangName : "English"}
+        <DropdownMenuItem onClick={() => switchTo("en")} className={locale === "en" ? "font-semibold" : undefined}>
+          EN
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => switchTo("fa")}>
-          {dict ? dict.nav.faLangName : "فارسی"}
+        <DropdownMenuItem onClick={() => switchTo("fa")} className={locale === "fa" ? "font-semibold" : undefined}>
+          FA
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => switchTo("ar")}>
-          {dict ? dict.nav.arLangName : "العربية"}
+        <DropdownMenuItem onClick={() => switchTo("ar")} className={locale === "ar" ? "font-semibold" : undefined}>
+          AR
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

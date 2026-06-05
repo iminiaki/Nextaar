@@ -26,7 +26,22 @@ export function SmoothScroll() {
     lenis.on("scroll", onScroll)
     requestAnimationFrame(raf)
 
+    // Bottom sections (reviews, partners) sit below async content and
+    // lazy-loaded images, so the page keeps growing after ScrollTrigger
+    // measured its positions. Refresh once everything settles, and whenever
+    // the document height changes, so their reveal triggers stay accurate.
+    const refresh = () => ScrollTrigger.refresh()
+    window.addEventListener("load", refresh)
+
+    const resizeObserver = new ResizeObserver(refresh)
+    resizeObserver.observe(document.body)
+
+    const initialRefresh = window.setTimeout(refresh, 500)
+
     return () => {
+      window.removeEventListener("load", refresh)
+      resizeObserver.disconnect()
+      window.clearTimeout(initialRefresh)
       lenis.off("scroll", onScroll)
       lenis.destroy()
     }
