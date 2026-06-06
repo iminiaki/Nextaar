@@ -8,6 +8,7 @@
     "dev:turbo": "next dev --turbopack",
     "import:wordpress": "tsx scripts/import-wordpress-posts.ts",
     "translate:posts": "tsx scripts/translate-post-locales.ts",
+    "translate:categories": "tsx scripts/translate-post-locales.ts -- --categories-only",
     "lint": "next lint",
     "start": "next start"
   },

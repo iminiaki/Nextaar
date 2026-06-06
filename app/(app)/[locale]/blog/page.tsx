@@ -9,6 +9,7 @@ import { Hash, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SubscribeWidget } from "@/components/blog/subscribe-widget";
+import { BlogPagination, getBlogPagination } from "@/components/blog/blog-pagination";
 
 function getLocalizedName(category: any, locale: Locale) {
   const name = category?.name;
@@ -38,10 +39,14 @@ function postMatchesSearch(post: any, query: string, locale: Locale) {
   return searchable.includes(normalizedQuery);
 }
 
-function createBlogHref(base: string, params: { category?: string; q?: string }) {
+function createBlogHref(
+  base: string,
+  params: { category?: string; q?: string; page?: number }
+) {
   const searchParams = new URLSearchParams();
   if (params.category) searchParams.set("category", params.category);
   if (params.q) searchParams.set("q", params.q);
+  if (params.page && params.page > 1) searchParams.set("page", String(params.page));
   const query = searchParams.toString();
 
   return query ? `${base}/blog?${query}` : `${base}/blog`;
@@ -52,13 +57,14 @@ export default async function BlogPage({
   searchParams,
 }: {
   params: { locale: Locale };
-  searchParams?: { category?: string; q?: string };
+  searchParams?: { category?: string; q?: string; page?: string };
 }) {
   const dict = await getDictionary(params.locale);
   const c = dict.pages.blog;
   const base = `/${params.locale}`;
   const activeCategory = searchParams?.category;
   const searchQuery = searchParams?.q?.trim() ?? "";
+  const requestedPage = Number.parseInt(searchParams?.page ?? "1", 10);
 
   const payload = await getPayload({ config: payloadConfig });
   const { isEnabled } = await draftMode();
@@ -95,6 +101,23 @@ export default async function BlogPage({
     }
     return acc;
   }, {});
+
+  const categoriesWithPosts = categories.filter((category: any) => {
+    const slug = getCategorySlug(category);
+    return slug ? (postCountByCategory[slug] ?? 0) > 0 : false;
+  });
+
+  const { currentPage, totalPages, offset, limit } = getBlogPagination({
+    totalItems: sortedPosts.length,
+    currentPage: Number.isFinite(requestedPage) ? requestedPage : 1,
+  });
+  const paginatedPosts = sortedPosts.slice(offset, offset + limit);
+  const createPageHref = (page: number) =>
+    createBlogHref(base, {
+      category: activeCategory,
+      q: searchQuery || undefined,
+      page,
+    });
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 relative">
@@ -149,7 +172,7 @@ export default async function BlogPage({
                   <span>{c.allPosts}</span>
                   <span className="text-xs opacity-80">{posts.length}</span>
                 </Link>
-                {categories.map((category: any) => {
+                {categoriesWithPosts.map((category: any) => {
                   const slug = getCategorySlug(category);
                   const name = getLocalizedName(category, params.locale);
                   if (!slug || !name) return null;
@@ -177,28 +200,40 @@ export default async function BlogPage({
 
         <RevealOnScroll staggerChildren className="lg:col-span-9">
           {sortedPosts.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {sortedPosts.map((p) => (
-                <PostCard
-                  key={p.slug}
-                  href={`${base}/blog/${p.slug}`}
-                  title={p.title}
-                  excerpt={p.excerpt}
-                  imageUrl={p.image?.url}
-                  createdAt={p.createdAt}
-                  readingTime={p.readingTime}
-                  locale={params.locale}
-                  labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
-                  author={{
-                    name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
-                    avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
-                  }}
-                  categories={Array.isArray((p as any).categories)
-                    ? (p as any).categories.map((category: any) => getLocalizedName(category, params.locale)).filter(Boolean)
-                    : undefined}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {paginatedPosts.map((p) => (
+                  <PostCard
+                    key={p.slug}
+                    href={`${base}/blog/${p.slug}`}
+                    title={p.title}
+                    excerpt={p.excerpt}
+                    imageUrl={p.image?.url}
+                    createdAt={p.createdAt}
+                    readingTime={p.readingTime}
+                    locale={params.locale}
+                    labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
+                    author={{
+                      name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
+                      avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
+                    }}
+                    categories={Array.isArray((p as any).categories)
+                      ? (p as any).categories.map((category: any) => getLocalizedName(category, params.locale)).filter(Boolean)
+                      : undefined}
+                  />
+                ))}
+              </div>
+              <BlogPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                createHref={createPageHref}
+                locale={params.locale}
+                labels={{
+                  previous: c.previousPage,
+                  next: c.nextPage,
+                }}
+              />
+            </>
           ) : (
             <div className="rounded-2xl border bg-card/60 p-8 text-center text-sm text-muted-foreground">
               {c.noPosts}

@@ -46,7 +46,7 @@ type Dict = {
     }
     cta: { badge: string; title: string; subtitle: string; button: { label: string } }
     portfolio: { title: string; subtitle: string; viewAll: string }
-    why: { title: string; bullets: string[] }
+    why: { eyebrow: string; title: string; subtitle: string; swipeHint: string; bullets: string[] }
     aboutTeaser: { title: string; body: string; button: string }
     process: {
       eyebrow: string
@@ -88,6 +88,8 @@ type Dict = {
       search: string
       searchPlaceholder: string
       noPosts: string
+      previousPage: string
+      nextPage: string
     }
     terms: {
       title: string
@@ -218,7 +220,11 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "Featured Work", subtitle: "Real projects built for performance, clarity, and measurable results.", viewAll: "View Full Portfolio" },
       why: {
+        eyebrow: "6 strengths",
         title: "Why Brands Choose Lastaar",
+        subtitle:
+          "Everything you need to launch, grow, and maintain a high-performing digital presence — without juggling multiple vendors.",
+        swipeHint: "Swipe to navigate",
         bullets: [
           "Strategy, design, and development in one integrated team",
           "Fast delivery with production-grade code quality",
@@ -335,6 +341,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "Search",
         searchPlaceholder: "Search articles...",
         noPosts: "No posts found in this category.",
+        previousPage: "Previous",
+        nextPage: "Next",
       },
       terms: {
         title: "Terms and Conditions",
@@ -695,7 +703,11 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "پروژه‌های منتخب", subtitle: "نمونه‌هایی واقعی با تمرکز بر عملکرد، وضوح پیام و نتیجه‌پذیری.", viewAll: "مشاهده کامل نمونه‌کارها" },
       why: {
+        eyebrow: "۶ مزیت",
         title: "چرا لستار",
+        subtitle:
+          "هرآنچه برای راه‌اندازی، رشد و نگهداری حضور دیجیتال باکیفیت نیاز دارید — بدون درگیر شدن با چند پیمانکار جداگانه.",
+        swipeHint: "برای جابه‌جایی بکشید",
         bullets: [
           "استراتژی، طراحی و توسعه در یک تیم یکپارچه",
           "تحویل سریع با کیفیت فنی در سطح Production",
@@ -809,6 +821,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "جستجو",
         searchPlaceholder: "جستجو در مقالات...",
         noPosts: "پستی در این دسته بندی پیدا نشد.",
+        previousPage: "قبلی",
+        nextPage: "بعدی",
       },
       terms: {
         title: "شرایط و قوانین",
@@ -1164,7 +1178,11 @@ const dictionaries: Record<Locale, Dict> = {
       cta: { badge: "لنصنع محرك نموك القادم", title: "هل لديك مشروع في ذهنك؟", subtitle: "شاركنا أهدافك لتحصل على خارطة طريق مناسبة لعملك.", button: { label: "تحدث مع لستار" } },
       portfolio: { title: "أعمال مختارة", subtitle: "مشاريع حقيقية مبنية للأداء ووضوح الرسالة والنتائج القابلة للقياس.", viewAll: "عرض جميع الأعمال" },
       why: {
+        eyebrow: "٦ مزايا",
         title: "لماذا تختار لستار",
+        subtitle:
+          "كل ما تحتاجه لإطلاق حضور رقمي عالي الأداء وتنميته وصيانته — دون التعامل مع عدة مزودين منفصلين.",
+        swipeHint: "اسحب للتنقل",
         bullets: [
           "الاستراتيجية والتصميم والتطوير ضمن فريق واحد متكامل",
           "تنفيذ سريع بجودة تقنية جاهزة للإنتاج",
@@ -1271,6 +1289,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "بحث",
         searchPlaceholder: "ابحث في المقالات...",
         noPosts: "لم يتم العثور على مقالات في هذا التصنيف.",
+        previousPage: "السابق",
+        nextPage: "التالي",
       },
       terms: {
         title: "الشروط والأحكام",

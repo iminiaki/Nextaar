@@ -85,7 +85,14 @@ export default async function Page({
 
       <GoogleReviews locale={params.locale} />
 
-      <WhyChoose title={dict.home.why.title} bullets={dict.home.why.bullets} />
+      <WhyChoose
+        locale={params.locale}
+        eyebrow={dict.home.why.eyebrow}
+        title={dict.home.why.title}
+        subtitle={dict.home.why.subtitle}
+        swipeHint={dict.home.why.swipeHint}
+        bullets={dict.home.why.bullets}
+      />
 
       <ProcessSection
         locale={params.locale}

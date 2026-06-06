@@ -12,7 +12,9 @@ const TARGET_LOCALES = (process.env.POST_TRANSLATE_TARGET_LOCALES || "en,ar")
   .filter(Boolean);
 const DRY_RUN = process.argv.includes("--dry-run");
 const FORCE = process.argv.includes("--force");
-const TRANSLATE_CATEGORIES = !process.argv.includes("--skip-categories");
+const CATEGORIES_ONLY = process.argv.includes("--categories-only");
+const TRANSLATE_CATEGORIES =
+  CATEGORIES_ONLY || !process.argv.includes("--skip-categories");
 const BATCH_CHAR_LIMIT = 3000;
 const DELIMITER = "\n___NEXTAAR_TRANSLATION_SEGMENT___\n";
 const REQUEST_TIMEOUT_MS = 20000;
@@ -53,6 +55,18 @@ function slugify(value: string) {
   const dashed = base.replace(/[\s_]+/g, "-");
   const cleaned = dashed.replace(/[^\p{L}\p{N}-]+/gu, "");
   return cleaned.replace(/-+/g, "-").replace(/^-|-$/g, "") || "untitled";
+}
+
+function categorySourceText(category: any) {
+  if (typeof category?.name === "string" && category.name.trim()) {
+    return category.name.trim();
+  }
+
+  if (typeof category?.slug === "string" && category.slug.trim()) {
+    return category.slug.replace(/-/g, " ").trim();
+  }
+
+  return "";
 }
 
 function unwrapPayloadConfig(module: any) {
@@ -297,15 +311,38 @@ async function translateCategory(
   category: any,
   targetLocale: TargetLocale
 ) {
-  if (!category.name && !category.description) return false;
+  const sourceName = categorySourceText(category);
+  const sourceDescription =
+    typeof category.description === "string" ? category.description : "";
+
+  if (!sourceName && !sourceDescription) return false;
+
+  if (!FORCE) {
+    const existing = await payload.findByID({
+      id: category.id,
+      collection: "categories",
+      fallbackLocale: false,
+      locale: targetLocale,
+      overrideAccess: true,
+    });
+
+    if (existing?.name) {
+      console.log(
+        `Skipping category ${targetLocale}: ${sourceName || category.slug} already localized.`
+      );
+      return false;
+    }
+  }
 
   const [name, description] = await translateTexts(
-    [category.name || "", category.description || ""],
+    [sourceName, sourceDescription],
     targetLocale
   );
 
   if (DRY_RUN) {
-    console.log(`Would update category ${targetLocale}: ${category.name} -> ${name}`);
+    console.log(
+      `Would update category ${targetLocale}: ${sourceName || category.slug} -> ${name}`
+    );
     return true;
   }
 
@@ -321,7 +358,9 @@ async function translateCategory(
     overrideAccess: true,
   });
 
-  console.log(`Updated category ${targetLocale}: ${category.name} -> ${name}`);
+  console.log(
+    `Updated category ${targetLocale}: ${sourceName || category.slug} -> ${name}`
+  );
   return true;
 }
 
@@ -331,27 +370,30 @@ async function main() {
     config: unwrapPayloadConfig(payloadConfigModule),
   });
 
-  const { docs: posts } = await payload.find({
-    collection: "posts",
-    depth: 0,
-    fallbackLocale: false,
-    limit: 100,
-    locale: SOURCE_LOCALE,
-    overrideAccess: true,
-  });
-
-  console.log(
-    `Translating ${posts.length} posts from ${SOURCE_LOCALE} to ${TARGET_LOCALES.join(", ")}${DRY_RUN ? " (dry run)" : ""}.`
-  );
-
   let updatedPosts = 0;
-  for (const post of posts) {
-    for (const targetLocale of TARGET_LOCALES as TargetLocale[]) {
-      if (await translatePost(payload, post, targetLocale)) updatedPosts += 1;
+  let updatedCategories = 0;
+
+  if (!CATEGORIES_ONLY) {
+    const { docs: posts } = await payload.find({
+      collection: "posts",
+      depth: 0,
+      fallbackLocale: false,
+      limit: 100,
+      locale: SOURCE_LOCALE,
+      overrideAccess: true,
+    });
+
+    console.log(
+      `Translating ${posts.length} posts from ${SOURCE_LOCALE} to ${TARGET_LOCALES.join(", ")}${DRY_RUN ? " (dry run)" : ""}.`
+    );
+
+    for (const post of posts) {
+      for (const targetLocale of TARGET_LOCALES as TargetLocale[]) {
+        if (await translatePost(payload, post, targetLocale)) updatedPosts += 1;
+      }
     }
   }
 
-  let updatedCategories = 0;
   if (TRANSLATE_CATEGORIES) {
     const { docs: categories } = await payload.find({
       collection: "categories",
@@ -361,6 +403,10 @@ async function main() {
       locale: SOURCE_LOCALE,
       overrideAccess: true,
     });
+
+    console.log(
+      `Translating ${categories.length} categories from ${SOURCE_LOCALE} to ${TARGET_LOCALES.join(", ")}${DRY_RUN ? " (dry run)" : ""}.`
+    );
 
     for (const category of categories) {
       for (const targetLocale of TARGET_LOCALES as TargetLocale[]) {
