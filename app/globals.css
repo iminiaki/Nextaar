@@ -402,3 +402,7 @@ html.theme-transition::view-transition-old(root) {
 .react-international-phone-input-container .react-international-phone-country-selector-button {
   padding: 0 4px;
 }
+
+main:has([data-not-found-page]) nav[aria-label="Breadcrumb"] {
+  display: none;
+}

@@ -37,7 +37,7 @@ export default async function LocaleLayout({
         <FancyCursor />
         <div className="relative">
           <Navbar locale={locale} nav={dict.nav} servicesMenu={dict.home.servicesFeatures.items} />
-          <main>
+          <main className="relative">
             <Breadcrumbs locale={locale} />
             {children}
           </main>

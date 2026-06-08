@@ -149,6 +149,15 @@ type Dict = {
     latest: { title: string }
     newsletter: { title: string; placeholder: string; button: string; success: string }
   }
+  notFound: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    homeCta: string
+    contactCta: string
+    exploreCta: string
+    quickLinksTitle: string
+  }
 }
 
 const dictionaries: Record<Locale, Dict> = {
@@ -634,6 +643,16 @@ const dictionaries: Record<Locale, Dict> = {
         success: "You’re subscribed!",
       },
     },
+    notFound: {
+      eyebrow: "Page not found",
+      title: "This page took a wrong turn",
+      subtitle:
+        "The link may be broken, outdated, or the page may have moved. Let’s get you back on track.",
+      homeCta: "Back to home",
+      contactCta: "Contact us",
+      exploreCta: "Explore services",
+      quickLinksTitle: "Popular destinations",
+    },
   },
   fa: {
     common: { authorAlt: "نویسنده" },
@@ -1114,6 +1133,16 @@ const dictionaries: Record<Locale, Dict> = {
         success: "با موفقیت عضو شدید!",
       },
     },
+    notFound: {
+      eyebrow: "صفحه پیدا نشد",
+      title: "این صفحه گم شده",
+      subtitle:
+        "احتمالاً لینک اشتباه است، منقضی شده یا صفحه جابه‌جا شده. بیایید شما را به مسیر درست برگردانیم.",
+      homeCta: "بازگشت به خانه",
+      contactCta: "تماس با ما",
+      exploreCta: "مشاهده خدمات",
+      quickLinksTitle: "مسیرهای پرکاربرد",
+    },
   },
   ar: {
     common: { authorAlt: "الكاتب" },
@@ -1577,9 +1606,23 @@ const dictionaries: Record<Locale, Dict> = {
       latest: { title: "أحدث المقالات" },
       newsletter: { title: "اشترك", placeholder: "بريدك الإلكتروني", button: "اشترك", success: "تم الاشتراك!" },
     },
+    notFound: {
+      eyebrow: "الصفحة غير موجودة",
+      title: "يبدو أن هذه الصفحة ضاعت",
+      subtitle:
+        "قد يكون الرابط معطلاً أو قديماً أو أن الصفحة نُقلت. دعنا نعيدك إلى المسار الصحيح.",
+      homeCta: "العودة للرئيسية",
+      contactCta: "تواصل معنا",
+      exploreCta: "استعرض الخدمات",
+      quickLinksTitle: "وجهات شائعة",
+    },
   },
 }
 
 export async function getDictionary(locale: Locale): Promise<Dict> {
   return dictionaries[locale]
+}
+
+export function getNotFoundCopy(locale: Locale) {
+  return dictionaries[locale].notFound
 }
