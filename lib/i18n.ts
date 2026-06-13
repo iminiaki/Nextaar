@@ -229,7 +229,7 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "Featured Work", subtitle: "Real projects built for performance, clarity, and measurable results.", viewAll: "View Full Portfolio" },
       why: {
-        eyebrow: "6 strengths",
+        eyebrow: "Informed choice",
         title: "Why Brands Choose Lastaar",
         subtitle:
           "Everything you need to launch, grow, and maintain a high-performing digital presence — without juggling multiple vendors.",
@@ -722,7 +722,7 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "پروژه‌های منتخب", subtitle: "نمونه‌هایی واقعی با تمرکز بر عملکرد، وضوح پیام و نتیجه‌پذیری.", viewAll: "مشاهده کامل نمونه‌کارها" },
       why: {
-        eyebrow: "۶ مزیت",
+        eyebrow: "انتخاب آگاهانه",
         title: "چرا لستار",
         subtitle:
           "هرآنچه برای راه‌اندازی، رشد و نگهداری حضور دیجیتال باکیفیت نیاز دارید — بدون درگیر شدن با چند پیمانکار جداگانه.",
@@ -1207,7 +1207,7 @@ const dictionaries: Record<Locale, Dict> = {
       cta: { badge: "لنصنع محرك نموك القادم", title: "هل لديك مشروع في ذهنك؟", subtitle: "شاركنا أهدافك لتحصل على خارطة طريق مناسبة لعملك.", button: { label: "تحدث مع لستار" } },
       portfolio: { title: "أعمال مختارة", subtitle: "مشاريع حقيقية مبنية للأداء ووضوح الرسالة والنتائج القابلة للقياس.", viewAll: "عرض جميع الأعمال" },
       why: {
-        eyebrow: "٦ مزايا",
+        eyebrow: "اختيار واعٍ",
         title: "لماذا تختار لستار",
         subtitle:
           "كل ما تحتاجه لإطلاق حضور رقمي عالي الأداء وتنميته وصيانته — دون التعامل مع عدة مزودين منفصلين.",
