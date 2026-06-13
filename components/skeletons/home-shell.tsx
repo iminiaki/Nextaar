@@ -122,15 +122,22 @@ export function SkeletonPortfolioPreview() {
           </div>
           <Skeleton className="mx-auto h-10 w-40 shrink-0 rounded-xl sm:mx-0" />
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="space-y-0">
-              <Skeleton className="aspect-[4/3] w-full rounded-2xl border border-border/40" />
-              <div className="mt-3 flex justify-between gap-2 px-1">
-                <Skeleton className="h-5 flex-1 rounded-md" />
+        <div className="mt-10 overflow-hidden">
+          <div className="flex gap-4">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="min-w-[calc(100%-1rem)] shrink-0 sm:min-w-[calc(50%-0.5rem)] xl:min-w-[calc(33.333%-0.67rem)]">
+                <Skeleton className="aspect-[4/3] w-full rounded-2xl border border-border/40" />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="mt-6 flex justify-center gap-1.5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Skeleton
+                key={i}
+                className={cn("h-1.5 rounded-full", i === 0 ? "w-4" : "w-1.5")}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

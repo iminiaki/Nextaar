@@ -22,7 +22,7 @@ export async function PortfolioPreview({
   const { isEnabled } = await draftMode()
   const { docs: items } = await payload.find({
     collection: "portfolio" as any,
-    limit: 3,
+    limit: 8,
     sort: "-createdAt" as any,
     locale: locale as any,
     fallbackLocale: false as any,
@@ -32,11 +32,11 @@ export async function PortfolioPreview({
   })
   return (
     <PortfolioPreviewSection
+      locale={locale}
       title={title}
       subtitle={subtitle}
       viewAll={viewAll}
       baseHref={baseHref}
-      itemsCount={items.length}
     >
       {items.map((it: any) => (
         <div key={it.slug} data-portfolio-card className="min-h-0 opacity-0">
