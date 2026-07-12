@@ -306,7 +306,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "Iman Akrami",
               role: "CEO, Developer",
-              photo: "/media/iman.jpg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -626,9 +626,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "Quick links",
         links: [
-          { label: "Website design", href: "/en/services/web-development" },
-          { label: "SEO services", href: "/en/services/seo-aeo-geo" },
-          { label: "Google Ads", href: "/en/services/ad-campaigns" },
           { label: "Portfolio", href: "/en/portfolio" },
           { label: "Latest posts", href: "/en/blog" },
           { label: "Terms & Conditions", href: "/en/terms" },
@@ -658,7 +655,7 @@ const dictionaries: Record<Locale, Dict> = {
     common: { authorAlt: "نویسنده" },
     brand: { name: "لستار" },
     nav: {
-      home: "خانه",
+      home: "صفحه نخست",
       about: "درباره",
       services: "خدمات",
       portfolio: "نمونه کارها",
@@ -796,7 +793,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "ایمان اکرمی",
               role: "مدیرعامل · توسعه‌دهنده",
-              photo: "/media/iman.jpeg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -1116,9 +1113,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "دسترسی سریع",
         links: [
-          { label: "طراحی وب‌سایت", href: "/fa/services/web-development" },
-          { label: "خدمات سئو", href: "/fa/services/seo-aeo-geo" },
-          { label: "گوگل ادز", href: "/fa/services/ad-campaigns" },
           { label: "نمونه کارها", href: "/fa/portfolio" },
           { label: "آخرین پست‌ها", href: "/fa/blog" },
           { label: "شرایط و قوانین", href: "/fa/terms" },
@@ -1138,7 +1132,7 @@ const dictionaries: Record<Locale, Dict> = {
       title: "این صفحه گم شده",
       subtitle:
         "احتمالاً لینک اشتباه است، منقضی شده یا صفحه جابه‌جا شده. بیایید شما را به مسیر درست برگردانیم.",
-      homeCta: "بازگشت به خانه",
+      homeCta: "بازگشت به صفحه نخست",
       contactCta: "تماس با ما",
       exploreCta: "مشاهده خدمات",
       quickLinksTitle: "مسیرهای پرکاربرد",
@@ -1277,7 +1271,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "إيمان أكرمي",
               role: "الرئيس التنفيذي · مطوّر",
-              photo: "/media/iman.jpeg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -1594,9 +1588,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "روابط سريعة",
         links: [
-          { label: "تصميم المواقع", href: "/ar/services/web-development" },
-          { label: "خدمات SEO", href: "/ar/services/seo-aeo-geo" },
-          { label: "إعلانات Google", href: "/ar/services/ad-campaigns" },
           { label: "الأعمال", href: "/ar/portfolio" },
           { label: "أحدث المقالات", href: "/ar/blog" },
           { label: "الشروط والأحكام", href: "/ar/terms" },
