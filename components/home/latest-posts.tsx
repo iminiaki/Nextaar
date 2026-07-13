@@ -1,10 +1,8 @@
 import { PostCard } from "@/components/blog/post-card"
 import type { Locale } from "@/lib/i18n"
 import { RevealOnScroll } from "@/components/gsap/reveal"
-import { getPayload } from "payload"
-import payloadConfig from "@/payload.config"
-import { draftMode } from "next/headers"
 import { getDictionary } from "@/lib/i18n"
+import { findPosts } from "@/lib/payload-queries"
 
 export async function LatestPosts({
   locale,
@@ -17,19 +15,11 @@ export async function LatestPosts({
   subtitle: string
   baseHref: string
 }) {
-  const payload = await getPayload({ config: payloadConfig })
-  const { isEnabled } = await draftMode()
-  const { docs: posts } = await payload.find({
-    collection: "posts" as any,
-    limit: 4,
-    sort: "-createdAt" as any,
-    locale: locale as any,
-    fallbackLocale: false as any,
-    draft: isEnabled as any,
-    overrideAccess: isEnabled,
-    depth: 2,
-  })
-  const dict = await getDictionary(locale)
+  const [{ docs: posts }, dict] = await Promise.all([
+    findPosts({ locale, limit: 4, depth: 1 }),
+    getDictionary(locale),
+  ])
+
   return (
     <section className="py-16 md:py-24" style={{ contentVisibility: "auto", containIntrinsicSize: "1000px" }}>
       <div className="container mx-auto px-4">

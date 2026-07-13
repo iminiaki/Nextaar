@@ -1,25 +1,37 @@
-import { getDictionary, type Locale } from "@/lib/i18n";
-import { Hero } from "@/components/hero";
-import { ServicesFeatures } from "@/components/home/services-features";
-import { CallToAction } from "@/components/home/cta";
-import { PortfolioPreview } from "@/components/home/portfolio-preview";
-import { WhyChoose } from "@/components/home/why-choose";
-import { ProcessSection } from "@/components/home/process-section";
-import { LatestPosts } from "@/components/home/latest-posts";
-import { Partners } from "@/components/home/partners";
-import { GoogleReviews } from "@/components/home/google-reviews";
-import { CodingVideoSection } from "@/components/home/coding-video-section";
+import dynamic from "next/dynamic"
+import { getDictionary, type Locale } from "@/lib/i18n"
+import { Hero } from "@/components/hero"
+import { ServicesFeatures } from "@/components/home/services-features"
+import { PortfolioPreview } from "@/components/home/portfolio-preview"
+import { WhyChoose } from "@/components/home/why-choose"
+import { LatestPosts } from "@/components/home/latest-posts"
+import { Partners } from "@/components/home/partners"
+import { CodingVideoSection } from "@/components/home/coding-video-section"
+import { getSiteMetadata } from "@/lib/metadata"
+export const revalidate = 3600
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  console.log("searchParams", searchParams);
-  const dict = await getDictionary(params.locale);
-  const base = `/${params.locale}`;
+const GoogleReviews = dynamic(
+  () => import("@/components/home/google-reviews").then((m) => ({ default: m.GoogleReviews })),
+  { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
+)
+
+const ProcessSection = dynamic(
+  () => import("@/components/home/process-section").then((m) => ({ default: m.ProcessSection })),
+  { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
+)
+
+const CallToAction = dynamic(
+  () => import("@/components/home/cta").then((m) => ({ default: m.CallToAction })),
+  { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
+)
+
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  return getSiteMetadata(params.locale)
+}
+
+export default async function Page({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const base = `/${params.locale}`
   const codingVideoText = {
     en: {
       eyebrow: "Engineering in motion",
@@ -51,7 +63,7 @@ export default async function Page({
         { value: "24/7", label: "دعم موثوق" },
       ],
     },
-  }[params.locale];
+  }[params.locale]
 
   return (
     <>
@@ -121,16 +133,6 @@ export default async function Page({
       />
 
       <Partners title={dict.home.partners.title} />
-
-      {/* Keep a contact prompt on home */}
-      {/* <ContactForm
-        title={dict.contact.title}
-        subtitle={dict.contact.subtitle}
-        emailLabel={dict.contact.emailLabel}
-        messageLabel={dict.contact.messageLabel}
-        send={dict.contact.send}
-        success={dict.contact.success}
-      /> */}
     </>
-  );
+  )
 }

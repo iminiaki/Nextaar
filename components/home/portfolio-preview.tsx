@@ -1,8 +1,6 @@
 import { PortfolioCard } from "@/components/portfolio/portfolio-card"
 import type { Locale } from "@/lib/i18n"
-import { getPayload } from "payload"
-import payloadConfig from "@/payload.config"
-import { draftMode } from "next/headers"
+import { findPortfolio } from "@/lib/payload-queries"
 import { PortfolioPreviewSection } from "@/components/home/portfolio-preview-section"
 
 export async function PortfolioPreview({
@@ -18,18 +16,8 @@ export async function PortfolioPreview({
   viewAll: string
   baseHref: string
 }) {
-  const payload = await getPayload({ config: payloadConfig })
-  const { isEnabled } = await draftMode()
-  const { docs: items } = await payload.find({
-    collection: "portfolio" as any,
-    limit: 8,
-    sort: "-createdAt" as any,
-    locale: locale as any,
-    fallbackLocale: false as any,
-    draft: isEnabled as any,
-    overrideAccess: isEnabled,
-    depth: 2,
-  })
+  const { docs: items } = await findPortfolio({ locale, limit: 8, depth: 1 })
+
   return (
     <PortfolioPreviewSection
       locale={locale}

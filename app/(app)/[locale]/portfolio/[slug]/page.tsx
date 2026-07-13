@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { ArrowRight, BriefcaseBusiness, Layers3, Sparkles } from "lucide-react"
 import { getDictionary, isRTL, type Locale } from "@/lib/i18n"
@@ -6,9 +7,12 @@ import { RevealOnScroll } from "@/components/gsap/reveal"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { RichText } from "@payloadcms/richtext-lexical/react"
+import { findPortfolioBySlug } from "@/lib/payload-queries"
+import { buildPageMetadata } from "@/lib/metadata"
 import { getPayload } from "payload"
 import payloadConfig from "@/payload.config"
-import { draftMode } from "next/headers"
+
+export const revalidate = 3600
 
 const labels: Record<
   Locale,
@@ -69,20 +73,23 @@ export async function generateStaticParams() {
   return ["en", "fa", "ar"].flatMap((loc) => slugs.map((slug: string) => ({ locale: loc, slug })))
 }
 
-export default async function PortfolioDetail({ params }: { params: { locale: Locale; slug: string } }) {
-  const { isEnabled } = await draftMode()
-  const payload = await getPayload({ config: payloadConfig })
-  const { docs } = await payload.find({
-    collection: "portfolio" as any,
-    where: { slug: { equals: params.slug } },
-    limit: 1,
-    locale: params.locale as any,
-    fallbackLocale: false as any,
-    draft: isEnabled as any,
-    overrideAccess: isEnabled,
-    depth: 2,
+export async function generateMetadata({ params }: { params: { locale: Locale; slug: string } }) {
+  const item: any = await findPortfolioBySlug(params.locale, params.slug)
+
+  if (!item) {
+    return { title: "Portfolio" }
+  }
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: item.title,
+    description: item.excerpt ?? item.title,
+    path: `/portfolio/${params.slug}`,
   })
-  const item: any | undefined = docs?.[0]
+}
+
+export default async function PortfolioDetail({ params }: { params: { locale: Locale; slug: string } }) {
+  const item: any | undefined = await findPortfolioBySlug(params.locale, params.slug)
   if (!item) return notFound()
 
   const locale = params.locale
@@ -165,12 +172,15 @@ export default async function PortfolioDetail({ params }: { params: { locale: Lo
       </RevealOnScroll>
 
       <RevealOnScroll className="mt-10">
-        <div className="relative overflow-hidden rounded-3xl border bg-background/70 shadow-sm">
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-          <img
+        <div className="relative aspect-[16/8] w-full overflow-hidden rounded-3xl border bg-background/70 shadow-sm">
+          <div aria-hidden className="absolute inset-0 z-10 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+          <Image
             src={item.image?.url || "/placeholder.svg"}
             alt={item.title}
-            className="aspect-[16/8] w-full object-cover"
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 80vw"
+            className="object-cover"
           />
         </div>
       </RevealOnScroll>

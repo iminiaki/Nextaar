@@ -1,12 +1,12 @@
 "use client"
 
 import { useActionState } from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { Locale } from "@/lib/i18n"
 import { subscribeEmail } from "@/app/actions"
-import { SparklesCore } from "@/components/ui/sparkles"
 import {
   Facebook,
   Instagram,
@@ -18,6 +18,11 @@ import {
   Smartphone,
 } from "lucide-react"
 import { SOCIAL_LINKS } from "@/lib/social-links"
+
+const SparklesCore = dynamic(
+  () => import("@/components/ui/sparkles").then((m) => ({ default: m.SparklesCore })),
+  { ssr: false }
+)
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (

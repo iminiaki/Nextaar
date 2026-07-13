@@ -1,51 +1,46 @@
-import { notFound } from "next/navigation";
-import { draftMode } from "next/headers";
-import Link from "next/link";
-import { getDictionary, type Locale } from "@/lib/i18n";
-import { posts } from "@/lib/content";
-import { RevealOnScroll } from "@/components/gsap/reveal";
-import { CalendarDays, UserRound, Clock3 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { ShareButton } from "@/components/blog/share-button";
-import { BlogTOC } from "@/components/blog/toc";
-import { SubscribeWidget } from "@/components/blog/subscribe-widget";
-import { getPayload } from "payload";
-import payloadConfig from "@/payload.config";
-import { RichText } from "@payloadcms/richtext-lexical/react";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+import { notFound } from "next/navigation"
+import { draftMode } from "next/headers"
+import Link from "next/link"
+import Image from "next/image"
+import { getDictionary, type Locale } from "@/lib/i18n"
+import { RevealOnScroll } from "@/components/gsap/reveal"
+import { CalendarDays, UserRound, Clock3 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { ShareButton } from "@/components/blog/share-button"
+import { BlogTOC } from "@/components/blog/toc"
+import { SubscribeWidget } from "@/components/blog/subscribe-widget"
+export const revalidate = 3600
 
 type Params = {
-  params: { locale: Locale; slug: string };
-  searchParams?: Record<string, string | string[] | undefined>;
-};
+  params: { locale: Locale; slug: string }
+  searchParams?: Record<string, string | string[] | undefined>
+}
 
 function getCategoryName(category: any, locale: Locale) {
-  const name = category?.name;
-  if (name && typeof name === "object" && typeof name[locale] === "string") return name[locale];
-  if (typeof name === "string") return name;
-  return undefined;
+  const name = category?.name
+  if (name && typeof name === "object" && typeof name[locale] === "string") return name[locale]
+  if (typeof name === "string") return name
+  return undefined
 }
 
 export const generateMetadata = async ({
   params,
   searchParams,
 }: {
-  params: { locale: Locale; slug: string };
-  searchParams?: Record<string, string | string[] | undefined>;
+  params: { locale: Locale; slug: string }
+  searchParams?: Record<string, string | string[] | undefined>
 }) => {
-  const { isEnabled } = await draftMode();
-  const payload = await getPayload({ config: payloadConfig });
-
-  let post: any | undefined;
+  const { isEnabled } = await draftMode()
   const previewId =
     typeof searchParams?.previewId === "string"
       ? searchParams.previewId
-      : undefined;
+      : undefined
+
+  let post: any | undefined
 
   if (isEnabled && previewId) {
     try {
+      const payload = await getPayloadClient()
       post = await payload.findByID({
         collection: "posts" as any,
         id: previewId,
@@ -54,54 +49,41 @@ export const generateMetadata = async ({
         draft: true as any,
         depth: 2 as any,
         overrideAccess: true,
-      });
+      })
     } catch {}
   }
 
   if (!post) {
-    const result = await payload.find({
-      collection: "posts" as any,
-      where: { slug: { equals: params.slug } },
-      limit: 1,
-      locale: params.locale as any,
-      fallbackLocale: false as any,
-      draft: isEnabled as any,
-      overrideAccess: isEnabled,
-    });
-    post = result.docs?.[0];
+    post = await findPostBySlug(params.locale, params.slug)
   }
 
   if (!post) {
     return {
       title: "Preview",
       description: "Previewing draft content",
-    };
+    }
   }
 
-  return {
+  return buildPageMetadata({
+    locale: params.locale,
     title: post.title,
     description: post.excerpt,
-  };
-};
-
-export async function generateStaticParams() {
-  return ["en", "fa", "ar"].flatMap((loc) =>
-    posts.map((p) => ({ locale: loc, slug: p.slug }))
-  );
+    path: `/blog/${params.slug}`,
+  })
 }
 
 export default async function PostDetail({ params, searchParams }: Params) {
-  const dict = await getDictionary(params.locale);
-  const { isEnabled } = await draftMode();
-  const payload = await getPayload({ config: payloadConfig });
+  const dict = await getDictionary(params.locale)
+  const { isEnabled } = await draftMode()
   const previewId =
     typeof searchParams?.previewId === "string"
       ? searchParams?.previewId
-      : undefined;
-  let post: any | undefined;
+      : undefined
+  let post: any | undefined
 
   if (isEnabled && previewId) {
     try {
+      const payload = await getPayloadClient()
       post = await payload.findByID({
         collection: "posts" as any,
         id: previewId,
@@ -109,26 +91,18 @@ export default async function PostDetail({ params, searchParams }: Params) {
         fallbackLocale: false as any,
         draft: true as any,
         overrideAccess: true,
-      });
-    } catch (e) {
+      })
+    } catch {
       // fallback to slug query below
     }
   }
 
   if (!post) {
-    const { docs: posts } = await payload.find({
-      collection: "posts" as any,
-      where: { slug: { equals: params.slug } },
-      limit: 1,
-      locale: params.locale as any,
-      fallbackLocale: false as any,
-      draft: isEnabled as any,
-      depth: 2 as any,
-      overrideAccess: isEnabled,
-    });
-    post = posts?.[0];
+    post = await findPostBySlug(params.locale, params.slug)
   }
-  if (!post) return notFound();
+
+  if (!post) return notFound()
+
   const categories = Array.isArray(post.categories)
     ? post.categories
         .map((category: any) => ({
@@ -136,12 +110,13 @@ export default async function PostDetail({ params, searchParams }: Params) {
           slug: typeof category?.slug === "string" ? category.slug : undefined,
         }))
         .filter((category: any) => Boolean(category.name))
-    : [];
+    : []
+
+  const imageUrl = post.image?.url || "/placeholder.svg"
 
   return (
     <article className="container mx-auto px-4 py-16 md:py-24">
       <div className="grid gap-10 lg:grid-cols-4">
-        {/* Sidebar */}
         <aside className="lg:col-span-1 order-2 md:order-1">
           <div className="sticky top-28 flex flex-col gap-6">
             <div className="rounded-xl border p-4">
@@ -157,7 +132,6 @@ export default async function PostDetail({ params, searchParams }: Params) {
           </div>
         </aside>
 
-        {/* Main */}
         <div className="lg:col-span-3 order-1 md:order-2">
           <RevealOnScroll>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -206,11 +180,16 @@ export default async function PostDetail({ params, searchParams }: Params) {
           </RevealOnScroll>
 
           <RevealOnScroll className="mt-8">
-            <img
-              src={post.image?.url || "/placeholder.svg"}
-              alt={post.title}
-              className="w-full rounded-xl aspect-[2/1] object-cover"
-            />
+            <div className="relative aspect-[2/1] w-full overflow-hidden rounded-xl">
+              <Image
+                src={imageUrl}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 75vw"
+                className="object-cover"
+              />
+            </div>
           </RevealOnScroll>
 
           <RevealOnScroll className="prose mt-8 max-w-none dark:prose-invert">
@@ -221,5 +200,5 @@ export default async function PostDetail({ params, searchParams }: Params) {
         </div>
       </div>
     </article>
-  );
+  )
 }

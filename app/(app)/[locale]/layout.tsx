@@ -12,7 +12,7 @@ import { FancyCursor } from "@/components/gsap/cursor"
 // import { SupportChatbot } from "@/components/support-chatbot"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { getDictionary } from "@/lib/i18n"
-import { isLocale, type Locale } from "@/lib/i18n"
+import { isLocale, isRTL, type Locale } from "@/lib/i18n"
 import { getLatestPostLinks } from "@/lib/latest-posts"
 
 export async function generateStaticParams() {
@@ -38,6 +38,11 @@ export default async function LocaleLayout({
 
   return (
     <AccentProvider>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang='${locale}';document.documentElement.dir='${isRTL(locale) ? "rtl" : "ltr"}';`,
+        }}
+      />
       <LocaleProvider locale={locale}>
         <SmoothScroll />
         <FancyCursor />

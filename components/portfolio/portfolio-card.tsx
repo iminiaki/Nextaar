@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 export type PortfolioCardProps = {
@@ -12,6 +13,7 @@ export type PortfolioCardProps = {
 
 export function PortfolioCard({ href, title, categories, image, imageAlt, className }: PortfolioCardProps) {
   const renderedCategories = Array.isArray(categories) ? categories.join(" · ") : categories
+  const imageSrc = image || "/placeholder.svg"
 
   const content = (
     <div
@@ -21,19 +23,15 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
       )}
       data-cursor-variant="portfolio"
     >
-      {/* Background image */}
-      <img
-        src={image || "/placeholder.svg"}
+      <Image
+        src={imageSrc}
         alt={imageAlt || title}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+        className="object-cover transition-transform duration-700 group-hover:scale-110"
       />
 
-      {/* Gradient overlay for readability */}
-      {/* <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" /> */}
-
-      {/* Blurred info box */}
       <div className="absolute bottom-4 left-4 right-4 group-hover:translate-y-2 group-hover:scale-105 transition-transform duration-500">
         <div
           className="rounded-xl border border-white/15 bg-black/65 p-4 text-white shadow-2xl"
@@ -59,5 +57,3 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
     content
   )
 }
-
-
