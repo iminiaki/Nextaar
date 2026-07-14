@@ -1,29 +1,33 @@
 import { PortfolioCard } from "@/components/portfolio/portfolio-card"
-import type { Locale } from "@/lib/i18n"
+import { getDictionary, type Locale } from "@/lib/i18n"
 import { RevealOnScroll } from "@/components/gsap/reveal"
-import { getPayload } from "payload"
-import payloadConfig from "@/payload.config"
-import { draftMode } from "next/headers"
+import { findPortfolio } from "@/lib/payload-queries"
+import { buildPageMetadata } from "@/lib/metadata"
+
+export const revalidate = 3600
+
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const c = dict.pages.portfolio
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: c.title,
+    description: c.subtitle,
+    path: "/portfolio",
+  })
+}
 
 export default async function PortfolioPage({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const c = dict.pages.portfolio
   const base = `/${params.locale}`
-  const payload = await getPayload({ config: payloadConfig })
-  const { isEnabled } = await draftMode()
-  const { docs: items } = await payload.find({
-    collection: "portfolio" as any,
-    limit: 100,
-    sort: "-createdAt" as any,
-    locale: params.locale as any,
-    fallbackLocale: false as any,
-    draft: isEnabled as any,
-    overrideAccess: isEnabled,
-    depth: 2,
-  })
+  const { docs: items } = await findPortfolio({ locale: params.locale, limit: 100, depth: 1 })
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24">
       <RevealOnScroll>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{"Portfolio"}</h1>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.title}</h1>
       </RevealOnScroll>
       <RevealOnScroll staggerChildren className="mt-10">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

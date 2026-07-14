@@ -23,7 +23,7 @@ const routeLabels: Record<Locale, Record<string, string>> = {
     "ad-campaigns": "Ad Campaigns",
   },
   fa: {
-    home: "خانه",
+    home: "صفحه نخست",
     about: "درباره",
     blog: "بلاگ",
     contact: "تماس",

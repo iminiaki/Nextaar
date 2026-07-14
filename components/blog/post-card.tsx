@@ -62,11 +62,11 @@ export function PostCard(props: PostCardProps) {
       <div className="absolute inset-0 rounded-[1.5rem] bg-gradient-to-br from-accent/20 via-transparent to-primary/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
       <div className="relative p-4 pb-0">
-        <div className={`relative overflow-hidden rounded-2xl shadow-lg shadow-black/5`}>
+        <div className="relative h-56 overflow-hidden rounded-2xl shadow-lg shadow-black/5">
           <ImageWithFallback
             src={imageUrl || "/placeholder.svg"}
             alt={imageAlt || title}
-            className="h-56 w-full object-cover transition-all duration-700 group-hover:rotate-1 group-hover:scale-110 will-change-transform"
+            className="transition-all duration-700 group-hover:rotate-1 group-hover:scale-110 will-change-transform"
             fetchPriority="low"
           />
 

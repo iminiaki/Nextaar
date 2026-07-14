@@ -6,6 +6,9 @@
     "build": "next build",
     "dev": "next dev",
     "dev:turbo": "next dev --turbopack",
+    "import:wordpress": "tsx scripts/import-wordpress-posts.ts",
+    "translate:posts": "tsx scripts/translate-post-locales.ts",
+    "translate:categories": "tsx scripts/translate-post-locales.ts -- --categories-only",
     "lint": "next lint",
     "start": "next start"
   },
@@ -92,6 +95,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
+    "tsx": "^4.22.4",
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
   },

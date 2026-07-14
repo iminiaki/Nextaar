@@ -122,15 +122,22 @@ export function SkeletonPortfolioPreview() {
           </div>
           <Skeleton className="mx-auto h-10 w-40 shrink-0 rounded-xl sm:mx-0" />
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="space-y-0">
-              <Skeleton className="aspect-[4/3] w-full rounded-2xl border border-border/40" />
-              <div className="mt-3 flex justify-between gap-2 px-1">
-                <Skeleton className="h-5 flex-1 rounded-md" />
+        <div className="mt-10 overflow-hidden">
+          <div className="flex gap-4">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="min-w-[calc(100%-1rem)] shrink-0 sm:min-w-[calc(50%-0.5rem)] xl:min-w-[calc(33.333%-0.67rem)]">
+                <Skeleton className="aspect-[4/3] w-full rounded-2xl border border-border/40" />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="mt-6 flex justify-center gap-1.5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Skeleton
+                key={i}
+                className={cn("h-1.5 rounded-full", i === 0 ? "w-4" : "w-1.5")}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -141,18 +148,52 @@ export function SkeletonWhyChoose() {
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <Skeleton className="mx-auto h-10 w-72 max-w-full rounded-lg sm:h-11" />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex gap-3 rounded-2xl border border-border/40 bg-card/30 p-4">
-              <Skeleton className="mt-0.5 h-9 w-9 shrink-0 rounded-full" />
-              <div className="min-w-0 flex-1 space-y-2 pt-0.5">
-                <Skeleton className="h-4 w-full rounded-md" />
-                <Skeleton className="h-4 w-[94%] rounded-md" />
-                <Skeleton className="h-4 w-[70%] rounded-md" />
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+            <div className="space-y-4 lg:col-span-4 xl:col-span-5">
+              <Skeleton className="h-7 w-28 rounded-full" />
+              <Skeleton className="h-10 w-full max-w-sm rounded-lg sm:h-11" />
+              <Skeleton className="h-4 w-full max-w-md rounded-md" />
+              <Skeleton className="h-4 w-[92%] max-w-md rounded-md" />
+            </div>
+            <div className="mx-auto lg:col-span-8 xl:col-span-7">
+              <div className="relative size-72">
+                {[0, 1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="absolute size-72 overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+                    style={{
+                      top: i * 10,
+                      left: i * 10,
+                      zIndex: 4 - i,
+                    }}
+                  >
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl"
+                    >
+                      <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-2xl" />
+                      <div className="absolute -bottom-16 left-1/3 h-40 w-40 rounded-full bg-blue-500/8 blur-2xl" />
+                    </div>
+                    <div className="relative z-10 flex h-full flex-col gap-4 p-5">
+                      <Skeleton className="size-14 shrink-0 rounded-2xl" />
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <Skeleton className="h-4 w-full rounded-md" />
+                        <Skeleton className="h-4 w-[82%] rounded-md" />
+                        <Skeleton className="h-4 w-[68%] rounded-md" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 flex justify-center gap-1.5">
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <Skeleton
+                    key={i}
+                    className={cn("h-1.5 rounded-full", i === 0 ? "w-4" : "w-1.5")}
+                  />
+                ))}
               </div>
             </div>
-          ))}
         </div>
       </div>
     </section>

@@ -1,33 +1,63 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
+import { cn } from "@/lib/utils"
 
-type Props = React.ImgHTMLAttributes<HTMLImageElement> & {
+type Props = {
+  src?: string | null
   fallbackSrc?: string
+  alt?: string
+  className?: string
+  sizes?: string
+  loading?: "lazy" | "eager"
+  fetchPriority?: "auto" | "high" | "low"
 }
 
-export function ImageWithFallback({ fallbackSrc = "/placeholder.svg", onError, ...props }: Props) {
-  const [src, setSrc] = React.useState<string | undefined>(
-    typeof props.src === "string" ? props.src : undefined
-  )
+export function ImageWithFallback({
+  fallbackSrc = "/placeholder.svg",
+  src,
+  alt = "",
+  className,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
+  loading = "lazy",
+  fetchPriority = "low",
+}: Props) {
+  const [currentSrc, setCurrentSrc] = React.useState(src || fallbackSrc)
+  const [useNativeImg, setUseNativeImg] = React.useState(false)
 
   React.useEffect(() => {
-    if (typeof props.src === "string") setSrc(props.src)
-  }, [props.src])
+    setCurrentSrc(src || fallbackSrc)
+    setUseNativeImg(false)
+  }, [src, fallbackSrc])
+
+  if (useNativeImg || !currentSrc.startsWith("/")) {
+    return (
+      <img
+        src={currentSrc}
+        alt={alt}
+        className={className}
+        loading={loading}
+        decoding="async"
+        fetchPriority={fetchPriority}
+        onError={() => setCurrentSrc(fallbackSrc)}
+      />
+    )
+  }
 
   return (
-    <img
-      {...props}
-      src={src || fallbackSrc}
-      loading={props.loading ?? "lazy"}
-      decoding={props.decoding ?? "async"}
-      fetchPriority={props.fetchPriority ?? "low"}
-      onError={(e) => {
-        setSrc(fallbackSrc)
-        onError?.(e as any)
+    <Image
+      src={currentSrc}
+      alt={alt}
+      fill
+      sizes={sizes}
+      loading={loading}
+      fetchPriority={fetchPriority}
+      className={cn("object-cover", className)}
+      onError={() => {
+        setUseNativeImg(true)
+        setCurrentSrc(fallbackSrc)
       }}
     />
   )
 }
-
-

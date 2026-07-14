@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Locale } from "@/lib/i18n";
+import { isRTL, type Locale } from "@/lib/i18n";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,7 @@ export function ServicesFeatures({
   subtitle: string;
   items: Item[];
 }) {
+  const rtl = isRTL(locale);
   const sectionRef = useRef<HTMLElement | null>(null);
   const serviceImages = [
     "/services/code.png",
@@ -111,15 +113,22 @@ export function ServicesFeatures({
                       </p>
                     </div>
                     <div data-service-card-content>
-                      <Link href={it.href}>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-2 bg-transparent"
-                        >
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="default"
+                        className="group/cta mt-2 h-10 rounded-xl border-border/80 bg-background/60 px-5 text-sm font-medium shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-foreground hover:shadow-md hover:shadow-primary/10"
+                      >
+                        <Link href={it.href} className="inline-flex items-center gap-2">
                           {it.cta}
-                        </Button>
-                      </Link>
+                          <ArrowRight
+                            className={cn(
+                              "size-4 transition-transform duration-300 group-hover/cta:translate-x-0.5",
+                              rtl && "rotate-180 group-hover/cta:-translate-x-0.5"
+                            )}
+                          />
+                        </Link>
+                      </Button>
                     </div>
                   </div>
                 </div>

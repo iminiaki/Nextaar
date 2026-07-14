@@ -3,6 +3,19 @@ import { ContactForm } from "@/components/contact-form"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { MapPinHouse, Phone, MailCheck } from "lucide-react"
 import Link from "next/link"
+import { buildPageMetadata } from "@/lib/metadata"
+export const revalidate = 3600
+
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: dict.contact.title,
+    description: dict.contact.subtitle,
+    path: "/contact",
+  })
+}
 
 export default async function ContactPage({ params }: { params: { locale: Locale } }) {
   const dict = await getDictionary(params.locale)

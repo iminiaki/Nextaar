@@ -70,17 +70,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // This should come from your language detection (router, i18n, etc.)
-  const currentLang: string = "en"; // Example: change this dynamically
-  const isRTL = currentLang === "fa" || currentLang === "ar";
-
   return (
     <html
-      lang={currentLang}
-      dir={isRTL ? "rtl" : "ltr"}
-      className={`${isRTL ? Peyda.variable : GeistSans.variable} ${
-        GeistMono.variable
-      }`}
+      lang="en"
+      dir="ltr"
+      className={`${GeistSans.variable} ${Peyda.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body className="font-sans">

@@ -1,100 +1,124 @@
-import Link from "next/link";
-import { PostCard } from "@/components/blog/post-card";
-import { getDictionary, type Locale } from "@/lib/i18n";
-import { RevealOnScroll } from "@/components/gsap/reveal";
-import { getPayload } from "payload";
-import payloadConfig from "@/payload.config";
-import { draftMode } from "next/headers";
-import { Hash, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { SubscribeWidget } from "@/components/blog/subscribe-widget";
+import Link from "next/link"
+import { PostCard } from "@/components/blog/post-card"
+import { getDictionary, type Locale } from "@/lib/i18n"
+import { RevealOnScroll } from "@/components/gsap/reveal"
+import { Hash, Search } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { SubscribeWidget } from "@/components/blog/subscribe-widget"
+import { BlogPagination, getBlogPagination } from "@/components/blog/blog-pagination"
+import {
+  findCategories,
+  findPosts,
+  getPostCategoryCounts,
+} from "@/lib/payload-queries"
+import { buildPageMetadata } from "@/lib/metadata"
+
+export const revalidate = 3600
 
 function getLocalizedName(category: any, locale: Locale) {
-  const name = category?.name;
-  if (name && typeof name === "object" && typeof name[locale] === "string") return name[locale];
-  if (typeof name === "string") return name;
-  return undefined;
+  const name = category?.name
+  if (name && typeof name === "object" && typeof name[locale] === "string") return name[locale]
+  if (typeof name === "string") return name
+  return undefined
 }
 
 function getCategorySlug(category: any) {
-  return typeof category?.slug === "string" ? category.slug : undefined;
+  return typeof category?.slug === "string" ? category.slug : undefined
 }
 
-function postHasCategory(post: any, categorySlug?: string) {
-  if (!categorySlug) return true;
-  if (!Array.isArray(post?.categories)) return false;
-  return post.categories.some((category: any) => getCategorySlug(category) === categorySlug);
+function createBlogHref(
+  base: string,
+  params: { category?: string; q?: string; page?: number }
+) {
+  const searchParams = new URLSearchParams()
+  if (params.category) searchParams.set("category", params.category)
+  if (params.q) searchParams.set("q", params.q)
+  if (params.page && params.page > 1) searchParams.set("page", String(params.page))
+  const query = searchParams.toString()
+
+  return query ? `${base}/blog?${query}` : `${base}/blog`
 }
 
-function postMatchesSearch(post: any, query: string, locale: Locale) {
-  if (!query) return true;
-  const normalizedQuery = query.trim().toLowerCase();
-  const categoryNames = Array.isArray(post?.categories)
-    ? post.categories.map((category: any) => getLocalizedName(category, locale)).filter(Boolean).join(" ")
-    : "";
-  const searchable = [post?.title, post?.excerpt, categoryNames].filter(Boolean).join(" ").toLowerCase();
+function buildPostsWhere(activeCategory?: string, searchQuery?: string) {
+  const conditions: Record<string, unknown>[] = []
 
-  return searchable.includes(normalizedQuery);
+  if (activeCategory) {
+    conditions.push({ "categories.slug": { equals: activeCategory } })
+  }
+
+  if (searchQuery) {
+    conditions.push({
+      or: [
+        { title: { contains: searchQuery } },
+        { excerpt: { contains: searchQuery } },
+      ],
+    })
+  }
+
+  if (conditions.length === 0) return undefined
+  if (conditions.length === 1) return conditions[0]
+  return { and: conditions }
 }
 
-function createBlogHref(base: string, params: { category?: string; q?: string }) {
-  const searchParams = new URLSearchParams();
-  if (params.category) searchParams.set("category", params.category);
-  if (params.q) searchParams.set("q", params.q);
-  const query = searchParams.toString();
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const c = dict.pages.blog
 
-  return query ? `${base}/blog?${query}` : `${base}/blog`;
+  return buildPageMetadata({
+    locale: params.locale,
+    title: c.title,
+    description: c.subtitle,
+    path: "/blog",
+  })
 }
 
 export default async function BlogPage({
   params,
   searchParams,
 }: {
-  params: { locale: Locale };
-  searchParams?: { category?: string; q?: string };
+  params: { locale: Locale }
+  searchParams?: { category?: string; q?: string; page?: string }
 }) {
-  const dict = await getDictionary(params.locale);
-  const c = dict.pages.blog;
-  const base = `/${params.locale}`;
-  const activeCategory = searchParams?.category;
-  const searchQuery = searchParams?.q?.trim() ?? "";
+  const dict = await getDictionary(params.locale)
+  const c = dict.pages.blog
+  const base = `/${params.locale}`
+  const activeCategory = searchParams?.category
+  const searchQuery = searchParams?.q?.trim() ?? ""
+  const requestedPage = Number.parseInt(searchParams?.page ?? "1", 10)
+  const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1
 
-  const payload = await getPayload({ config: payloadConfig });
-  const { isEnabled } = await draftMode();
-  const [{ docs: posts }, { docs: categories }] = await Promise.all([
-    payload.find({
-      collection: "posts" as any,
-      limit: 100,
-      locale: params.locale as any,
-      fallbackLocale: false as any,
-      draft: isEnabled as any,
-      overrideAccess: isEnabled,
-      depth: 2,
-    }),
-    payload.find({
-      collection: "categories" as any,
-      limit: 100,
-      locale: params.locale as any,
-      fallbackLocale: false as any,
-      sort: "name" as any,
+  const where = buildPostsWhere(activeCategory, searchQuery || undefined)
+
+  const [{ docs: posts, totalDocs }, { docs: categories }, postCountByCategory] = await Promise.all([
+    findPosts({
+      locale: params.locale,
+      limit: 12,
+      page: currentPage,
       depth: 1,
+      where,
     }),
-  ]);
+    findCategories(params.locale),
+    getPostCategoryCounts(params.locale),
+  ])
 
-  const sortedPosts = posts
-    .filter((post) => postHasCategory(post, activeCategory))
-    .filter((post) => postMatchesSearch(post, searchQuery, params.locale))
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  const { currentPage: safePage, totalPages } = getBlogPagination({
+    totalItems: totalDocs,
+    currentPage,
+  })
 
-  const postCountByCategory = posts.reduce<Record<string, number>>((acc, post: any) => {
-    if (!Array.isArray(post.categories)) return acc;
-    for (const category of post.categories) {
-      const slug = getCategorySlug(category);
-      if (slug) acc[slug] = (acc[slug] ?? 0) + 1;
-    }
-    return acc;
-  }, {});
+  const categoriesWithPosts = categories.filter((category: any) => {
+    const slug = getCategorySlug(category)
+    return slug ? (postCountByCategory[slug] ?? 0) > 0 : false
+  })
+
+  const totalPosts = Object.values(postCountByCategory).reduce((sum, count) => sum + count, 0)
+  const createPageHref = (page: number) =>
+    createBlogHref(base, {
+      category: activeCategory,
+      q: searchQuery || undefined,
+      page,
+    })
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 relative">
@@ -147,13 +171,13 @@ export default async function BlogPage({
                   }`}
                 >
                   <span>{c.allPosts}</span>
-                  <span className="text-xs opacity-80">{posts.length}</span>
+                  <span className="text-xs opacity-80">{totalPosts}</span>
                 </Link>
-                {categories.map((category: any) => {
-                  const slug = getCategorySlug(category);
-                  const name = getLocalizedName(category, params.locale);
-                  if (!slug || !name) return null;
-                  const isActive = activeCategory === slug;
+                {categoriesWithPosts.map((category: any) => {
+                  const slug = getCategorySlug(category)
+                  const name = getLocalizedName(category, params.locale)
+                  if (!slug || !name) return null
+                  const isActive = activeCategory === slug
 
                   return (
                     <Link
@@ -166,7 +190,7 @@ export default async function BlogPage({
                       <span>{name}</span>
                       <span className="text-xs opacity-80">{postCountByCategory[slug] ?? 0}</span>
                     </Link>
-                  );
+                  )
                 })}
               </nav>
             </div>
@@ -176,29 +200,41 @@ export default async function BlogPage({
         </RevealOnScroll>
 
         <RevealOnScroll staggerChildren className="lg:col-span-9">
-          {sortedPosts.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {sortedPosts.map((p) => (
-                <PostCard
-                  key={p.slug}
-                  href={`${base}/blog/${p.slug}`}
-                  title={p.title}
-                  excerpt={p.excerpt}
-                  imageUrl={p.image?.url}
-                  createdAt={p.createdAt}
-                  readingTime={p.readingTime}
-                  locale={params.locale}
-                  labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
-                  author={{
-                    name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
-                    avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
-                  }}
-                  categories={Array.isArray((p as any).categories)
-                    ? (p as any).categories.map((category: any) => getLocalizedName(category, params.locale)).filter(Boolean)
-                    : undefined}
-                />
-              ))}
-            </div>
+          {posts.length > 0 ? (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {posts.map((p) => (
+                  <PostCard
+                    key={p.slug}
+                    href={`${base}/blog/${p.slug}`}
+                    title={p.title}
+                    excerpt={p.excerpt}
+                    imageUrl={p.image?.url}
+                    createdAt={p.createdAt}
+                    readingTime={p.readingTime}
+                    locale={params.locale}
+                    labels={{ readTimeSuffix: dict.blogDetail.readTimeSuffix, authorAlt: (dict as any)?.common?.authorAlt }}
+                    author={{
+                      name: (p.author && typeof p.author === "object") ? (p.author as any).name : undefined,
+                      avatar: (p.author && typeof p.author === "object") ? (p.author as any).image?.url : undefined,
+                    }}
+                    categories={Array.isArray((p as any).categories)
+                      ? (p as any).categories.map((category: any) => getLocalizedName(category, params.locale)).filter(Boolean)
+                      : undefined}
+                  />
+                ))}
+              </div>
+              <BlogPagination
+                currentPage={safePage}
+                totalPages={totalPages}
+                createHref={createPageHref}
+                locale={params.locale}
+                labels={{
+                  previous: c.previousPage,
+                  next: c.nextPage,
+                }}
+              />
+            </>
           ) : (
             <div className="rounded-2xl border bg-card/60 p-8 text-center text-sm text-muted-foreground">
               {c.noPosts}
@@ -207,5 +243,5 @@ export default async function BlogPage({
         </RevealOnScroll>
       </div>
     </div>
-  );
+  )
 }

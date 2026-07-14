@@ -46,7 +46,7 @@ type Dict = {
     }
     cta: { badge: string; title: string; subtitle: string; button: { label: string } }
     portfolio: { title: string; subtitle: string; viewAll: string }
-    why: { title: string; bullets: string[] }
+    why: { eyebrow: string; title: string; subtitle: string; swipeHint: string; bullets: string[] }
     aboutTeaser: { title: string; body: string; button: string }
     process: {
       eyebrow: string
@@ -88,6 +88,8 @@ type Dict = {
       search: string
       searchPlaceholder: string
       noPosts: string
+      previousPage: string
+      nextPage: string
     }
     terms: {
       title: string
@@ -146,6 +148,15 @@ type Dict = {
     quickLinks: { title: string; links: { label: string; href: string }[] }
     latest: { title: string }
     newsletter: { title: string; placeholder: string; button: string; success: string }
+  }
+  notFound: {
+    eyebrow: string
+    title: string
+    subtitle: string
+    homeCta: string
+    contactCta: string
+    exploreCta: string
+    quickLinksTitle: string
   }
 }
 
@@ -218,7 +229,11 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "Featured Work", subtitle: "Real projects built for performance, clarity, and measurable results.", viewAll: "View Full Portfolio" },
       why: {
+        eyebrow: "Informed choice",
         title: "Why Brands Choose Lastaar",
+        subtitle:
+          "Everything you need to launch, grow, and maintain a high-performing digital presence — without juggling multiple vendors.",
+        swipeHint: "Swipe to navigate",
         bullets: [
           "Strategy, design, and development in one integrated team",
           "Fast delivery with production-grade code quality",
@@ -291,7 +306,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "Iman Akrami",
               role: "CEO, Developer",
-              photo: "/media/iman.jpg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -335,6 +350,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "Search",
         searchPlaceholder: "Search articles...",
         noPosts: "No posts found in this category.",
+        previousPage: "Previous",
+        nextPage: "Next",
       },
       terms: {
         title: "Terms and Conditions",
@@ -609,9 +626,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "Quick links",
         links: [
-          { label: "Website design", href: "/en/services/web-development" },
-          { label: "SEO services", href: "/en/services/seo-aeo-geo" },
-          { label: "Google Ads", href: "/en/services/ad-campaigns" },
           { label: "Portfolio", href: "/en/portfolio" },
           { label: "Latest posts", href: "/en/blog" },
           { label: "Terms & Conditions", href: "/en/terms" },
@@ -626,12 +640,22 @@ const dictionaries: Record<Locale, Dict> = {
         success: "You’re subscribed!",
       },
     },
+    notFound: {
+      eyebrow: "Page not found",
+      title: "This page took a wrong turn",
+      subtitle:
+        "The link may be broken, outdated, or the page may have moved. Let’s get you back on track.",
+      homeCta: "Back to home",
+      contactCta: "Contact us",
+      exploreCta: "Explore services",
+      quickLinksTitle: "Popular destinations",
+    },
   },
   fa: {
     common: { authorAlt: "نویسنده" },
     brand: { name: "لستار" },
     nav: {
-      home: "خانه",
+      home: "صفحه نخست",
       about: "درباره",
       services: "خدمات",
       portfolio: "نمونه کارها",
@@ -695,7 +719,11 @@ const dictionaries: Record<Locale, Dict> = {
       },
       portfolio: { title: "پروژه‌های منتخب", subtitle: "نمونه‌هایی واقعی با تمرکز بر عملکرد، وضوح پیام و نتیجه‌پذیری.", viewAll: "مشاهده کامل نمونه‌کارها" },
       why: {
+        eyebrow: "انتخاب آگاهانه",
         title: "چرا لستار",
+        subtitle:
+          "هرآنچه برای راه‌اندازی، رشد و نگهداری حضور دیجیتال باکیفیت نیاز دارید — بدون درگیر شدن با چند پیمانکار جداگانه.",
+        swipeHint: "برای جابه‌جایی بکشید",
         bullets: [
           "استراتژی، طراحی و توسعه در یک تیم یکپارچه",
           "تحویل سریع با کیفیت فنی در سطح Production",
@@ -765,7 +793,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "ایمان اکرمی",
               role: "مدیرعامل · توسعه‌دهنده",
-              photo: "/media/iman.jpeg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -809,6 +837,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "جستجو",
         searchPlaceholder: "جستجو در مقالات...",
         noPosts: "پستی در این دسته بندی پیدا نشد.",
+        previousPage: "قبلی",
+        nextPage: "بعدی",
       },
       terms: {
         title: "شرایط و قوانین",
@@ -1083,9 +1113,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "دسترسی سریع",
         links: [
-          { label: "طراحی وب‌سایت", href: "/fa/services/web-development" },
-          { label: "خدمات سئو", href: "/fa/services/seo-aeo-geo" },
-          { label: "گوگل ادز", href: "/fa/services/ad-campaigns" },
           { label: "نمونه کارها", href: "/fa/portfolio" },
           { label: "آخرین پست‌ها", href: "/fa/blog" },
           { label: "شرایط و قوانین", href: "/fa/terms" },
@@ -1099,6 +1126,16 @@ const dictionaries: Record<Locale, Dict> = {
         button: "اشتراک",
         success: "با موفقیت عضو شدید!",
       },
+    },
+    notFound: {
+      eyebrow: "صفحه پیدا نشد",
+      title: "این صفحه گم شده",
+      subtitle:
+        "احتمالاً لینک اشتباه است، منقضی شده یا صفحه جابه‌جا شده. بیایید شما را به مسیر درست برگردانیم.",
+      homeCta: "بازگشت به صفحه نخست",
+      contactCta: "تماس با ما",
+      exploreCta: "مشاهده خدمات",
+      quickLinksTitle: "مسیرهای پرکاربرد",
     },
   },
   ar: {
@@ -1164,7 +1201,11 @@ const dictionaries: Record<Locale, Dict> = {
       cta: { badge: "لنصنع محرك نموك القادم", title: "هل لديك مشروع في ذهنك؟", subtitle: "شاركنا أهدافك لتحصل على خارطة طريق مناسبة لعملك.", button: { label: "تحدث مع لستار" } },
       portfolio: { title: "أعمال مختارة", subtitle: "مشاريع حقيقية مبنية للأداء ووضوح الرسالة والنتائج القابلة للقياس.", viewAll: "عرض جميع الأعمال" },
       why: {
+        eyebrow: "اختيار واعٍ",
         title: "لماذا تختار لستار",
+        subtitle:
+          "كل ما تحتاجه لإطلاق حضور رقمي عالي الأداء وتنميته وصيانته — دون التعامل مع عدة مزودين منفصلين.",
+        swipeHint: "اسحب للتنقل",
         bullets: [
           "الاستراتيجية والتصميم والتطوير ضمن فريق واحد متكامل",
           "تنفيذ سريع بجودة تقنية جاهزة للإنتاج",
@@ -1230,7 +1271,7 @@ const dictionaries: Record<Locale, Dict> = {
             {
               name: "إيمان أكرمي",
               role: "الرئيس التنفيذي · مطوّر",
-              photo: "/media/iman.jpeg",
+              photo: "/media/iman.png",
               socials: { github: "#", linkedin: "#" },
             },
             {
@@ -1271,6 +1312,8 @@ const dictionaries: Record<Locale, Dict> = {
         search: "بحث",
         searchPlaceholder: "ابحث في المقالات...",
         noPosts: "لم يتم العثور على مقالات في هذا التصنيف.",
+        previousPage: "السابق",
+        nextPage: "التالي",
       },
       terms: {
         title: "الشروط والأحكام",
@@ -1545,9 +1588,6 @@ const dictionaries: Record<Locale, Dict> = {
       quickLinks: {
         title: "روابط سريعة",
         links: [
-          { label: "تصميم المواقع", href: "/ar/services/web-development" },
-          { label: "خدمات SEO", href: "/ar/services/seo-aeo-geo" },
-          { label: "إعلانات Google", href: "/ar/services/ad-campaigns" },
           { label: "الأعمال", href: "/ar/portfolio" },
           { label: "أحدث المقالات", href: "/ar/blog" },
           { label: "الشروط والأحكام", href: "/ar/terms" },
@@ -1557,9 +1597,23 @@ const dictionaries: Record<Locale, Dict> = {
       latest: { title: "أحدث المقالات" },
       newsletter: { title: "اشترك", placeholder: "بريدك الإلكتروني", button: "اشترك", success: "تم الاشتراك!" },
     },
+    notFound: {
+      eyebrow: "الصفحة غير موجودة",
+      title: "يبدو أن هذه الصفحة ضاعت",
+      subtitle:
+        "قد يكون الرابط معطلاً أو قديماً أو أن الصفحة نُقلت. دعنا نعيدك إلى المسار الصحيح.",
+      homeCta: "العودة للرئيسية",
+      contactCta: "تواصل معنا",
+      exploreCta: "استعرض الخدمات",
+      quickLinksTitle: "وجهات شائعة",
+    },
   },
 }
 
 export async function getDictionary(locale: Locale): Promise<Dict> {
   return dictionaries[locale]
+}
+
+export function getNotFoundCopy(locale: Locale) {
+  return dictionaries[locale].notFound
 }

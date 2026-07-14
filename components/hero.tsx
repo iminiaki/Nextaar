@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Spline from "@splinetool/react-spline"
+import { useEffect, useRef, useState } from "react"
+import { SplineScene } from "@/components/ui/splite"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -33,6 +33,26 @@ export function Hero({
   const rootRef = useRef<HTMLDivElement>(null)
   const blob1Ref = useRef<HTMLDivElement>(null)
   const blob2Ref = useRef<HTMLDivElement>(null)
+  const visualRef = useRef<HTMLDivElement>(null)
+  const [showSpline, setShowSpline] = useState(false)
+
+  useEffect(() => {
+    const node = visualRef.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setShowSpline(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "200px" }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -191,7 +211,7 @@ export function Hero({
         </div>
 
         {/* Right column — Spline visual */}
-        <div data-hero-visual className="relative flex items-center justify-center">
+        <div ref={visualRef} data-hero-visual className="relative flex items-center justify-center">
           {/* Glow behind card: #a30098 → blue */}
           <div
             aria-hidden
@@ -212,10 +232,17 @@ export function Hero({
   }}/>
 
             <div className="aspect-[4/3] w-full lg:aspect-square">
-              <Spline
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                className="h-full w-full"
-              />
+              {showSpline ? (
+                <SplineScene
+                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                  className="h-full w-full"
+                />
+              ) : (
+                <div
+                  aria-hidden
+                  className="h-full w-full animate-pulse bg-gradient-to-br from-primary/10 via-accent/5 to-transparent"
+                />
+              )}
             </div>
           </div>
         </div>

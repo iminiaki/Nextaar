@@ -7,12 +7,12 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
-import { Users } from "./collections/Users";
-import { Media } from "./collections/Media";
-import { Posts } from "./collections/Posts";
-import { Categories } from "./collections/PostCat";
-import { PortfolioCategories } from "./collections/PortfolioCat";
-import { Portfolio } from "./collections/Portfolio";
+import { Users } from "./collections/Users.ts";
+import { Media } from "./collections/Media.ts";
+import { Posts } from "./collections/Posts.ts";
+import { Categories } from "./collections/PostCat.ts";
+import { PortfolioCategories } from "./collections/PortfolioCat.ts";
+import { Portfolio } from "./collections/Portfolio.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { type Locale, locales } from "@/lib/i18n"
+import { setLocalePreference } from "@/lib/locale-preference"
 import { Languages } from "lucide-react"
 
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
@@ -11,6 +12,8 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname() || "/en"
 
   function switchTo(target: Locale) {
+    setLocalePreference(target)
+
     const parts = pathname.split("/")
     if (parts.length > 1 && locales.includes(parts[1] as Locale)) {
       parts[1] = target
