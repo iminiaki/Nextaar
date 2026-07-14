@@ -1,8 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/lastaar1/public_html
+    - export DEPLOYPATH=/home/lastaar1/nextaar
     - /bin/mkdir -p $DEPLOYPATH
     - /usr/bin/rsync -a --delete --exclude=.git --exclude=node_modules --exclude=.next ./ $DEPLOYPATH/
-    - cd $DEPLOYPATH && npm install --legacy-peer-deps
+    - cd $DEPLOYPATH && npm ci --legacy-peer-deps
     - cd $DEPLOYPATH && NODE_OPTIONS=--max-old-space-size=4096 npm run build
