@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    # Update DEPLOYPATH if your Node.js app root differs from the git repo.
+    # Common values: /home/$USER/nextaar or /home/$USER/repositories/Nextaar
+    - export DEPLOYPATH=/home/$USER/nextaar
+    - /bin/mkdir -p $DEPLOYPATH
+    - /usr/bin/rsync -a --delete --exclude='.git' --exclude='node_modules' --exclude='.next' --exclude='.env.local' ./ $DEPLOYPATH/
+    - cd $DEPLOYPATH && npm install && npm run build
