@@ -9,8 +9,6 @@ import { Button } from "@/components/ui/button"
 import { RichText } from "@payloadcms/richtext-lexical/react"
 import { findPortfolioBySlug } from "@/lib/payload-queries"
 import { buildPageMetadata } from "@/lib/metadata"
-import { getPayload } from "payload"
-import payloadConfig from "@/payload.config"
 
 export const revalidate = 3600
 
@@ -64,13 +62,6 @@ function getCategoryName(category: any, locale: Locale) {
   if (name && typeof name === "object" && typeof name[locale] === "string") return name[locale]
   if (typeof name === "string") return name
   return undefined
-}
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: payloadConfig })
-  const { docs } = await payload.find({ collection: "portfolio" as any, limit: 1000, depth: 0 })
-  const slugs = docs.map((d: any) => d.slug).filter(Boolean)
-  return ["en", "fa", "ar"].flatMap((loc) => slugs.map((slug: string) => ({ locale: loc, slug })))
 }
 
 export async function generateMetadata({ params }: { params: { locale: Locale; slug: string } }) {
