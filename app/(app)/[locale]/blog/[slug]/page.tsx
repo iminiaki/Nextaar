@@ -2,18 +2,22 @@ import { notFound } from "next/navigation"
 import { draftMode } from "next/headers"
 import Link from "next/link"
 import Image from "next/image"
+import { RichText } from "@payloadcms/richtext-lexical/react"
 import { getDictionary, type Locale } from "@/lib/i18n"
+import { findPostBySlug, getPayloadClient } from "@/lib/payload-queries"
+import { buildPageMetadata } from "@/lib/metadata"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { CalendarDays, UserRound, Clock3 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { ShareButton } from "@/components/blog/share-button"
 import { BlogTOC } from "@/components/blog/toc"
 import { SubscribeWidget } from "@/components/blog/subscribe-widget"
+
 export const revalidate = 3600
 
-type Params = {
-  params: { locale: Locale; slug: string }
-  searchParams?: Record<string, string | string[] | undefined>
+type PageProps = {
+  params: Promise<{ locale: Locale; slug: string }>
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
 }
 
 function getCategoryName(category: any, locale: Locale) {
@@ -23,17 +27,14 @@ function getCategoryName(category: any, locale: Locale) {
   return undefined
 }
 
-export const generateMetadata = async ({
-  params,
-  searchParams,
-}: {
-  params: { locale: Locale; slug: string }
-  searchParams?: Record<string, string | string[] | undefined>
-}) => {
+export async function generateMetadata({ params, searchParams }: PageProps) {
+  const { locale, slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
   const { isEnabled } = await draftMode()
   const previewId =
-    typeof searchParams?.previewId === "string"
-      ? searchParams.previewId
+    typeof resolvedSearchParams?.previewId === "string"
+      ? resolvedSearchParams.previewId
       : undefined
 
   let post: any | undefined
@@ -44,7 +45,7 @@ export const generateMetadata = async ({
       post = await payload.findByID({
         collection: "posts" as any,
         id: previewId,
-        locale: params.locale as any,
+        locale: locale as any,
         fallbackLocale: false as any,
         draft: true as any,
         depth: 2 as any,
@@ -54,7 +55,7 @@ export const generateMetadata = async ({
   }
 
   if (!post) {
-    post = await findPostBySlug(params.locale, params.slug)
+    post = await findPostBySlug(locale, slug)
   }
 
   if (!post) {
@@ -65,19 +66,22 @@ export const generateMetadata = async ({
   }
 
   return buildPageMetadata({
-    locale: params.locale,
+    locale,
     title: post.title,
     description: post.excerpt,
-    path: `/blog/${params.slug}`,
+    path: `/blog/${slug}`,
   })
 }
 
-export default async function PostDetail({ params, searchParams }: Params) {
-  const dict = await getDictionary(params.locale)
+export default async function PostDetail({ params, searchParams }: PageProps) {
+  const { locale, slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const dict = await getDictionary(locale)
   const { isEnabled } = await draftMode()
   const previewId =
-    typeof searchParams?.previewId === "string"
-      ? searchParams?.previewId
+    typeof resolvedSearchParams?.previewId === "string"
+      ? resolvedSearchParams.previewId
       : undefined
   let post: any | undefined
 
@@ -87,7 +91,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
       post = await payload.findByID({
         collection: "posts" as any,
         id: previewId,
-        locale: params.locale as any,
+        locale: locale as any,
         fallbackLocale: false as any,
         draft: true as any,
         overrideAccess: true,
@@ -98,7 +102,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
   }
 
   if (!post) {
-    post = await findPostBySlug(params.locale, params.slug)
+    post = await findPostBySlug(locale, slug)
   }
 
   if (!post) return notFound()
@@ -106,7 +110,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
   const categories = Array.isArray(post.categories)
     ? post.categories
         .map((category: any) => ({
-          name: getCategoryName(category, params.locale),
+          name: getCategoryName(category, locale),
           slug: typeof category?.slug === "string" ? category.slug : undefined,
         }))
         .filter((category: any) => Boolean(category.name))
@@ -123,10 +127,10 @@ export default async function PostDetail({ params, searchParams }: Params) {
               <h3 className="mb-3 text-sm font-semibold">
                 {dict.blogDetail.tocTitle}
               </h3>
-              <BlogTOC containerId="post-content" locale={params.locale} />
+              <BlogTOC containerId="post-content" locale={locale} />
             </div>
             <SubscribeWidget
-              locale={params.locale}
+              locale={locale}
               labels={dict.blogDetail.subscribe}
             />
           </div>
@@ -159,7 +163,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
                     {categories.map((category: any) => (
                       <Link
                         key={`${category.name}-${category.slug ?? "category"}`}
-                        href={`/${params.locale}/blog${category.slug ? `?category=${encodeURIComponent(category.slug)}` : ""}`}
+                        href={`/${locale}/blog${category.slug ? `?category=${encodeURIComponent(category.slug)}` : ""}`}
                       >
                         <Badge variant="secondary" className="rounded-full px-3 py-1 hover:bg-primary hover:text-primary-foreground">
                           {category.name}
@@ -172,7 +176,7 @@ export default async function PostDetail({ params, searchParams }: Params) {
                 <ShareButton
                   title={post.title}
                   ariaLabel={dict.blogDetail.share.title}
-                  locale={params.locale}
+                  locale={locale}
                   labels={dict.blogDetail.share}
                 />
               </div>

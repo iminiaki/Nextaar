@@ -1,5 +1,6 @@
 import { PortfolioCard } from "@/components/portfolio/portfolio-card"
 import type { Locale } from "@/lib/i18n"
+import { getMediaSrc } from "@/lib/media"
 import { findPortfolio } from "@/lib/payload-queries"
 import { PortfolioPreviewSection } from "@/components/home/portfolio-preview-section"
 
@@ -43,7 +44,7 @@ export async function PortfolioPreview({
                   })
                   .filter(Boolean)
               : undefined}
-            image={it.image?.url}
+            image={getMediaSrc(it.image)}
             imageAlt={it.title}
           />
         </div>
