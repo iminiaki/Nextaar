@@ -13,7 +13,7 @@ Before running the application, ensure you have the following installed:
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15.2.4 with React 19
+- **Frontend**: Next.js 15 with React 19
 - **CMS**: Payload CMS 3.54.0
 - **Database**: PostgreSQL 16 (Alpine)
 - **Styling**: Tailwind CSS v4

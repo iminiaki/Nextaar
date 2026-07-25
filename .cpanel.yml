@@ -1,4 +1,0 @@
----
-deployment:
-  tasks:
-    - /bin/bash -c 'DEPLOYPATH=/home/lastaar1/nextaar && /bin/mkdir -p "$DEPLOYPATH" && /bin/cp -R app blocks collections components hooks lib payload public scripts styles "$DEPLOYPATH/" && /bin/cp package.json package-lock.json server.js next.config.mjs postcss.config.mjs tsconfig.json tailwind.config.ts payload.config.ts payload-types.ts components.json middleware.ts .npmrc "$DEPLOYPATH/"'
