@@ -1,0 +1,18 @@
+# Caddy site file for Nextaar — install at /srv/edge/sites/nextaar.caddy on the
+# VPS, then: docker exec edge-caddy caddy reload --config /etc/caddy/Caddyfile
+#
+# IMPORTANT: only add a block here AFTER that hostname's DNS A record points at
+# 194.5.175.170. Caddy requests a Let's Encrypt cert as soon as the block loads,
+# and ACME cannot validate a name that still resolves to the old cPanel host.
+
+# --- Stage 1: staging host. Safe to enable first — it is an independent A
+# record, so it touches neither the apex nor mail. ---
+nextaar.lastaar.com {
+	reverse_proxy nextaar-app:3000
+}
+
+# --- Stage 2: production. Uncomment only once lastaar.com's A record has been
+# moved to 194.5.175.170 and the low TTL has taken effect. ---
+#lastaar.com, www.lastaar.com {
+#	reverse_proxy nextaar-app:3000
+#}

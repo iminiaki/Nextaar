@@ -4,7 +4,8 @@ services:
     container_name: nextaar-postgres
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      # 5432 is taken by other local projects; Nextaar dev/build DB lives on 5546.
+      - "5546:5432"
     environment:
       POSTGRES_USER: nextaar
       POSTGRES_PASSWORD: nextaar

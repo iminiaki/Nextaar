@@ -11,7 +11,7 @@ export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://lastaar.com}"
 
 # Use local Docker Postgres for build (NOT the cPanel production DB).
 # Start it first: docker-compose up -d
-export DATABASE_URI="${BUILD_DATABASE_URI:-postgres://nextaar:nextaar@127.0.0.1:5432/nextaar}"
+export DATABASE_URI="${BUILD_DATABASE_URI:-postgres://nextaar:nextaar@127.0.0.1:5546/nextaar}"
 export PAYLOAD_SECRET="${BUILD_PAYLOAD_SECRET:-local-cpanel-build-secret-min-32-chars}"
 
 if ! command -v docker >/dev/null 2>&1; then

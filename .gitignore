@@ -19,6 +19,9 @@ yarn-error.log*
 # env files
 .env*
 
+# database dumps — these contain user records (emails, password salts/hashes)
+*.sql
+
 # vercel
 .vercel
 

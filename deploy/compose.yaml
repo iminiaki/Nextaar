@@ -1,0 +1,53 @@
+# Production stack for Nextaar on the shared Radya VPS (194.5.175.170).
+# Lives at /srv/nextaar/compose.yaml on the server.
+#
+# The app joins the external `edge` network so the shared Caddy can reach it.
+# Nothing here publishes a public port — Caddy owns 80/443 for every app on
+# this box. Postgres is bound to loopback only, for migrations/psql over SSH.
+services:
+  app:
+    image: nextaar-app:prod
+    container_name: nextaar-app
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Payload writes uploads to public/media inside the image; bind-mount the
+      # host dir over it so images survive redeploys. Owner must be 100:101,
+      # which is the nextjs user inside the node:22-alpine image.
+      - ./media:/app/public/media
+    networks:
+      - edge
+      - internal
+    mem_limit: 1g
+    memswap_limit: 1g
+
+  db:
+    image: postgres:16-alpine
+    container_name: nextaar-db
+    restart: unless-stopped
+    env_file: .env.db
+    ports:
+      # Loopback only. Pastil already uses 5544; Supabase holds 5432.
+      - "127.0.0.1:5545:5432"
+    volumes:
+      - nextaar-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nextaar -d nextaar"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - internal
+    mem_limit: 512m
+    memswap_limit: 512m
+
+networks:
+  edge:
+    external: true
+  internal:
+
+volumes:
+  nextaar-db-data:

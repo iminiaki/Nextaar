@@ -2,6 +2,9 @@ import { withPayload } from "@payloadcms/next/withPayload";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Standalone output keeps the runtime image small and lets it start with a
+  // plain `node server.js` — the server has no Node and cannot run npm.
+  output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },
