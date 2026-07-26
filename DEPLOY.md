@@ -1,4 +1,7 @@
-# Deploying Nextaar — PRODUCTION AS-BUILT (2026-07-25)
+# Deploying Nextaar — PRODUCTION AS-BUILT (2026-07-26)
+
+Live at **https://lastaar.com** (and `www`), HTTP 200 with a valid Let's Encrypt
+cert. Cut over from the SabinServer cPanel host on 2026-07-26.
 
 > **Read this first:**
 > 1. Prod lives on the shared Radya VPS: `root@194.5.175.170` (SSH key auth from
@@ -13,7 +16,7 @@
 ## Production layout
 
 ```
-/srv/edge/sites/nextaar.caddy   nextaar.lastaar.com → reverse_proxy nextaar-app:3000
+/srv/edge/sites/nextaar.caddy   lastaar.com, www.lastaar.com → reverse_proxy nextaar-app:3000
 /srv/nextaar/
   compose.yaml       app (image nextaar-app:prod) + db (postgres:16-alpine)
   .env               DATABASE_URI (db:5432), PAYLOAD_SECRET, NEXT_PUBLIC_* (mode 600)
@@ -120,6 +123,17 @@ cPanel Zone Editor. `.com`, so no IRNIC involvement.
   Nextaar uses path locales (`/en`, `/fa`, `/ar`), so redirect or remove them.
 - Lower the apex TTL to 300 **~4 hours before** any cutover — a TTL change only
   takes effect after the old TTL expires.
+- As cut over on 2026-07-26: apex `lastaar.com` A → `194.5.175.170` (TTL 300);
+  `www` is a CNAME to the apex and follows it automatically.
+
+**Install the Caddy block BEFORE moving DNS, not after.** The two must be
+sequenced deliberately: Caddy asks Let's Encrypt for a cert the moment a block
+loads, so the hostname must already resolve here — but if DNS moves while no
+block exists, Caddy has no route and every request fails with
+`tlsv1 alert internal error` until one is added. That gap took the site down
+briefly during this cutover. The safe order is: point DNS → immediately install
+the block and reload. Validation then takes seconds:
+`docker exec edge-caddy caddy reload --config /etc/caddy/Caddyfile`
 
 ## Iran-network gotchas
 
