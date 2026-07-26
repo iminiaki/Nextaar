@@ -29,6 +29,7 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         loading="lazy"
+        unoptimized={imageSrc.endsWith(".gif")}
         className="object-cover transition-transform duration-700 group-hover:scale-110"
       />
 

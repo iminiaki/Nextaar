@@ -6,6 +6,7 @@ import payloadConfig from "@/payload.config"
 import type { Locale } from "@/lib/i18n"
 
 export const REVALIDATE_SECONDS = 3600
+export const CACHE_VERSION = 'portfolio-images-v5'
 
 export const getPayloadClient = cache(async () => {
   return getPayload({ config: payloadConfig })
@@ -105,7 +106,7 @@ export const findPortfolio = cache(async (options: FindPortfolioOptions) => {
 
   return unstable_cache(
     () => findPortfolioUncached(options),
-    ["find-portfolio", cacheKey],
+    ["find-portfolio", CACHE_VERSION, cacheKey],
     { revalidate: REVALIDATE_SECONDS, tags: [`portfolio-${locale}`] }
   )()
 })
@@ -137,13 +138,22 @@ export const findCategories = cache(async (locale: Locale) => {
   )()
 })
 
+function normalizeSlug(slug: string) {
+  try {
+    return decodeURIComponent(slug)
+  } catch {
+    return slug
+  }
+}
+
 async function findPostBySlugUncached(locale: Locale, slug: string) {
   const payload = await getPayloadClient()
   const isEnabled = await isDraftModeEnabled()
+  const normalizedSlug = normalizeSlug(slug)
 
   const result = await payload.find({
     collection: "posts" as any,
-    where: { slug: { equals: slug } },
+    where: { slug: { equals: normalizedSlug } },
     limit: 1,
     locale: locale as any,
     fallbackLocale: false as any,
@@ -156,13 +166,14 @@ async function findPostBySlugUncached(locale: Locale, slug: string) {
 }
 
 export const findPostBySlug = cache(async (locale: Locale, slug: string) => {
+  const normalizedSlug = normalizeSlug(slug)
   const isEnabled = await isDraftModeEnabled()
-  if (isEnabled) return findPostBySlugUncached(locale, slug)
+  if (isEnabled) return findPostBySlugUncached(locale, normalizedSlug)
 
   return unstable_cache(
-    () => findPostBySlugUncached(locale, slug),
-    ["find-post-by-slug", locale, slug],
-    { revalidate: REVALIDATE_SECONDS, tags: [`posts-${locale}`, `post-${slug}`] }
+    () => findPostBySlugUncached(locale, normalizedSlug),
+    ["find-post-by-slug", locale, normalizedSlug],
+    { revalidate: REVALIDATE_SECONDS, tags: [`posts-${locale}`, `post-${normalizedSlug}`] }
   )()
 })
 
@@ -214,7 +225,7 @@ export const findPortfolioBySlug = cache(async (locale: Locale, slug: string) =>
 
   return unstable_cache(
     () => findPortfolioBySlugUncached(locale, slug),
-    ["find-portfolio-by-slug", locale, slug],
+    ["find-portfolio-by-slug", CACHE_VERSION, locale, slug],
     { revalidate: REVALIDATE_SECONDS, tags: [`portfolio-${locale}`, `portfolio-item-${slug}`] }
   )()
 })

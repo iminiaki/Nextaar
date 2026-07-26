@@ -1,5 +1,6 @@
 import { PortfolioCard } from "@/components/portfolio/portfolio-card"
 import { getDictionary, type Locale } from "@/lib/i18n"
+import { getMediaSrc } from "@/lib/media"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { findPortfolio } from "@/lib/payload-queries"
 import { buildPageMetadata } from "@/lib/metadata"
@@ -48,7 +49,7 @@ export default async function PortfolioPage({ params }: { params: { locale: Loca
                     })
                     .filter(Boolean)
                 : undefined}
-              image={it.image?.url}
+              image={getMediaSrc(it.image)}
               imageAlt={it.title}
             />
           ))}

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { RichText } from "@payloadcms/richtext-lexical/react"
 import { findPortfolioBySlug } from "@/lib/payload-queries"
 import { buildPageMetadata } from "@/lib/metadata"
+import { getMediaSrc } from "@/lib/media"
 
 export const revalidate = 3600
 
@@ -64,26 +65,36 @@ function getCategoryName(category: any, locale: Locale) {
   return undefined
 }
 
-export async function generateMetadata({ params }: { params: { locale: Locale; slug: string } }) {
-  const item: any = await findPortfolioBySlug(params.locale, params.slug)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>
+}) {
+  const { locale, slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
+  const item: any = await findPortfolioBySlug(locale, slug)
 
   if (!item) {
     return { title: "Portfolio" }
   }
 
   return buildPageMetadata({
-    locale: params.locale,
+    locale,
     title: item.title,
     description: item.excerpt ?? item.title,
-    path: `/portfolio/${params.slug}`,
+    path: `/portfolio/${slug}`,
   })
 }
 
-export default async function PortfolioDetail({ params }: { params: { locale: Locale; slug: string } }) {
-  const item: any | undefined = await findPortfolioBySlug(params.locale, params.slug)
+export default async function PortfolioDetail({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>
+}) {
+  const { locale, slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
+  const item: any | undefined = await findPortfolioBySlug(locale, slug)
   if (!item) return notFound()
-
-  const locale = params.locale
   const rtl = isRTL(locale)
   const t = labels[locale]
   const dict = await getDictionary(locale)
@@ -166,7 +177,7 @@ export default async function PortfolioDetail({ params }: { params: { locale: Lo
         <div className="relative aspect-[16/8] w-full overflow-hidden rounded-3xl border bg-background/70 shadow-sm">
           <div aria-hidden className="absolute inset-0 z-10 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
           <Image
-            src={item.image?.url || "/placeholder.svg"}
+            src={getMediaSrc(item.image)}
             alt={item.title}
             fill
             priority

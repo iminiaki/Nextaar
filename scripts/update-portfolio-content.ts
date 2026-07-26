@@ -1,5 +1,18 @@
+import { existsSync, readFileSync } from "node:fs"
+import path from "node:path"
 import { getPayload } from "payload"
-import payloadConfig from "../payload.config"
+
+for (const filename of [".env", ".env.local"]) {
+  const filePath = path.join(process.cwd(), filename)
+  if (!existsSync(filePath)) continue
+  for (const line of readFileSync(filePath, "utf8").split(/\r?\n/)) {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/)
+    if (!match || process.env[match[1]]) continue
+    process.env[match[1]] = (match[2] || "").replace(/^['"]|['"]$/g, "")
+  }
+}
+
+process.env.PAYLOAD_SECRET ||= "local-payload-script-secret"
 
 type Locale = "en" | "fa" | "ar"
 
@@ -13,7 +26,7 @@ type PortfolioCopy = {
 
 type PortfolioEntry = Record<Locale, PortfolioCopy>
 
-function lexicalDoc(paragraphs: string[], direction: "ltr" | "rtl") {
+export function lexicalDoc(paragraphs: string[], direction: "ltr" | "rtl") {
   return {
     root: {
       children: paragraphs.map((text) => ({
@@ -45,7 +58,7 @@ function lexicalDoc(paragraphs: string[], direction: "ltr" | "rtl") {
   }
 }
 
-const portfolioContent: Record<string, PortfolioEntry> = {
+export const portfolioContent: Record<string, PortfolioEntry> = {
   arantouch: {
     en: {
       title: "Arantouch",
@@ -377,9 +390,12 @@ const portfolioContent: Record<string, PortfolioEntry> = {
 }
 
 async function main() {
+  const mod = await import("../payload.config")
+  const payloadConfig = (mod as any).default?.default ?? (mod as any).default
   const payload = await getPayload({ config: payloadConfig })
   const { docs } = await payload.find({
     collection: "portfolio" as any,
+    locale: "en",
     limit: 100,
     depth: 0,
     overrideAccess: true,
@@ -407,6 +423,7 @@ async function main() {
           client: copy.client,
           excerpt: copy.excerpt,
           body: lexicalDoc(copy.body, direction),
+          _status: "published",
         },
         overrideAccess: true,
       })
