@@ -1,6 +1,9 @@
 node_modules
 .next
 .git
+# uploads live on the server (bind-mounted over /app/public/media); never bake
+# local media into the image — it doubles via the chown -R layer
+public/media
 .DS_Store
 *.log
 npm-debug.log*

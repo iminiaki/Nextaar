@@ -77,6 +77,16 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${Peyda.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Umami (self-hosted, stats.radya.ir). Plain tag rather than
+            next/script so it is present in the server-rendered HTML.
+            Cookieless — no consent banner needed. */}
+        <script
+          defer
+          src="https://stats.radya.ir/script.js"
+          data-website-id="72c536e9-0679-49ec-910f-c2d94aed7c8f"
+        />
+      </head>
       <body className="font-sans">
         <ThemeProvider
           attribute="class"
