@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
 import { getPayload } from "payload"
 
@@ -15,35 +15,71 @@ process.env.PAYLOAD_SECRET ||= "local-payload-script-secret"
 
 const updates = [
   {
+    slug: "diakoo",
+    source: path.join(process.cwd(), "public/media/diakoo-portfolio.jpg"),
+    filename: "diakoo-portfolio.jpg",
+    alt: "Diakoo Shop",
+  },
+  {
     slug: "partix",
     source: path.join(process.cwd(), "public/media/partix-portfolio.jpg"),
+    filename: "partix-portfolio.jpg",
     alt: "Partix",
   },
   {
     slug: "steelchi",
     source: path.join(process.cwd(), "public/media/steelchi-portfolio.jpg"),
+    filename: "steelchi-portfolio.jpg",
     alt: "Steelchi",
   },
 ] as const
 
+async function resolveMediaId(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  item: (typeof updates)[number],
+) {
+  const existing = await payload.find({
+    collection: "media",
+    limit: 1,
+    overrideAccess: true,
+    where: { filename: { equals: item.filename } },
+  })
+  const found = existing.docs[0]
+  if (found?.id != null) {
+    console.log(`Reusing media ${item.filename} -> #${found.id}`)
+    return found.id as number
+  }
+
+  if (!existsSync(item.source)) {
+    throw new Error(`Missing screenshot: ${item.source}`)
+  }
+
+  const created = await payload.create({
+    collection: "media",
+    data: { alt: item.alt },
+    filePath: item.source,
+    overrideAccess: true,
+  })
+  console.log(`Created media ${created.filename} -> #${created.id}`)
+  return created.id as number
+}
+
 async function main() {
+  const only = process.argv.slice(2).filter((arg) => !arg.startsWith("-"))
+  const selected = only.length
+    ? updates.filter((item) => only.includes(item.slug))
+    : updates.filter((item) => item.slug === "diakoo")
+
+  if (selected.length === 0) {
+    throw new Error(`No matching portfolio slugs. Available: ${updates.map((u) => u.slug).join(", ")}`)
+  }
+
   const mod = await import("../payload.config")
   const payloadConfig = (mod as any).default?.default ?? (mod as any).default
   const payload = await getPayload({ config: payloadConfig })
 
-  for (const item of updates) {
-    if (!existsSync(item.source)) {
-      throw new Error(`Missing screenshot: ${item.source}`)
-    }
-
-    const created = await payload.create({
-      collection: "media",
-      data: { alt: item.alt },
-      filePath: item.source,
-      overrideAccess: true,
-    })
-    const mediaId = created.id as number
-    console.log(`Created media ${created.filename} -> #${mediaId}`)
+  for (const item of selected) {
+    const mediaId = await resolveMediaId(payload, item)
 
     const portfolio = await payload.find({
       collection: "portfolio" as any,
@@ -76,7 +112,7 @@ async function main() {
     }
   }
 
-  for (const item of updates) {
+  for (const item of selected) {
     const check = await payload.find({
       collection: "portfolio" as any,
       locale: "en",
@@ -86,7 +122,7 @@ async function main() {
       where: { slug: { equals: item.slug } },
     })
     const image = check.docs[0]?.image as any
-    console.log(`VERIFY ${item.slug}:`, image?.id, image?.filename)
+    console.log(`VERIFY ${item.slug}:`, image?.id, image?.filename, image?.sizes?.banner?.filename)
   }
 }
 

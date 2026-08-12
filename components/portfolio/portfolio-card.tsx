@@ -13,7 +13,15 @@ export type PortfolioCardProps = {
 
 export function PortfolioCard({ href, title, categories, image, imageAlt, className }: PortfolioCardProps) {
   const renderedCategories = Array.isArray(categories) ? categories.join(" · ") : categories
-  const imageSrc = image || "/placeholder.svg"
+  const rawSrc = image || "/placeholder.svg"
+  // Encode path segments so filenames with spaces/commas work with next/image in prod.
+  const imageSrc = rawSrc.startsWith("/media/")
+    ? `/media/${rawSrc
+        .slice("/media/".length)
+        .split("/")
+        .map((segment) => encodeURIComponent(decodeURIComponent(segment)))
+        .join("/")}`
+    : rawSrc
 
   const content = (
     <div
