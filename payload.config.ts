@@ -13,6 +13,7 @@ import { Posts } from "./collections/Posts.ts";
 import { Categories } from "./collections/PostCat.ts";
 import { PortfolioCategories } from "./collections/PortfolioCat.ts";
 import { Portfolio } from "./collections/Portfolio.ts";
+import { migrations } from "./migrations";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -46,6 +47,9 @@ export default buildConfig({
   db: postgresAdapter({
     // No src/ dir in this project, so override Payload's default src/migrations.
     migrationDir: path.resolve(dirname, "migrations"),
+    // Railway (and similar) can't migrate at Docker build time — private DB
+    // DNS only works at runtime. Run pending migrations on first Payload init.
+    prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URI || "",
     },
