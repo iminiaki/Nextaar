@@ -188,11 +188,11 @@ export function CallToAction({
   }, [locale])
 
   return (
-    <section className="py-8 md:py-24">
-      <div className="relative container mx-auto px-4">
+    <section className="overflow-x-clip py-8 md:py-24">
+      <div className="relative container mx-auto min-w-0 px-4">
       
-        <div className="container overflow-visible mx-auto px-4 py-8 rounded-2xl bg-background flex flex-col lg:flex-row items-center justify-center ">
-        <div className="w-full max-w-lg">
+        <div className="mx-auto flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-background px-4 py-8 lg:flex-row">
+        <div className="w-full max-w-lg overflow-hidden">
           <Globe
             markers={localizedMarkers}
             arcs={localizedArcs}

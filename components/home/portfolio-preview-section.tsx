@@ -155,39 +155,8 @@ export function PortfolioPreviewSection({
       dragState.current.moved = false
     }
 
-    let touchStartX = 0
-    let touchStartY = 0
-    let touchScrollLeft = 0
-    let touchAxis: "x" | "y" | null = null
-
-    const onTouchStart = (event: TouchEvent) => {
-      const touch = event.touches[0]
-      if (!touch) return
-      touchStartX = touch.clientX
-      touchStartY = touch.clientY
-      touchScrollLeft = el.scrollLeft
-      touchAxis = null
-    }
-
-    const onTouchMove = (event: TouchEvent) => {
-      const touch = event.touches[0]
-      if (!touch) return
-      const deltaX = touch.clientX - touchStartX
-      const deltaY = touch.clientY - touchStartY
-
-      if (!touchAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 8) {
-        touchAxis = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y"
-      }
-
-      if (touchAxis !== "x") return
-      event.preventDefault()
-      el.scrollLeft = touchScrollLeft - deltaX
-    }
-
     el.addEventListener("mousedown", onMouseDown)
     el.addEventListener("click", onClick, true)
-    el.addEventListener("touchstart", onTouchStart, { passive: true })
-    el.addEventListener("touchmove", onTouchMove, { passive: false })
     window.addEventListener("mouseup", onMouseUp)
     window.addEventListener("mousemove", onMouseMove)
     el.addEventListener("scroll", updatePagination, { passive: true })
@@ -198,8 +167,6 @@ export function PortfolioPreviewSection({
     return () => {
       el.removeEventListener("mousedown", onMouseDown)
       el.removeEventListener("click", onClick, true)
-      el.removeEventListener("touchstart", onTouchStart)
-      el.removeEventListener("touchmove", onTouchMove)
       window.removeEventListener("mouseup", onMouseUp)
       window.removeEventListener("mousemove", onMouseMove)
       el.removeEventListener("scroll", updatePagination)
@@ -272,13 +239,13 @@ export function PortfolioPreviewSection({
           </Link>
         </div>
 
-        <div data-portfolio-carousel className="relative mt-10">
+        <div data-portfolio-carousel className="relative mt-10 min-w-0">
           <div
             ref={scrollRef}
             dir={rtl ? "rtl" : "ltr"}
             className={cn(
               "flex gap-4 overflow-x-auto overscroll-x-contain scroll-smooth pb-2",
-              "snap-x snap-mandatory touch-pan-y",
+              "snap-x snap-mandatory touch-pan-x",
               "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               "cursor-grab select-none",
             )}
@@ -286,7 +253,7 @@ export function PortfolioPreviewSection({
             {Children.map(children, (child, index) => (
               <div
                 key={index}
-                className="w-[min(100%,340px)] shrink-0 snap-start sm:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.67rem)]"
+                className="w-[min(100%,340px)] max-w-full shrink-0 snap-start sm:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.67rem)]"
               >
                 {child}
               </div>
@@ -296,7 +263,7 @@ export function PortfolioPreviewSection({
           {pageCount > 1 ? (
             <div
               data-portfolio-dots
-              className="mt-6 flex items-center justify-center"
+              className="mt-6 flex items-center justify-center gap-1.5"
               role="tablist"
               aria-label={locale === "fa" ? "اسلایدها" : locale === "ar" ? "الشرائح" : "Slides"}
             >
@@ -306,20 +273,15 @@ export function PortfolioPreviewSection({
                   type="button"
                   role="tab"
                   onClick={() => scrollToPage(index)}
-                  className="group relative -mx-1.5 inline-flex h-11 w-11 shrink-0 items-center justify-center"
+                  className={cn(
+                    "h-1.5 rounded-full transition-all",
+                    index === activePage
+                      ? "w-4 bg-primary"
+                      : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50",
+                  )}
                   aria-label={dotLabel(index)}
                   aria-selected={index === activePage}
-                >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "pointer-events-none h-1.5 rounded-full transition-all",
-                      index === activePage
-                        ? "w-4 bg-primary"
-                        : "w-1.5 bg-muted-foreground/30 group-hover:bg-muted-foreground/50",
-                    )}
-                  />
-                </button>
+                />
               ))}
             </div>
           ) : null}

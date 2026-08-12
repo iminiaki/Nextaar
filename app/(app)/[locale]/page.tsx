@@ -146,7 +146,7 @@ export default async function Page({
         />
       </Suspense>
 
-      <Partners title={dict.home.partners.title} />
+      <Partners locale={locale} title={dict.home.partners.title} />
     </>
   )
 }

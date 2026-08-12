@@ -50,9 +50,6 @@ export const metadata: Metadata = {
   description:
     "Lastaar combines branding, UX, and modern engineering to launch high-performing websites and web apps for ambitious brands.",
   generator: "imanak",
-  icons: {
-    icon: "/nextaar.png",
-  },
 };
 
 export default function RootLayout({

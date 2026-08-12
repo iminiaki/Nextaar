@@ -164,10 +164,11 @@ export function WhyChoose({
   }
 
   const stackHeight = CARD_SIZE + (cards.length - 1) * STACK_OFFSET
+  const stackWidth = CARD_SIZE + (cards.length - 1) * STACK_OFFSET
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
-      <div className="container mx-auto px-4">
+    <section ref={sectionRef} className="overflow-x-clip py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
+      <div className="container mx-auto min-w-0 px-4">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
             <div
               className={cn(
@@ -196,13 +197,13 @@ export function WhyChoose({
               </p>
             </div>
 
-            <div className="lg:col-span-8 xl:col-span-7">
+            <div className="min-w-0 overflow-x-clip lg:col-span-8 xl:col-span-7">
               <LayoutGroup>
                 <motion.div
                   layout
                   data-why-stack
-                  className="relative mx-auto size-72 opacity-0"
-                  style={{ height: stackHeight }}
+                  className="relative mx-auto opacity-0"
+                  style={{ height: stackHeight, width: stackWidth }}
                 >
                   <AnimatePresence mode="popLayout">
                     {getStackOrder().map((card) => {
@@ -288,20 +289,15 @@ export function WhyChoose({
                       key={index}
                       type="button"
                       onClick={() => goToIndex(index)}
-                      className="group relative -mx-1.5 inline-flex h-11 w-11 shrink-0 items-center justify-center"
+                      className={cn(
+                        "h-1.5 rounded-full transition-all",
+                        index === activeIndex
+                          ? "w-4 bg-primary"
+                          : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50",
+                      )}
                       aria-label={`${index + 1}`}
                       aria-current={index === activeIndex ? "true" : undefined}
-                    >
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "pointer-events-none h-1.5 rounded-full transition-all",
-                          index === activeIndex
-                            ? "w-4 bg-primary"
-                            : "w-1.5 bg-muted-foreground/30 group-hover:bg-muted-foreground/50",
-                        )}
-                      />
-                    </button>
+                    />
                   ))}
                 </div>
               )}

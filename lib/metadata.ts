@@ -50,7 +50,7 @@ function absoluteUrl(path = "") {
 /** Site-wide defaults — sync so meta description is in the initial HTML head. */
 export function getSiteMetadata(locale: Locale = "en"): Metadata {
   const site = SITE_SEO[locale] ?? SITE_SEO.en
-  const imageUrl = absoluteUrl("/nextaar.png")
+  const imageUrl = absoluteUrl("/Nextaar.png")
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -119,7 +119,7 @@ export function buildPageMetadata({
       ? String(site.title.default)
       : String(site.title ?? "Lastaar")
   const url = absoluteUrl(path)
-  const imageUrl = absoluteUrl(image || "/nextaar.png")
+  const imageUrl = absoluteUrl(image || "/Nextaar.png")
 
   return {
     ...site,

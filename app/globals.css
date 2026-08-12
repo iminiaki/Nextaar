@@ -14,6 +14,7 @@ html[dir="rtl"] {
 /* Apply the font variable to the body */
 body {
   font-family: var(--font-sans);
+  overflow-x: clip;
 }
 
 /* Prevent custom cursor flash on initial paint for touch/coarse pointers */

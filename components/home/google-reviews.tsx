@@ -271,8 +271,8 @@ export function GoogleReviews({ locale }: { locale: Locale }) {
   const t = labels[locale]
 
   return (
-    <section className="py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
-      <div className="container mx-auto px-4">
+    <section className="overflow-x-clip py-16 md:py-24" dir={rtl ? "rtl" : "ltr"}>
+      <div className="container mx-auto min-w-0 px-4">
         <RevealOnScroll start="top 88%" end="bottom 16%">
           <div className="relative overflow-hidden rounded-3xl border bg-card/60 p-6 shadow-sm backdrop-blur md:p-8">
             <div aria-hidden className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
