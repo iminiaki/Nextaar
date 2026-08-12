@@ -25,13 +25,23 @@ const CallToAction = dynamic(
   { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
 )
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
-  return getSiteMetadata(params.locale)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }> | { locale: Locale }
+}) {
+  const { locale } = await Promise.resolve(params)
+  return getSiteMetadata(locale)
 }
 
-export default async function Page({ params }: { params: { locale: Locale } }) {
-  const dict = await getDictionary(params.locale)
-  const base = `/${params.locale}`
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: Locale }> | { locale: Locale }
+}) {
+  const { locale } = await Promise.resolve(params)
+  const dict = await getDictionary(locale)
+  const base = `/${locale}`
   const codingVideoText = {
     en: {
       eyebrow: "Engineering in motion",
@@ -63,7 +73,7 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
         { value: "24/7", label: "دعم موثوق" },
       ],
     },
-  }[params.locale]
+  }[locale]
 
   return (
     <>
@@ -79,7 +89,7 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
       />
 
       <ServicesFeatures
-        locale={params.locale}
+        locale={locale}
         title={dict.home.servicesFeatures.title}
         subtitle={dict.home.servicesFeatures.subtitle}
         items={dict.home.servicesFeatures.items}
@@ -88,17 +98,17 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
       <CodingVideoSection {...codingVideoText} />
 
       <PortfolioPreview
-        locale={params.locale}
+        locale={locale}
         title={dict.home.portfolio.title}
         subtitle={dict.home.portfolio.subtitle}
         viewAll={dict.home.portfolio.viewAll}
         baseHref={base}
       />
 
-      <GoogleReviews locale={params.locale} />
+      <GoogleReviews locale={locale} />
 
       <WhyChoose
-        locale={params.locale}
+        locale={locale}
         eyebrow={dict.home.why.eyebrow}
         title={dict.home.why.title}
         subtitle={dict.home.why.subtitle}
@@ -107,7 +117,7 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
       />
 
       <ProcessSection
-        locale={params.locale}
+        locale={locale}
         eyebrow={dict.home.process.eyebrow}
         title={dict.home.process.title}
         subtitle={dict.home.process.subtitle}
@@ -118,7 +128,7 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
       />
 
       <CallToAction
-        locale={params.locale}
+        locale={locale}
         badge={dict.home.cta.badge}
         title={dict.home.cta.title}
         subtitle={dict.home.cta.subtitle}
@@ -126,7 +136,7 @@ export default async function Page({ params }: { params: { locale: Locale } }) {
       />
 
       <LatestPosts
-        locale={params.locale}
+        locale={locale}
         title={dict.home.latestPosts.title}
         subtitle={dict.home.latestPosts.subtitle}
         baseHref={base}
