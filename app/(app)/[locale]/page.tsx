@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic"
-import { getDictionary, type Locale } from "@/lib/i18n"
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n"
 import { Hero } from "@/components/hero"
 import { ServicesFeatures } from "@/components/home/services-features"
 import { PortfolioPreview } from "@/components/home/portfolio-preview"
@@ -28,18 +28,20 @@ const CallToAction = dynamic(
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale }> | { locale: Locale }
+  params: Promise<{ locale: string }>
 }) {
-  const { locale } = await Promise.resolve(params)
+  const { locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
   return getSiteMetadata(locale)
 }
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: Locale }> | { locale: Locale }
+  params: Promise<{ locale: string }>
 }) {
-  const { locale } = await Promise.resolve(params)
+  const { locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
   const dict = await getDictionary(locale)
   const base = `/${locale}`
   const codingVideoText = {
