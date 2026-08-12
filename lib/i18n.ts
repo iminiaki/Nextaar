@@ -1611,7 +1611,7 @@ const dictionaries: Record<Locale, Dict> = {
 }
 
 export async function getDictionary(locale: Locale): Promise<Dict> {
-  return dictionaries[locale]
+  return dictionaries[locale] ?? dictionaries.en
 }
 
 export function getNotFoundCopy(locale: Locale) {
