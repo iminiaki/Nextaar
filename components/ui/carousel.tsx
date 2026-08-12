@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useIsRTL } from "@/components/locale-provider"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -178,7 +179,7 @@ function CarouselPrevious({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
-  const isRTL = typeof document !== "undefined" && document.dir === "rtl"
+  const isRTL = useIsRTL()
 
   return (
     <Button
@@ -209,7 +210,7 @@ function CarouselNext({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
-  const isRTL = typeof document !== "undefined" && document.dir === "rtl"
+  const isRTL = useIsRTL()
 
   return (
     <Button

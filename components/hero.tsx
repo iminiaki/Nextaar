@@ -1,14 +1,24 @@
 "use client"
 
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useEffect, useRef, useState } from "react"
-import { SplineScene } from "@/components/ui/splite"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-gsap.registerPlugin(ScrollTrigger)
+const SplineScene = dynamic(
+  () => import("@/components/ui/splite").then((m) => m.SplineScene),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        aria-hidden
+        className="h-full w-full animate-pulse bg-gradient-to-br from-primary/10 via-accent/5 to-transparent"
+      />
+    ),
+  }
+)
 
 export function Hero({
   eyebrow,
@@ -40,22 +50,53 @@ export function Hero({
     const node = visualRef.current
     if (!node) return
 
+    // Skip Spline on touch / reduced-motion — it's the biggest home-page cost.
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches
+    const narrow = window.matchMedia("(max-width: 1023px)").matches
+    if (prefersReduced || coarsePointer || narrow) return
+
+    let idleId: number | undefined
+    let timeoutId: number | undefined
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) {
-          setShowSpline(true)
-          observer.disconnect()
+        if (!entry?.isIntersecting) return
+        observer.disconnect()
+
+        const load = () => setShowSpline(true)
+        if ("requestIdleCallback" in window) {
+          idleId = window.requestIdleCallback(load, { timeout: 1800 })
+        } else {
+          timeoutId = window.setTimeout(load, 400)
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "80px" }
     )
 
     observer.observe(node)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (idleId !== undefined && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId)
+      }
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
+    }
   }, [])
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches
+
     const ctx = gsap.context(() => {
+      if (prefersReduced) {
+        gsap.set(
+          "[data-hero-eyebrow], [data-hero-title], [data-hero-subtitle], [data-hero-ctas] > *, [data-hero-stats] > *, [data-hero-visual]",
+          { clearProps: "all", opacity: 1, y: 0, x: 0 }
+        )
+        return
+      }
+
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
 
       tl.fromTo("[data-hero-eyebrow]",
@@ -78,28 +119,29 @@ export function Hero({
           { x: 0, opacity: 1, duration: 1.1, ease: "power2.out" }, "<-=1.1")
     }, rootRef)
 
+    if (prefersReduced || coarsePointer) {
+      return () => ctx.revert()
+    }
+
+    // quickTo avoids spawning a new tween on every mousemove.
+    const qx1 = gsap.quickTo(blob1Ref.current, "x", { duration: 1.2, ease: "power2.out" })
+    const qy1 = gsap.quickTo(blob1Ref.current, "y", { duration: 1.2, ease: "power2.out" })
+    const qx2 = gsap.quickTo(blob2Ref.current, "x", { duration: 1.5, ease: "power2.out" })
+    const qy2 = gsap.quickTo(blob2Ref.current, "y", { duration: 1.5, ease: "power2.out" })
+
     const onMove = (e: MouseEvent) => {
       if (!rootRef.current) return
       const rect = rootRef.current.getBoundingClientRect()
       const rx = (e.clientX - rect.left) / rect.width
       const ry = (e.clientY - rect.top) / rect.height
-
-      gsap.to(blob1Ref.current, {
-        x: rx * 40 - 20,
-        y: ry * 40 - 20,
-        duration: 1.4,
-        ease: "power2.out",
-      })
-      gsap.to(blob2Ref.current, {
-        x: -(rx * 30 - 15),
-        y: -(ry * 30 - 15),
-        duration: 1.8,
-        ease: "power2.out",
-      })
+      qx1(rx * 40 - 20)
+      qy1(ry * 40 - 20)
+      qx2(-(rx * 30 - 15))
+      qy2(-(ry * 30 - 15))
     }
 
     const node = rootRef.current
-    node?.addEventListener("mousemove", onMove)
+    node?.addEventListener("mousemove", onMove, { passive: true })
     return () => {
       node?.removeEventListener("mousemove", onMove)
       ctx.revert()
@@ -129,17 +171,17 @@ export function Hero({
         />
       </div>
 
-      {/* Floating blobs (parallax on mouse) */}
+      {/* Floating blobs (parallax on mouse) — smaller blur = cheaper paint */}
       <div
         ref={blob1Ref}
         aria-hidden
-        className="pointer-events-none absolute -left-48 -top-48 h-[680px] w-[680px] rounded-full blur-[130px]"
+        className="pointer-events-none absolute -left-48 -top-48 h-[480px] w-[480px] rounded-full blur-[80px] will-change-transform contain-strict"
         style={{ background: "rgb(163 0 152 / 0.18)" }}
       />
       <div
         ref={blob2Ref}
         aria-hidden
-        className="pointer-events-none absolute -bottom-48 -right-32 h-[560px] w-[560px] rounded-full blur-[120px]"
+        className="pointer-events-none absolute -bottom-48 -right-32 h-[400px] w-[400px] rounded-full blur-[72px] will-change-transform contain-strict"
         style={{ background: "rgb(37 99 235 / 0.16)" }}
       />
 
@@ -210,7 +252,7 @@ export function Hero({
           </div>
         </div>
 
-        {/* Right column — Spline visual */}
+        {/* Right column — Spline visual (desktop only) */}
         <div ref={visualRef} data-hero-visual className="relative flex items-center justify-center">
           {/* Glow behind card: #a30098 → blue */}
           <div
@@ -240,7 +282,7 @@ export function Hero({
               ) : (
                 <div
                   aria-hidden
-                  className="h-full w-full animate-pulse bg-gradient-to-br from-primary/10 via-accent/5 to-transparent"
+                  className="h-full w-full bg-gradient-to-br from-primary/15 via-accent/10 to-blue-500/10"
                 />
               )}
             </div>

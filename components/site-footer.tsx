@@ -1,7 +1,6 @@
 "use client"
 
 import { useActionState } from "react"
-import dynamic from "next/dynamic"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,11 +17,6 @@ import {
   Smartphone,
 } from "lucide-react"
 import { SOCIAL_LINKS } from "@/lib/social-links"
-
-const SparklesCore = dynamic(
-  () => import("@/components/ui/sparkles").then((m) => ({ default: m.SparklesCore })),
-  { ssr: false }
-)
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -99,14 +93,9 @@ export function SiteFooter({
                 <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-primary/20 blur-3xl" />
                 <div className="absolute -right-16 -bottom-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
               </div>
-              <SparklesCore
-                className="absolute inset-0 pointer-events-none"
-                background="transparent"
-                particleColor="#a30098"
-                particleDensity={60}
-                minSize={1}
-                maxSize={2}
-                speed={2}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(circle_at_12%_24%,hsl(var(--primary))_0_1px,transparent_1.5px),radial-gradient(circle_at_72%_18%,hsl(var(--primary))_0_1px,transparent_1.5px),radial-gradient(circle_at_38%_72%,hsl(var(--primary))_0_1px,transparent_1.5px),radial-gradient(circle_at_88%_68%,hsl(var(--primary))_0_1px,transparent_1.5px)]"
               />
               <h4 className="mb-3 text-sm font-semibold">{newsletter.title}</h4>
               <form action={formAction} className="flex max-w-lg gap-2">

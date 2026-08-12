@@ -89,7 +89,8 @@ export function WhyChoose({
           trigger: section,
           start: "top 78%",
           end: "bottom 28%",
-          toggleActions: "play reverse play reverse",
+          toggleActions: "play none none none",
+          once: true,
         },
       })
 
@@ -287,15 +288,20 @@ export function WhyChoose({
                       key={index}
                       type="button"
                       onClick={() => goToIndex(index)}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all",
-                        index === activeIndex
-                          ? "w-4 bg-primary"
-                          : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                      )}
+                      className="group relative -mx-1.5 inline-flex h-11 w-11 shrink-0 items-center justify-center"
                       aria-label={`${index + 1}`}
                       aria-current={index === activeIndex ? "true" : undefined}
-                    />
+                    >
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "pointer-events-none h-1.5 rounded-full transition-all",
+                          index === activeIndex
+                            ? "w-4 bg-primary"
+                            : "w-1.5 bg-muted-foreground/30 group-hover:bg-muted-foreground/50",
+                        )}
+                      />
+                    </button>
                   ))}
                 </div>
               )}

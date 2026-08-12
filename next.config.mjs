@@ -5,6 +5,9 @@ const nextConfig = {
   // Standalone output keeps the runtime image small and lets it start with a
   // plain `node server.js` — the server has no Node and cannot run npm.
   output: "standalone",
+  // Keep metadata in the initial document head. This avoids streamed metadata
+  // being missed by crawlers and audits that do not wait for React to settle.
+  htmlLimitedBots: /.*/,
   typescript: {
     // Restored so the production build can complete. Next 15 types `params` as
     // a Promise, but 9 page files under app/(app)/[locale]/ still declare it as
@@ -31,6 +34,9 @@ const nextConfig = {
       "@radix-ui/react-icons",
       "date-fns",
       "recharts",
+      "gsap",
+      "framer-motion",
+      "motion",
     ],
   },
 };

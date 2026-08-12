@@ -40,7 +40,7 @@ export function RevealOnScroll({
   className,
   start = DEFAULT_START,
   end = DEFAULT_END,
-  toggleActions = "play reverse play reverse",
+  toggleActions = "play none none none",
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 

@@ -7,9 +7,16 @@ import { type Locale, locales } from "@/lib/i18n"
 import { setLocalePreference } from "@/lib/locale-preference"
 import { Languages } from "lucide-react"
 
+const switcherLabel: Record<Locale, string> = {
+  en: "Change language",
+  fa: "تغییر زبان",
+  ar: "تغيير اللغة",
+}
+
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const router = useRouter()
   const pathname = usePathname() || "/en"
+  const accessibleName = switcherLabel[locale] ?? switcherLabel.en
 
   function switchTo(target: Locale) {
     setLocalePreference(target)
@@ -28,9 +35,14 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="shrink-0 bg-transparent flex gap-2 w-9 md:w-auto">
-          <Languages className="h-4 w-4" />
+        <Button
+          variant="outline"
+          aria-label={accessibleName}
+          className="shrink-0 bg-transparent flex gap-2 w-9 md:w-auto"
+        >
+          <Languages className="h-4 w-4" aria-hidden="true" />
           <span className="hidden md:inline">{label}</span>
+          <span className="sr-only">{accessibleName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[105px]">

@@ -34,10 +34,10 @@ export function Partners({ title }: { title: string }) {
         <div className="mx-auto max-w-2xl text-center">
           <h3 className="text-xl font-medium mb-12">{title}</h3>
         </div>
-        <RevealOnScroll staggerChildren className="mt-6" start="top 88%">
+        <RevealOnScroll className="mt-6" start="top 92%">
           <div className="grid grid-cols-2 items-center justify-center gap-6 sm:grid-cols-3 md:grid-cols-6">
             {logos.map((src, i) => (
-              <div key={i} className="flex items-center justify-center" data-animate>
+              <div key={src} className="flex items-center justify-center">
                 <Image
                   width={100}
                   height={100}
@@ -45,7 +45,7 @@ export function Partners({ title }: { title: string }) {
                   alt={"Partner logo " + (i + 1)}
                   loading="lazy"
                   decoding="async"
-                  className="h-10 grayscale transition duration-300 hover:grayscale-0 dark:invert dark:hover:invert-0"
+                  className="h-10 w-auto grayscale transition duration-300 hover:grayscale-0 dark:invert dark:hover:invert-0"
                 />
               </div>
             ))}

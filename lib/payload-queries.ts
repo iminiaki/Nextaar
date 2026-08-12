@@ -6,7 +6,7 @@ import payloadConfig from "@/payload.config"
 import type { Locale } from "@/lib/i18n"
 
 export const REVALIDATE_SECONDS = 3600
-export const CACHE_VERSION = 'portfolio-images-v5'
+export const CACHE_VERSION = 'portfolio-images-v6'
 
 export const getPayloadClient = cache(async () => {
   return getPayload({ config: payloadConfig })

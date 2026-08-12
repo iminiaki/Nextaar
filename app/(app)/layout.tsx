@@ -9,21 +9,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 const Peyda = localFont({
   src: [
     {
-      path: "../../public/fonts/Peyda-Thin.woff2",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/Peyda-ExtraLight.woff2",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/Peyda-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
       path: "../../public/fonts/Peyda-Regular.woff2",
       weight: "400",
       style: "normal",
@@ -55,12 +40,15 @@ const Peyda = localFont({
     },
   ],
   variable: "--font-peyda",
+  preload: false,
+  display: "swap",
 });
 
 // Metadata
 export const metadata: Metadata = {
   title: "Lastaar",
-  description: "Your Last Website",
+  description:
+    "Lastaar combines branding, UX, and modern engineering to launch high-performing websites and web apps for ambitious brands.",
   generator: "imanak",
   icons: {
     icon: "/nextaar.png",

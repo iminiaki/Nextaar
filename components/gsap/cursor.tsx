@@ -20,7 +20,8 @@ export function FancyCursor() {
     if (typeof window === "undefined") return
     const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0
     const isCoarsePointer = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches
-    setEnabled(!(isTouch || isCoarsePointer))
+    const prefersReduced = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    setEnabled(!(isTouch || isCoarsePointer || prefersReduced))
   }, [])
 
   useEffect(() => {
@@ -83,21 +84,24 @@ export function FancyCursor() {
     window.addEventListener("mousedown", down)
     window.addEventListener("mouseup", up)
 
-    const sel = "a, button, [role='button'], input, textarea, select"
-    const enterLeave = (el: Element) => {
-      el.addEventListener("mouseenter", enterInteractive)
-      el.addEventListener("mouseleave", leaveInteractive)
-      return () => {
-        el.removeEventListener("mouseenter", enterInteractive)
-        el.removeEventListener("mouseleave", leaveInteractive)
-      }
+    const interactiveSelector = "a, button, [role='button'], input, textarea, select"
+    const onInteractiveOver = (e: MouseEvent) => {
+      const target = e.target as Element | null
+      if (!target?.closest?.(interactiveSelector)) return
+      enterInteractive()
     }
-    const interactive = Array.from(document.querySelectorAll(sel))
-    const cleanups = interactive.map(enterLeave)
+    const onInteractiveOut = (e: MouseEvent) => {
+      const target = e.target as Element | null
+      const related = e.relatedTarget as Element | null
+      if (!target?.closest?.(interactiveSelector)) return
+      if (related?.closest?.(interactiveSelector)) return
+      leaveInteractive()
+    }
 
     // Variant detection via event delegation for dynamic content
     let currentVariantEl: Element | null = null
     const onOver = (e: MouseEvent) => {
+      onInteractiveOver(e)
       const target = e.target as Element | null
       if (!target) return
       const el = target.closest?.("[data-cursor-variant]") as HTMLElement | null
@@ -108,6 +112,7 @@ export function FancyCursor() {
       }
     }
     const onOut = (e: MouseEvent) => {
+      onInteractiveOut(e)
       const related = e.relatedTarget as Element | null
       if (!currentVariantEl) return
       if (!related || !currentVariantEl.contains(related)) {
@@ -122,7 +127,6 @@ export function FancyCursor() {
       window.removeEventListener("mousemove", move)
       window.removeEventListener("mousedown", down)
       window.removeEventListener("mouseup", up)
-      cleanups.forEach((c) => c())
       document.removeEventListener("mouseover", onOver)
       document.removeEventListener("mouseout", onOut)
     }

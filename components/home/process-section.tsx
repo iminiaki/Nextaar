@@ -59,7 +59,8 @@ export function ProcessSection({
             trigger: "[data-process-copy-wrap]",
             start: "top 88%",
             end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
+            once: true,
           },
         })
         .fromTo(
@@ -75,7 +76,8 @@ export function ProcessSection({
             trigger: section,
             start: "top 70%",
             end: "bottom 30%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
+            once: true,
           },
         })
         .fromTo(

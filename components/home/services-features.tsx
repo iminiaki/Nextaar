@@ -56,7 +56,8 @@ export function ServicesFeatures({
             trigger: section,
             start: "top 78%",
             end: "bottom 28%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
+            once: true,
           },
         })
         .fromTo(headerItems, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, stagger: 0.06 })
@@ -121,6 +122,13 @@ export function ServicesFeatures({
                       >
                         <Link href={it.href} className="inline-flex items-center gap-2">
                           {it.cta}
+                          <span className="sr-only">
+                            {locale === "fa"
+                              ? ` درباره ${it.title}`
+                              : locale === "ar"
+                                ? ` عن ${it.title}`
+                                : ` about ${it.title}`}
+                          </span>
                           <ArrowRight
                             className={cn(
                               "size-4 transition-transform duration-300 group-hover/cta:translate-x-0.5",

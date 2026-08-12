@@ -49,7 +49,7 @@ export default async function PortfolioPage({ params }: { params: { locale: Loca
                     })
                     .filter(Boolean)
                 : undefined}
-              image={getMediaSrc(it.image)}
+              image={getMediaSrc(it.image, "/placeholder.svg", "banner")}
               imageAlt={it.title}
             />
           ))}

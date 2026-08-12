@@ -1,4 +1,7 @@
+"use client"
+
 import { RevealOnScroll } from "@/components/gsap/reveal"
+import { useEffect, useRef } from "react"
 
 export function CodingVideoSection({
   eyebrow,
@@ -11,8 +14,38 @@ export function CodingVideoSection({
   subtitle: string
   stats: { value: string; label: string }[]
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const video = videoRef.current
+    if (!section || !video) return
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (prefersReduced) {
+      video.removeAttribute("autoplay")
+      video.pause()
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          void video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { rootMargin: "80px", threshold: 0.15 }
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="py-14 md:py-20">
+    <section ref={sectionRef} className="py-14 md:py-20">
       <div className="container mx-auto px-4">
         <RevealOnScroll>
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-card/60 p-2 shadow-2xl shadow-black/10 backdrop-blur dark:shadow-black/40">
@@ -20,12 +53,13 @@ export function CodingVideoSection({
             <div aria-hidden className="absolute -bottom-32 left-1/4 h-96 w-96 rounded-full bg-blue-500/15 blur-3xl" />
             <div className="relative overflow-hidden rounded-[1.5rem]">
               <video
+                ref={videoRef}
                 src="/media/coding.mp4"
-                autoPlay
+                aria-hidden="true"
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 className="aspect-[16/10] min-h-[420px] w-full object-cover brightness-[0.62] saturate-125 md:aspect-video"
               />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(190,24,147,0.18),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.72))]" />

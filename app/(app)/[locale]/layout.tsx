@@ -7,17 +7,28 @@ import { Navbar } from "@/components/navbar"
 import { SiteFooter } from "@/components/site-footer"
 import { CookieConsent } from "@/components/cookie-consent"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { SmoothScroll } from "@/components/gsap/smooth-scroll"
-import { FancyCursor } from "@/components/gsap/cursor"
+import { DeferredChrome } from "@/components/deferred-chrome"
 // import { SupportChatbot } from "@/components/support-chatbot"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { getDictionary } from "@/lib/i18n"
 import { isLocale, isRTL, type Locale } from "@/lib/i18n"
 import { getLatestPostLinks } from "@/lib/latest-posts"
+import { getSiteMetadata } from "@/lib/metadata"
 
 // Railway (and other hosts) cannot reach private Postgres during `next build`.
 // Render on demand so Payload queries run only at request time.
 export const dynamic = "force-dynamic"
+
+/** Sync metadata so <meta name="description"> is present in the initial HTML head. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
+  return getSiteMetadata(locale)
+}
 
 export default async function LocaleLayout({
   children,
@@ -44,8 +55,7 @@ export default async function LocaleLayout({
         }}
       />
       <LocaleProvider locale={locale}>
-        <SmoothScroll />
-        <FancyCursor />
+        <DeferredChrome />
         <div className="relative">
           <Navbar locale={locale} nav={dict.nav} servicesMenu={dict.home.servicesFeatures.items} />
           <main className="relative">

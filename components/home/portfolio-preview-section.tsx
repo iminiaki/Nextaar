@@ -73,7 +73,14 @@ export function PortfolioPreviewSection({
 }: Props) {
   const sectionRef = useRef<HTMLElement | null>(null)
   const scrollRef = useRef<HTMLDivElement | null>(null)
-  const dragState = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false })
+  const dragState = useRef({
+    active: false,
+    axis: null as "x" | "y" | null,
+    startX: 0,
+    startY: 0,
+    scrollLeft: 0,
+    moved: false,
+  })
   const [activePage, setActivePage] = useState(0)
   const [pageCount, setPageCount] = useState(0)
   const rtl = isRTL(locale)
@@ -109,8 +116,10 @@ export function PortfolioPreviewSection({
       if (event.button !== 0) return
       dragState.current = {
         active: true,
+        axis: null,
         moved: false,
         startX: event.pageX,
+        startY: event.pageY,
         scrollLeft: el.scrollLeft,
       }
       el.classList.add("cursor-grabbing")
@@ -123,13 +132,20 @@ export function PortfolioPreviewSection({
 
     const onMouseMove = (event: MouseEvent) => {
       if (!dragState.current.active) return
-      const walk = event.pageX - dragState.current.startX
-      if (Math.abs(walk) > 4) {
+      const walkX = event.pageX - dragState.current.startX
+      const walkY = event.pageY - dragState.current.startY
+
+      if (!dragState.current.axis && Math.max(Math.abs(walkX), Math.abs(walkY)) > 6) {
+        dragState.current.axis = Math.abs(walkX) > Math.abs(walkY) ? "x" : "y"
+      }
+
+      if (dragState.current.axis !== "x") return
+      if (Math.abs(walkX) > 4) {
         dragState.current.moved = true
         event.preventDefault()
       }
       if (!dragState.current.moved) return
-      el.scrollLeft = dragState.current.scrollLeft - walk
+      el.scrollLeft = dragState.current.scrollLeft - walkX
     }
 
     const onClick = (event: MouseEvent) => {
@@ -139,8 +155,39 @@ export function PortfolioPreviewSection({
       dragState.current.moved = false
     }
 
+    let touchStartX = 0
+    let touchStartY = 0
+    let touchScrollLeft = 0
+    let touchAxis: "x" | "y" | null = null
+
+    const onTouchStart = (event: TouchEvent) => {
+      const touch = event.touches[0]
+      if (!touch) return
+      touchStartX = touch.clientX
+      touchStartY = touch.clientY
+      touchScrollLeft = el.scrollLeft
+      touchAxis = null
+    }
+
+    const onTouchMove = (event: TouchEvent) => {
+      const touch = event.touches[0]
+      if (!touch) return
+      const deltaX = touch.clientX - touchStartX
+      const deltaY = touch.clientY - touchStartY
+
+      if (!touchAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 8) {
+        touchAxis = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y"
+      }
+
+      if (touchAxis !== "x") return
+      event.preventDefault()
+      el.scrollLeft = touchScrollLeft - deltaX
+    }
+
     el.addEventListener("mousedown", onMouseDown)
     el.addEventListener("click", onClick, true)
+    el.addEventListener("touchstart", onTouchStart, { passive: true })
+    el.addEventListener("touchmove", onTouchMove, { passive: false })
     window.addEventListener("mouseup", onMouseUp)
     window.addEventListener("mousemove", onMouseMove)
     el.addEventListener("scroll", updatePagination, { passive: true })
@@ -151,6 +198,8 @@ export function PortfolioPreviewSection({
     return () => {
       el.removeEventListener("mousedown", onMouseDown)
       el.removeEventListener("click", onClick, true)
+      el.removeEventListener("touchstart", onTouchStart)
+      el.removeEventListener("touchmove", onTouchMove)
       window.removeEventListener("mouseup", onMouseUp)
       window.removeEventListener("mousemove", onMouseMove)
       el.removeEventListener("scroll", updatePagination)
@@ -175,7 +224,8 @@ export function PortfolioPreviewSection({
             trigger: section,
             start: "top 78%",
             end: "bottom 28%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none none",
+            once: true,
           },
         })
         .fromTo(headerEls, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, stagger: 0.06 })
@@ -228,7 +278,7 @@ export function PortfolioPreviewSection({
             dir={rtl ? "rtl" : "ltr"}
             className={cn(
               "flex gap-4 overflow-x-auto overscroll-x-contain scroll-smooth pb-2",
-              "snap-x snap-mandatory touch-pan-x",
+              "snap-x snap-mandatory touch-pan-y",
               "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               "cursor-grab select-none",
             )}
@@ -246,7 +296,7 @@ export function PortfolioPreviewSection({
           {pageCount > 1 ? (
             <div
               data-portfolio-dots
-              className="mt-6 flex items-center justify-center gap-1.5"
+              className="mt-6 flex items-center justify-center"
               role="tablist"
               aria-label={locale === "fa" ? "اسلایدها" : locale === "ar" ? "الشرائح" : "Slides"}
             >
@@ -256,15 +306,20 @@ export function PortfolioPreviewSection({
                   type="button"
                   role="tab"
                   onClick={() => scrollToPage(index)}
-                  className={cn(
-                    "h-1.5 rounded-full transition-all",
-                    index === activePage
-                      ? "w-4 bg-primary"
-                      : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50",
-                  )}
-                  aria-label={dotLabel(index + 1)}
+                  className="group relative -mx-1.5 inline-flex h-11 w-11 shrink-0 items-center justify-center"
+                  aria-label={dotLabel(index)}
                   aria-selected={index === activePage}
-                />
+                >
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "pointer-events-none h-1.5 rounded-full transition-all",
+                      index === activePage
+                        ? "w-4 bg-primary"
+                        : "w-1.5 bg-muted-foreground/30 group-hover:bg-muted-foreground/50",
+                    )}
+                  />
+                </button>
               ))}
             </div>
           ) : null}

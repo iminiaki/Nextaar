@@ -100,10 +100,24 @@ const GlowingEffect = memo(
     useEffect(() => {
       if (disabled) return;
 
-      const handleScroll = () => handleMove();
-      const handlePointerMove = (e: PointerEvent) => handleMove(e);
+      // Skip expensive pointer tracking on touch / reduced-motion devices.
+      if (
+        typeof window !== "undefined" &&
+        (window.matchMedia("(pointer: coarse)").matches ||
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      ) {
+        return;
+      }
 
-      window.addEventListener("scroll", handleScroll, { passive: true });
+      let lastTs = 0;
+      const handlePointerMove = (e: PointerEvent) => {
+        const now = performance.now();
+        // Cap to ~30fps — enough for the glow without burning main thread.
+        if (now - lastTs < 32) return;
+        lastTs = now;
+        handleMove(e);
+      };
+
       document.body.addEventListener("pointermove", handlePointerMove, {
         passive: true,
       });
@@ -112,7 +126,6 @@ const GlowingEffect = memo(
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
-        window.removeEventListener("scroll", handleScroll);
         document.body.removeEventListener("pointermove", handlePointerMove);
       };
     }, [handleMove, disabled]);

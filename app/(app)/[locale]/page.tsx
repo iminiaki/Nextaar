@@ -1,17 +1,25 @@
 import dynamic from "next/dynamic"
+import { Suspense } from "react"
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n"
 import { Hero } from "@/components/hero"
 import { ServicesFeatures } from "@/components/home/services-features"
 import { PortfolioPreview } from "@/components/home/portfolio-preview"
-import { WhyChoose } from "@/components/home/why-choose"
 import { LatestPosts } from "@/components/home/latest-posts"
 import { Partners } from "@/components/home/partners"
-import { CodingVideoSection } from "@/components/home/coding-video-section"
-import { getSiteMetadata } from "@/lib/metadata"
 export const revalidate = 3600
+
+const CodingVideoSection = dynamic(
+  () => import("@/components/home/coding-video-section").then((m) => ({ default: m.CodingVideoSection })),
+  { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
+)
 
 const GoogleReviews = dynamic(
   () => import("@/components/home/google-reviews").then((m) => ({ default: m.GoogleReviews })),
+  { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
+)
+
+const WhyChoose = dynamic(
+  () => import("@/components/home/why-choose").then((m) => ({ default: m.WhyChoose })),
   { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
 )
 
@@ -24,16 +32,6 @@ const CallToAction = dynamic(
   () => import("@/components/home/cta").then((m) => ({ default: m.CallToAction })),
   { loading: () => <div className="h-96 animate-pulse bg-muted/20" /> }
 )
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale: rawLocale } = await params
-  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
-  return getSiteMetadata(locale)
-}
 
 export default async function Page({
   params,
@@ -99,13 +97,15 @@ export default async function Page({
 
       <CodingVideoSection {...codingVideoText} />
 
-      <PortfolioPreview
-        locale={locale}
-        title={dict.home.portfolio.title}
-        subtitle={dict.home.portfolio.subtitle}
-        viewAll={dict.home.portfolio.viewAll}
-        baseHref={base}
-      />
+      <Suspense fallback={<div className="h-96 animate-pulse bg-muted/20" />}>
+        <PortfolioPreview
+          locale={locale}
+          title={dict.home.portfolio.title}
+          subtitle={dict.home.portfolio.subtitle}
+          viewAll={dict.home.portfolio.viewAll}
+          baseHref={base}
+        />
+      </Suspense>
 
       <GoogleReviews locale={locale} />
 
@@ -137,12 +137,14 @@ export default async function Page({
         button={{ label: dict.home.cta.button.label, href: `${base}/contact` }}
       />
 
-      <LatestPosts
-        locale={locale}
-        title={dict.home.latestPosts.title}
-        subtitle={dict.home.latestPosts.subtitle}
-        baseHref={base}
-      />
+      <Suspense fallback={<div className="h-64 animate-pulse bg-muted/20" />}>
+        <LatestPosts
+          locale={locale}
+          title={dict.home.latestPosts.title}
+          subtitle={dict.home.latestPosts.subtitle}
+          baseHref={base}
+        />
+      </Suspense>
 
       <Partners title={dict.home.partners.title} />
     </>
