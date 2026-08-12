@@ -182,6 +182,7 @@ export default async function PortfolioDetail({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 80vw"
+            unoptimized
             className="object-cover"
           />
         </div>

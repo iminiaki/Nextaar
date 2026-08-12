@@ -29,7 +29,10 @@ export function PortfolioCard({ href, title, categories, image, imageAlt, classN
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         loading="lazy"
-        unoptimized={imageSrc.endsWith(".gif")}
+        // Payload media uses original filenames, including non-ASCII and
+        // punctuation. Serve local files directly so Next's optimizer does
+        // not reject an otherwise valid upload.
+        unoptimized={imageSrc.startsWith("/media/") || imageSrc.endsWith(".gif")}
         className="object-cover transition-transform duration-700 group-hover:scale-110"
       />
 
