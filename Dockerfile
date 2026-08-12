@@ -8,8 +8,9 @@
 #     --build-arg DATABASE_URI=postgres://nextaar:nextaar@host.docker.internal:5546/nextaar \
 #     -t nextaar-app:prod .
 #
-# The build prerenders pages that query Payload, so it needs a reachable
-# Postgres — that is what the --add-host flag is for (the local dev DB on 5546).
+# Local VPS builds that still prerender against a real DB can pass DATABASE_URI
+# and --add-host as above. Railway builds use a dummy URI (private DB DNS is
+# unavailable at build time); the app is force-dynamic and queries DB at runtime.
 
 FROM node:22-alpine AS deps
 WORKDIR /app
@@ -21,20 +22,22 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build-time only. The DB is read to prerender /[locale] pages; no writes occur.
-ARG DATABASE_URI
+# Build-time secrets/URLs. Do NOT use Railway's private DATABASE_URI here —
+# private networking is unavailable during image builds (ENOTFOUND *.railway.internal).
+# Pages are force-dynamic, so Payload talks to Postgres only at runtime.
 ARG PAYLOAD_SECRET=build-time-placeholder-secret-min-32-chars
 # NEXT_PUBLIC_* are inlined into the client bundle at build time, so this must
 # already be the production origin.
-ARG NEXT_PUBLIC_SERVER_URL=https://lastaar.com
-ARG NEXT_PUBLIC_SITE_URL=https://lastaar.com
-ENV DATABASE_URI=$DATABASE_URI \
-    PAYLOAD_SECRET=$PAYLOAD_SECRET \
+ARG NEXT_PUBLIC_SERVER_URL=https://nextaar-production.up.railway.app
+ARG NEXT_PUBLIC_SITE_URL=https://nextaar-production.up.railway.app
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET \
     NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL \
     NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
-    NODE_ENV=production
+    NODE_ENV=production \
+    DATABASE_URI=postgresql://build:build@127.0.0.1:5432/build
 
-RUN npm run build
+# Force a dummy DB URL even if the host injects DATABASE_URI into the build env.
+RUN DATABASE_URI=postgresql://build:build@127.0.0.1:5432/build npm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app

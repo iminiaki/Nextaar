@@ -178,14 +178,19 @@ export const findPostBySlug = cache(async (locale: Locale, slug: string) => {
 })
 
 export async function getLatestPostLinks(locale: Locale, limit = 4) {
-  const { docs } = await findPosts({ locale, limit, depth: 0 })
+  try {
+    const { docs } = await findPosts({ locale, limit, depth: 0 })
 
-  return docs
-    .filter((post) => typeof post.slug === "string" && typeof post.title === "string")
-    .map((post) => ({
-      label: post.title as string,
-      href: `/${locale}/blog/${post.slug}`,
-    }))
+    return docs
+      .filter((post) => typeof post.slug === "string" && typeof post.title === "string")
+      .map((post) => ({
+        label: post.title as string,
+        href: `/${locale}/blog/${post.slug}`,
+      }))
+  } catch {
+    // Build environments (e.g. Railway Docker) often cannot reach Postgres.
+    return []
+  }
 }
 
 export async function getPostCategoryCounts(locale: Locale) {

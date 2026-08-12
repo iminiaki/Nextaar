@@ -1,0 +1,13 @@
+# Keep Railway uploads lean — Nixpacks installs deps on the server.
+node_modules
+.next
+.git
+.pnpm-store
+*.sql
+.nextaar-backup.sql
+tsconfig.tsbuildinfo
+.DS_Store
+agent-transcripts
+scripts/debug-*
+tmp
+/tmp

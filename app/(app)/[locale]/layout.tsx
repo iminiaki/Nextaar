@@ -15,9 +15,9 @@ import { getDictionary } from "@/lib/i18n"
 import { isLocale, isRTL, type Locale } from "@/lib/i18n"
 import { getLatestPostLinks } from "@/lib/latest-posts"
 
-export async function generateStaticParams() {
-  return [{ locale: "en" }, { locale: "fa" }, { locale: "ar" }]
-}
+// Railway (and other hosts) cannot reach private Postgres during `next build`.
+// Render on demand so Payload queries run only at request time.
+export const dynamic = "force-dynamic"
 
 export default async function LocaleLayout({
   children,
