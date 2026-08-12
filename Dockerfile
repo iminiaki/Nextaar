@@ -62,5 +62,6 @@ RUN mkdir -p /app/public/media && chown -R nextjs:nodejs /app/public/media
 
 USER nextjs
 EXPOSE 3000
-ENV PORT=3000 HOSTNAME=0.0.0.0
+# Railway's edge often reaches the container over IPv6; bind dual-stack.
+ENV PORT=3000 HOSTNAME=::
 CMD ["node", "server.js"]
