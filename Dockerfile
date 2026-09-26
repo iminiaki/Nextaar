@@ -1,16 +1,12 @@
 # Multi-stage build for the Nextaar (Next.js 15 + Payload 3) app.
 #
-# Built on the dev Mac for linux/amd64 and shipped to the VPS as a saved image —
-# the server has no Node and cannot reach the npm registry reliably.
-#
-#   docker build --platform linux/amd64 \
-#     --add-host=host.docker.internal:host-gateway \
-#     --build-arg DATABASE_URI=postgres://nextaar:nextaar@host.docker.internal:5546/nextaar \
-#     -t nextaar-app:prod .
-#
-# Local VPS builds that still prerender against a real DB can pass DATABASE_URI
-# and --add-host as above. Railway builds use a dummy URI (private DB DNS is
-# unavailable at build time); the app is force-dynamic and queries DB at runtime.
+# Two builders use this file:
+#   - GitHub Actions (.github/workflows/deploy.yml) on every push to main: builds
+#     linux/amd64 with NEXT_PUBLIC_* = https://lastaar.com, pushes to
+#     ghcr.io/iminiaki/nextaar, and the VPS pulls it. The VPS never builds —
+#     it has no Node and cannot reach the npm registry reliably.
+#   - Railway, for the dev branch, with NEXT_PUBLIC_* from its service variables.
+# Both use a dummy DATABASE_URI: pages are force-dynamic and query at runtime.
 
 FROM node:22-alpine AS deps
 WORKDIR /app
@@ -41,7 +37,10 @@ RUN DATABASE_URI=postgresql://build:build@127.0.0.1:5432/build npm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV=production
+# Commit the image was built from; served by /healthz so deploys can prove
+# which build is live. The GitHub deploy workflow passes it.
+ARG GIT_SHA=unknown
+ENV NODE_ENV=production GIT_SHA=$GIT_SHA
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 
 COPY --from=builder /app/public ./public
