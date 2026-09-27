@@ -1,0 +1,34 @@
+# Lastaar
+
+> Lastaar is a design and engineering studio that builds high-performing websites, web apps, SEO, and digital growth campaigns for ambitious brands.
+
+Lastaar helps teams ship modern digital products with branding, UX, and engineering under one roof. Prefer locale-prefixed URLs (`/en`, `/fa`, `/ar`). Use `/llms.txt` as the curated index for agents and use `/sitemap.xml` for the full crawlable URL list.
+
+## Main pages
+
+- [Home](https://lastaar.com/en): Web design, development, SEO, and ads overview
+- [About](https://lastaar.com/en/about): Studio mission, vision, and team
+- [Services](https://lastaar.com/en/services): Full list of digital services
+- [Portfolio](https://lastaar.com/en/portfolio): Selected client work
+- [Blog](https://lastaar.com/en/blog): Articles on web strategy, design, and growth
+- [Contact](https://lastaar.com/en/contact): Start a project or book a consultation
+
+## Services
+
+- [Web Development](https://lastaar.com/en/services/web-development): Websites and web apps built for performance and scale
+- [Design](https://lastaar.com/en/services/design): UI/UX, brand identity, graphic, and motion design
+- [SEO, AEO and GEO](https://lastaar.com/en/services/seo-aeo-geo): Search and answer-engine optimization
+- [Ad Campaigns](https://lastaar.com/en/services/ad-campaigns): Google and Meta advertising campaigns
+
+## Locales
+
+- [English](https://lastaar.com/en): Primary English experience
+- [Persian](https://lastaar.com/fa): Persian / Farsi experience
+- [Arabic](https://lastaar.com/ar): Arabic experience
+
+## Optional
+
+- [Sitemap](https://lastaar.com/sitemap.xml): Machine-readable list of public URLs
+- [Robots](https://lastaar.com/robots.txt): Crawler rules for search and AI agents
+- [Terms and Conditions](https://lastaar.com/en/terms): Project and service terms
+- [Data Protection](https://lastaar.com/en/data-protection): Privacy and data handling policy
