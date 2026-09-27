@@ -27,13 +27,14 @@ cd "$DIR"
 
 # A pull that fails is not an error worth alerting on — the Iran link has bad
 # hours. The timer tries again in 2 minutes.
+# Layers already downloaded are kept, so each retry resumes where it stopped.
 pulled=0
 for attempt in 1 2 3; do
-  if docker pull -q "$REMOTE" >/dev/null 2>&1; then pulled=1; break; fi
+  if err=$(docker pull -q "$REMOTE" 2>&1); then pulled=1; break; fi
   sleep 15
 done
 if [ "$pulled" != 1 ]; then
-  log "pull failed after 3 attempts; will retry next run"
+  log "pull failed after 3 attempts; will retry next run. Last error: $(echo "$err" | tail -2 | tr '\n' ' ')"
   exit 0
 fi
 

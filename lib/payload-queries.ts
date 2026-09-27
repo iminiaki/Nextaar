@@ -188,7 +188,7 @@ export async function getLatestPostLinks(locale: Locale, limit = 4) {
         href: `/${locale}/blog/${post.slug}`,
       }))
   } catch {
-    // Build environments (e.g. Railway Docker) often cannot reach Postgres.
+    // The Docker build has no Postgres to reach.
     return []
   }
 }
