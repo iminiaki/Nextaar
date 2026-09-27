@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 import type { Locale } from "@/lib/i18n"
-import { findPosts, findPortfolio } from "@/lib/payload-queries"
+import { getPayloadClient } from "@/lib/payload-queries"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lastaar.com"
 const locales: Locale[] = ["en", "fa", "ar"]
@@ -45,17 +45,50 @@ function localeEntry(
   }))
 }
 
+function asSlug(value: unknown): string | null {
+  if (typeof value === "string" && value.trim()) return value.trim()
+  if (value && typeof value === "object") {
+    for (const locale of locales) {
+      const localized = (value as Record<string, unknown>)[locale]
+      if (typeof localized === "string" && localized.trim()) return localized.trim()
+    }
+  }
+  return null
+}
+
 async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
   try {
+    // Query Payload directly so sitemap generation does not depend on draftMode
+    // or React cache wrappers that can fail outside a normal page request.
+    const payload = await getPayloadClient()
     const [posts, portfolio] = await Promise.all([
-      findPosts({ locale: "en", limit: 500, page: 1, depth: 0 }),
-      findPortfolio({ locale: "en", limit: 500, page: 1, depth: 0 }),
+      payload.find({
+        collection: "posts" as any,
+        limit: 500,
+        page: 1,
+        depth: 0,
+        locale: "en" as any,
+        fallbackLocale: false as any,
+        draft: false as any,
+        where: { _status: { equals: "published" } } as any,
+      }),
+      payload.find({
+        collection: "portfolio" as any,
+        limit: 500,
+        page: 1,
+        depth: 0,
+        locale: "en" as any,
+        fallbackLocale: false as any,
+        draft: false as any,
+        where: { _status: { equals: "published" } } as any,
+      }),
     ])
 
     const postEntries = (posts.docs ?? []).flatMap((post: any) => {
-      if (typeof post.slug !== "string" || !post.slug) return []
+      const slug = asSlug(post.slug)
+      if (!slug) return []
       const lastModified = post.updatedAt ? new Date(post.updatedAt) : new Date()
-      return localeEntry(`/blog/${post.slug}`, {
+      return localeEntry(`/blog/${slug}`, {
         lastModified,
         changeFrequency: "weekly",
         priority: 0.6,
@@ -63,9 +96,10 @@ async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
     })
 
     const portfolioEntries = (portfolio.docs ?? []).flatMap((item: any) => {
-      if (typeof item.slug !== "string" || !item.slug) return []
+      const slug = asSlug(item.slug)
+      if (!slug) return []
       const lastModified = item.updatedAt ? new Date(item.updatedAt) : new Date()
-      return localeEntry(`/portfolio/${item.slug}`, {
+      return localeEntry(`/portfolio/${slug}`, {
         lastModified,
         changeFrequency: "monthly",
         priority: 0.6,
@@ -73,8 +107,8 @@ async function dynamicEntries(): Promise<MetadataRoute.Sitemap> {
     })
 
     return [...postEntries, ...portfolioEntries]
-  } catch {
-    // Build / offline environments may not reach Postgres.
+  } catch (error) {
+    console.error("[sitemap] dynamic entries unavailable:", error)
     return []
   }
 }
