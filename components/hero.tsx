@@ -1,24 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import dynamic from "next/dynamic"
 import gsap from "gsap"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-const SplineScene = dynamic(
-  () => import("@/components/ui/splite").then((m) => m.SplineScene),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        aria-hidden
-        className="h-full w-full animate-pulse bg-gradient-to-br from-primary/10 via-accent/5 to-transparent"
-      />
-    ),
-  }
-)
+import { HeroIntegrations } from "@/components/hero-integrations"
 
 export function Hero({
   eyebrow,
@@ -43,46 +30,6 @@ export function Hero({
   const rootRef = useRef<HTMLDivElement>(null)
   const blob1Ref = useRef<HTMLDivElement>(null)
   const blob2Ref = useRef<HTMLDivElement>(null)
-  const visualRef = useRef<HTMLDivElement>(null)
-  const [showSpline, setShowSpline] = useState(false)
-
-  useEffect(() => {
-    const node = visualRef.current
-    if (!node) return
-
-    // Skip Spline on touch / reduced-motion — it's the biggest home-page cost.
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const coarsePointer = window.matchMedia("(pointer: coarse)").matches
-    const narrow = window.matchMedia("(max-width: 1023px)").matches
-    if (prefersReduced || coarsePointer || narrow) return
-
-    let idleId: number | undefined
-    let timeoutId: number | undefined
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return
-        observer.disconnect()
-
-        const load = () => setShowSpline(true)
-        if ("requestIdleCallback" in window) {
-          idleId = window.requestIdleCallback(load, { timeout: 1800 })
-        } else {
-          timeoutId = window.setTimeout(load, 400)
-        }
-      },
-      { rootMargin: "80px" }
-    )
-
-    observer.observe(node)
-    return () => {
-      observer.disconnect()
-      if (idleId !== undefined && "cancelIdleCallback" in window) {
-        window.cancelIdleCallback(idleId)
-      }
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
-    }
-  }, [])
 
   useEffect(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -252,42 +199,7 @@ export function Hero({
           </div>
         </div>
 
-        {/* Right column — Spline visual (desktop only) */}
-        <div ref={visualRef} data-hero-visual className="relative flex items-center justify-center">
-          {/* Glow behind card: #a30098 → blue */}
-          <div
-            aria-hidden
-            className="absolute inset-4 -z-10 blur-2xl"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgb(163 0 152 / 0.22) 0%, rgb(37 99 235 / 0.14) 55%, transparent 80%)",
-            }}
-          />
-
-          {/* Card frame */}
-          <div className="w-full overflow-hidden border border-border/50 bg-background/40 shadow-2xl shadow-black/10 backdrop-blur-md dark:border-border/30 dark:shadow-black/30" style={{
-    borderRadius: "88% 12% 86% 14% / 24% 78% 22% 76%",
-  }}>
-            {/* Thin inner highlight */}
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10"  style={{
-    borderRadius: "88% 12% 86% 14% / 24% 78% 22% 76%",
-  }}/>
-
-            <div className="aspect-[4/3] w-full lg:aspect-square">
-              {showSpline ? (
-                <SplineScene
-                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                  className="h-full w-full"
-                />
-              ) : (
-                <div
-                  aria-hidden
-                  className="h-full w-full bg-gradient-to-br from-primary/15 via-accent/10 to-blue-500/10"
-                />
-              )}
-            </div>
-          </div>
-        </div>
+        <HeroIntegrations />
       </div>
 
       {/* Scroll indicator */}
