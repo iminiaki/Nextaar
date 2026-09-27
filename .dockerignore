@@ -1,8 +1,6 @@
 node_modules
 .next
 .git
-# Railway has no mounted uploads volume. Keep the tracked CMS assets in the
-# image so public portfolio images and the home-page video are served there.
 .DS_Store
 *.log
 npm-debug.log*
