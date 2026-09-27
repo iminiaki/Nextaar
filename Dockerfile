@@ -1,12 +1,9 @@
 # Multi-stage build for the Nextaar (Next.js 15 + Payload 3) app.
 #
-# Two builders use this file:
-#   - GitHub Actions (.github/workflows/deploy.yml) on every push to main: builds
-#     linux/amd64 with NEXT_PUBLIC_* = https://lastaar.com, pushes to
-#     ghcr.io/iminiaki/nextaar, and the VPS pulls it. The VPS never builds —
-#     it has no Node and cannot reach the npm registry reliably.
-#   - Railway, for the dev branch, with NEXT_PUBLIC_* from its service variables.
-# Both use a dummy DATABASE_URI: pages are force-dynamic and query at runtime.
+# Built by GitHub Actions (.github/workflows/deploy.yml) on every push to main:
+# linux/amd64, pushed to ghcr.io/iminiaki/nextaar, and the VPS pulls it. The VPS
+# never builds — it has no Node and cannot reach the npm registry reliably.
+# The build uses a dummy DATABASE_URI: pages are force-dynamic and query at runtime.
 
 FROM node:22-alpine AS deps
 WORKDIR /app
@@ -18,14 +15,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build-time secrets/URLs. Do NOT use Railway's private DATABASE_URI here —
-# private networking is unavailable during image builds (ENOTFOUND *.railway.internal).
-# Pages are force-dynamic, so Payload talks to Postgres only at runtime.
+# Build-time placeholders. The build never talks to Postgres: pages are
+# force-dynamic, so Payload queries only at runtime.
 ARG PAYLOAD_SECRET=build-time-placeholder-secret-min-32-chars
 # NEXT_PUBLIC_* are inlined into the client bundle at build time, so this must
 # already be the production origin.
-ARG NEXT_PUBLIC_SERVER_URL=https://nextaar-production.up.railway.app
-ARG NEXT_PUBLIC_SITE_URL=https://nextaar-production.up.railway.app
+ARG NEXT_PUBLIC_SERVER_URL=https://lastaar.com
+ARG NEXT_PUBLIC_SITE_URL=https://lastaar.com
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET \
     NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL \
     NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
@@ -61,6 +57,6 @@ RUN mkdir -p /app/public/media && chown -R nextjs:nodejs /app/public/media
 
 USER nextjs
 EXPOSE 3000
-# Railway's edge often reaches the container over IPv6; bind dual-stack.
+# Bind dual-stack (IPv4 and IPv6).
 ENV PORT=3000 HOSTNAME=::
 CMD ["node", "server.js"]

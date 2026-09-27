@@ -35,10 +35,10 @@ cert. Cut over from the SabinServer cPanel host on 2026-07-26.
 
 ## How to deploy a new version
 
-**Push to `main`. That is the whole procedure.** `dev` deploys to Railway instead.
+**Merge a PR into `main`. That is the whole procedure.** `main` is protected:
+changes land through a PR whose CI build check passed.
 
 ```
-push dev  ──▶ Railway builds the Dockerfile (service source branch = dev, "Wait for CI" on)
 push main ──▶ .github/workflows/deploy.yml builds linux/amd64 with NEXT_PUBLIC_* = https://lastaar.com
               and pushes ghcr.io/iminiaki/nextaar:main (+ :sha-<short>)
           ──▶ VPS: nextaar-deploy.timer runs /srv/nextaar/deploy.sh every 2 min

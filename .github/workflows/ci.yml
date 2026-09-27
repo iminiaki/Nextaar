@@ -1,12 +1,9 @@
-# Build check for pull requests and the dev branch. Builds the same Dockerfile
-# Railway (dev) and the VPS (main) run, without pushing anything. Turn on
-# Railway's "Wait for CI" so a red run here blocks the dev deploy.
+# Build check for pull requests. Builds the same Dockerfile production runs,
+# without pushing anything. Branch protection on main requires it to pass.
 name: CI
 
 on:
   pull_request:
-  push:
-    branches: [dev]
 
 concurrency:
   group: ci-${{ github.ref }}

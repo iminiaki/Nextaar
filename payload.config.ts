@@ -47,8 +47,8 @@ export default buildConfig({
   db: postgresAdapter({
     // No src/ dir in this project, so override Payload's default src/migrations.
     migrationDir: path.resolve(dirname, "migrations"),
-    // Railway (and similar) can't migrate at Docker build time — private DB
-    // DNS only works at runtime. Run pending migrations on first Payload init.
+    // The Docker build has no database, so pending migrations run on the
+    // first Payload init at runtime instead — i.e. on every deploy.
     prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URI || "",
