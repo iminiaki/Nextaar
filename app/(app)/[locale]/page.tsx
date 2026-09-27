@@ -6,7 +6,27 @@ import { ServicesFeatures } from "@/components/home/services-features"
 import { PortfolioPreview } from "@/components/home/portfolio-preview"
 import { LatestPosts } from "@/components/home/latest-posts"
 import { Partners } from "@/components/home/partners"
+import { getSiteMetadata } from "@/lib/metadata"
 export const revalidate = 3600
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
+  const site = getSiteMetadata(locale)
+  const title =
+    typeof site.title === "object" && site.title && "default" in site.title
+      ? String(site.title.default)
+      : "Lastaar"
+
+  return {
+    ...site,
+    title: { absolute: title },
+  }
+}
 
 const CodingVideoSection = dynamic(
   () => import("@/components/home/coding-video-section").then((m) => ({ default: m.CodingVideoSection })),

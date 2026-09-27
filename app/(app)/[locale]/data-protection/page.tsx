@@ -4,6 +4,19 @@ import { RevealOnScroll } from "@/components/gsap/reveal"
 import { getDictionary, isRTL, type Locale } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
 import { CookieSettingsLink } from "@/components/cookie-settings-link"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
+
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const dataProtection = dict.pages.dataProtection
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: getPageTopic("dataProtection", params.locale),
+    description: dataProtection.subtitle,
+    path: `/${params.locale}/data-protection`,
+  })
+}
 
 export default async function DataProtectionPage({ params }: { params: { locale: Locale } }) {
   const dict = await getDictionary(params.locale)

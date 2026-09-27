@@ -6,8 +6,33 @@ import { services } from "@/lib/content"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { Button } from "@/components/ui/button"
 import { PlanContactDialog } from "@/components/plan-contact-dialog"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
 
 type Params = { params: { locale: Locale; slug: string } }
+
+export async function generateMetadata({ params }: Params) {
+  const service = services.find((item) => item.slug === params.slug)
+  if (!service) {
+    return buildPageMetadata({
+      locale: params.locale,
+      title: getPageTopic("services", params.locale),
+      description: "",
+      path: `/${params.locale}/services`,
+    })
+  }
+
+  const known = ["web-development", "design", "seo-aeo-geo", "ad-campaigns"] as const
+  const topic = (known as readonly string[]).includes(service.slug)
+    ? getPageTopic(service.slug as (typeof known)[number], params.locale)
+    : service.title[params.locale]
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: topic,
+    description: service.excerpt[params.locale],
+    path: `/${params.locale}/services/${service.slug}`,
+  })
+}
 type Localized = Record<Locale, string>
 
 const labels: Record<
