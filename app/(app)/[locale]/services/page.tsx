@@ -1,7 +1,7 @@
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { services } from "@/lib/content";
 import { ServicesFeatures } from "@/components/home/services-features";
-import { buildPageMetadata } from "@/lib/metadata";
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata";
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }) {
@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
   return buildPageMetadata({
     locale: params.locale,
-    title: c.title,
+    title: getPageTopic("services", params.locale),
     description: c.subtitle,
     path: "/services",
   });

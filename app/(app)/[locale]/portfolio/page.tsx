@@ -3,7 +3,7 @@ import { getDictionary, type Locale } from "@/lib/i18n"
 import { getMediaSrc } from "@/lib/media"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { findPortfolio } from "@/lib/payload-queries"
-import { buildPageMetadata } from "@/lib/metadata"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
 
 export const revalidate = 3600
 
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
   return buildPageMetadata({
     locale: params.locale,
-    title: c.title,
+    title: getPageTopic("portfolio", params.locale),
     description: c.subtitle,
     path: "/portfolio",
   })

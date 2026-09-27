@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import localFont from "next/font/local";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { GoogleTag } from "@/components/google-tag";
 
 // Arabic/Persian font (Peyda)
 const Peyda = localFont({
@@ -46,7 +47,10 @@ const Peyda = localFont({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "Lastaar",
+  title: {
+    default: "Web Design, Development, SEO & Ads | Lastaar",
+    template: "%s | Lastaar",
+  },
   description:
     "Lastaar combines branding, UX, and modern engineering to launch high-performing websites and web apps for ambitious brands.",
   generator: "imanak",
@@ -73,6 +77,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans">
+        <GoogleTag />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

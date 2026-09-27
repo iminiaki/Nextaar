@@ -12,7 +12,7 @@ import {
   findPosts,
   getPostCategoryCounts,
 } from "@/lib/payload-queries"
-import { buildPageMetadata } from "@/lib/metadata"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
 
 export const revalidate = 3600
 
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
   return buildPageMetadata({
     locale: params.locale,
-    title: c.title,
+    title: getPageTopic("blog", params.locale),
     description: c.subtitle,
     path: "/blog",
   })

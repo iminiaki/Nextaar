@@ -3,6 +3,19 @@ import { FileText, Scale } from "lucide-react"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { getDictionary, isRTL, type Locale } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
+
+export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+  const dict = await getDictionary(params.locale)
+  const terms = dict.pages.terms
+
+  return buildPageMetadata({
+    locale: params.locale,
+    title: getPageTopic("terms", params.locale),
+    description: terms.subtitle,
+    path: `/${params.locale}/terms`,
+  })
+}
 
 export default async function TermsPage({ params }: { params: { locale: Locale } }) {
   const dict = await getDictionary(params.locale)

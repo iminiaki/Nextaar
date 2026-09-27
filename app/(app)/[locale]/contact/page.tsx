@@ -3,7 +3,7 @@ import { ContactForm } from "@/components/contact-form"
 import { RevealOnScroll } from "@/components/gsap/reveal"
 import { MapPinHouse, Phone, MailCheck } from "lucide-react"
 import Link from "next/link"
-import { buildPageMetadata } from "@/lib/metadata"
+import { buildPageMetadata, getPageTopic } from "@/lib/metadata"
 export const revalidate = 3600
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }) {
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
   return buildPageMetadata({
     locale: params.locale,
-    title: dict.contact.title,
+    title: getPageTopic("contact", params.locale),
     description: dict.contact.subtitle,
     path: "/contact",
   })
