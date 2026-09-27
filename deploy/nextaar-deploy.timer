@@ -1,0 +1,12 @@
+# Installed at /etc/systemd/system/nextaar-deploy.timer.
+# Every 2 minutes: one anonymous manifest check against GHCR; a pull only
+# downloads layers when main has a new image.
+[Unit]
+Description=Check GHCR for a new Nextaar image every 2 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+
+[Install]
+WantedBy=timers.target

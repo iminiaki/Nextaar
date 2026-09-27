@@ -1,0 +1,12 @@
+# Installed at /etc/systemd/system/nextaar-deploy.service. Triggered by
+# nextaar-deploy.timer; see deploy/nextaar-deploy.sh. Logs: journalctl -u nextaar-deploy
+[Unit]
+Description=Nextaar pull-based deploy (ghcr.io/iminiaki/nextaar:main)
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/srv/nextaar/deploy.sh
+TimeoutStartSec=15min

@@ -18,7 +18,8 @@ cert. Cut over from the SabinServer cPanel host on 2026-07-26.
 ```
 /srv/edge/sites/nextaar.caddy   lastaar.com, www.lastaar.com → reverse_proxy nextaar-app:3000
 /srv/nextaar/
-  compose.yaml       app (image nextaar-app:prod) + db (postgres:16-alpine)
+  compose.yaml       app (image nextaar-app:live, set by deploy.sh) + db (postgres:16-alpine)
+  deploy.sh          pull-based deploy, run by nextaar-deploy.timer (see below)
   .env               DATABASE_URI (db:5432), PAYLOAD_SECRET, NEXT_PUBLIC_* (mode 600)
   .env.db            POSTGRES_USER/PASSWORD/DB (mode 600)
   media/             Payload uploads, bind-mounted to /app/public/media.
@@ -34,22 +35,31 @@ cert. Cut over from the SabinServer cPanel host on 2026-07-26.
 
 ## How to deploy a new version
 
-```bash
-cd ~/Documents/dev/nextaar
-docker compose up -d                      # local build DB on 5546 must be running
-docker build --platform linux/amd64 \
-  --add-host=host.docker.internal:host-gateway \
-  --build-arg DATABASE_URI=postgres://nextaar:nextaar@host.docker.internal:5546/nextaar \
-  -t nextaar-app:prod .
-docker save nextaar-app:prod | gzip -1 | ssh root@194.5.175.170 'gunzip | docker load'
-ssh root@194.5.175.170 'cd /srv/nextaar && docker compose up -d app'
-```
-The build **prerenders pages that query Payload**, so it needs a reachable
-Postgres — that is what `--add-host` is for. Without it the build fails with
-`relation "posts" does not exist`.
+**Push to `main`. That is the whole procedure.** `dev` deploys to Railway instead.
 
-`NEXT_PUBLIC_*` values are inlined into the client bundle at build time, so the
-image is origin-specific. Rebuild if the public URL changes.
+```
+push dev  ──▶ Railway builds the Dockerfile (service source branch = dev, "Wait for CI" on)
+push main ──▶ .github/workflows/deploy.yml builds linux/amd64 with NEXT_PUBLIC_* = https://lastaar.com
+              and pushes ghcr.io/iminiaki/nextaar:main (+ :sha-<short>)
+          ──▶ VPS: nextaar-deploy.timer runs /srv/nextaar/deploy.sh every 2 min
+              pull :main → new image? → pg_dump to backups/predeploy/ → retag nextaar-app:live
+              → compose up -d app (Payload prodMigrations run on boot)
+              → /healthz via Caddy must report ok + the new commit within 3 min
+              → otherwise retag nextaar-app:previous, restart, remember the bad image
+          ──▶ the workflow's verify-live job goes green once lastaar.com/healthz shows the commit
+```
+- The server only *pulls* — nothing connects in, so the throttled inbound SSH
+  from outside Iran is not in the path. ghcr.io was reachable from the VPS on
+  2026-09-26 (27.5 MB test image pulled in 6.9 s). The package must stay
+  **public** so the pull needs no token (no GitHub account touches an Iranian IP).
+- Logs: `journalctl -u nextaar-deploy -n 50`. Force a check now:
+  `systemctl start nextaar-deploy`.
+- Manual rollback: `docker tag nextaar-app:previous nextaar-app:live && docker
+  compose up -d app`. A pushed revert commit is the cleaner way.
+- Rollback does not undo migrations. The pre-deploy dump named in the log is
+  the restore point.
+- `/healthz` (app/healthz/route.ts) returns `{ok, sha}`; `sha` comes from the
+  `GIT_SHA` build arg.
 
 ## Server CPU constraint — sharp is version-pinned
 

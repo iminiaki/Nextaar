@@ -6,7 +6,9 @@
 # this box. Postgres is bound to loopback only, for migrations/psql over SSH.
 services:
   app:
-    image: nextaar-app:prod
+    # Local tag managed by deploy.sh: it points at the last healthy image pulled
+    # from ghcr.io/iminiaki/nextaar:main. Never edit it by hand.
+    image: nextaar-app:live
     container_name: nextaar-app
     restart: unless-stopped
     env_file: .env
