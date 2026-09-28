@@ -58,7 +58,7 @@ export default async function LocaleLayout({
         <DeferredChrome />
         <div className="relative">
           <Navbar locale={locale} nav={dict.nav} servicesMenu={dict.home.servicesFeatures.items} />
-          <main className="relative overflow-x-hidden">
+          <main className="relative overflow-x-clip">
             <Suspense fallback={null}>
               <Breadcrumbs locale={locale} />
             </Suspense>

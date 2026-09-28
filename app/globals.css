@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 /* Define CSS variables for font families */
 :root {
@@ -266,6 +267,44 @@ html {
   }
 }
 
+@keyframes toc-finish-path {
+  0% {
+    stroke-opacity: 0;
+    stroke-dashoffset: 1;
+  }
+  35% {
+    stroke-opacity: 0.85;
+  }
+  100% {
+    stroke-opacity: 0.35;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes toc-finish-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+@keyframes toc-finish-dot {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.55);
+  }
+  70% {
+    transform: scale(1.15);
+  }
+}
+
 /* Apply only while toggling to avoid affecting other transitions */
 html.theme-transition::view-transition-new(root) {
   animation: theme-circle-reveal 420ms ease-out;
@@ -332,4 +371,267 @@ html.theme-transition::view-transition-old(root) {
 
 main:has([data-not-found-page]) nav[aria-label="Breadcrumb"] {
   display: none;
+}
+
+/* Blog / rich-text article typography */
+.post-prose {
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.85;
+}
+
+.post-prose :where(.payload-richtext) {
+  display: flow-root;
+}
+
+.post-prose :where(p) {
+  margin-block: 1.15em;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: color-mix(in oklch, var(--foreground) 88%, var(--muted-foreground));
+}
+
+.post-prose :where(h1) {
+  margin-block: 1.6em 0.55em;
+  font-size: clamp(1.875rem, 1.5rem + 1.2vw, 2.375rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.post-prose :where(h2) {
+  margin-block: 1.7em 0.55em;
+  font-size: clamp(1.5rem, 1.3rem + 0.7vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+}
+
+.post-prose :where(h3) {
+  margin-block: 1.45em 0.45em;
+  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--foreground);
+}
+
+.post-prose :where(h4) {
+  margin-block: 1.3em 0.4em;
+  font-size: 1.175rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+
+.post-prose :where(h5) {
+  margin-block: 1.2em 0.35em;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--foreground);
+}
+
+.post-prose :where(h6) {
+  margin-block: 1.1em 0.3em;
+  font-size: 0.975rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.post-prose :where(h1, h2, h3, h4, h5, h6) + :where(p) {
+  margin-top: 0.55em;
+}
+
+.post-prose :where(ul, ol) {
+  margin-block: 1.15em;
+  padding-inline-start: 1.4em;
+}
+
+.post-prose :where(ul) {
+  list-style: disc;
+}
+
+.post-prose :where(ol) {
+  list-style: decimal;
+}
+
+.post-prose :where(li) {
+  margin-block: 0.4em;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.8;
+  padding-inline-start: 0.2em;
+}
+
+.post-prose :where(li > ul, li > ol) {
+  margin-block: 0.4em;
+}
+
+.post-prose :where(blockquote) {
+  margin-block: 1.5em;
+  padding-block: 0.15em;
+  padding-inline: 1.1em;
+  border-inline-start: 3px solid color-mix(in oklch, var(--primary) 70%, transparent);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--muted-foreground);
+}
+
+.post-prose :where(blockquote p) {
+  color: inherit;
+}
+
+.post-prose :where(a) {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.post-prose :where(a:hover) {
+  color: color-mix(in oklch, var(--primary) 80%, var(--foreground));
+}
+
+.post-prose :where(strong, b) {
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.post-prose :where(em, i) {
+  font-style: italic;
+}
+
+.post-prose :where(small) {
+  font-size: 0.875em;
+  line-height: 1.6;
+}
+
+.post-prose :where(hr) {
+  margin-block: 2.25em;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.post-prose :where(img, video) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-block: 1.5em;
+  border-radius: calc(var(--radius) + 2px);
+}
+
+.post-prose :where(figure) {
+  margin-block: 1.6em;
+}
+
+.post-prose :where(figcaption) {
+  margin-top: 0.55em;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.post-prose :where(pre) {
+  margin-block: 1.4em;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 2px);
+  background: color-mix(in oklch, var(--muted) 80%, transparent);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.post-prose :where(code) {
+  font-size: 0.9em;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.post-prose :where(:not(pre) > code) {
+  padding: 0.15em 0.4em;
+  border-radius: 0.35rem;
+  background: color-mix(in oklch, var(--muted) 85%, transparent);
+}
+
+.post-prose :where(pre code) {
+  padding: 0;
+  background: transparent;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.post-prose :where(table) {
+  width: 100%;
+  margin-block: 1.6em;
+  border-collapse: collapse;
+  font-size: 0.975rem;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.post-prose :where(thead th) {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: start;
+  color: var(--foreground);
+  background: color-mix(in oklch, var(--muted) 75%, transparent);
+}
+
+.post-prose :where(th, td) {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.post-prose :where(td) {
+  font-weight: 400;
+  line-height: 1.65;
+  color: color-mix(in oklch, var(--foreground) 88%, var(--muted-foreground));
+}
+
+.post-prose :where(tbody tr:nth-child(even) td) {
+  background: color-mix(in oklch, var(--muted) 35%, transparent);
+}
+
+.post-prose :where(dl) {
+  margin-block: 1.2em;
+}
+
+.post-prose :where(dt) {
+  margin-top: 0.85em;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.post-prose :where(dd) {
+  margin-inline-start: 0;
+  margin-top: 0.25em;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--muted-foreground);
+}
+
+html[dir="rtl"] .post-prose {
+  line-height: 2;
+}
+
+html[dir="rtl"] .post-prose :where(p, li, td, dd, blockquote) {
+  line-height: 2;
 }
