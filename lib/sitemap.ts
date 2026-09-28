@@ -229,8 +229,16 @@ export const sitemapHeaders = {
 }
 
 export function wantsHtml(request: Request) {
-  const accept = request.headers.get("accept") || ""
-  return accept.includes("text/html")
+  // Googlebot and other crawlers often send Accept: text/html,*/* — always
+  // prefer XML unless this is a real browser navigation.
+  const dest = request.headers.get("sec-fetch-dest")
+  const mode = request.headers.get("sec-fetch-mode")
+  if (dest === "document" && mode === "navigate") return true
+
+  const url = new URL(request.url)
+  if (url.searchParams.get("view") === "html") return true
+
+  return false
 }
 
 function formatDate(value?: string) {
