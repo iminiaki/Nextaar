@@ -196,7 +196,7 @@ export default async function PostDetail({ params, searchParams }: PageProps) {
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll className="prose mt-8 max-w-none dark:prose-invert">
+          <RevealOnScroll className="post-prose prose mt-8 max-w-none dark:prose-invert prose-headings:scroll-mt-28">
             <div id="post-content">
               <RichText data={post.body} />
             </div>
