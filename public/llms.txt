@@ -28,7 +28,10 @@ Lastaar helps teams ship modern digital products with branding, UX, and engineer
 
 ## Optional
 
-- [Sitemap](https://lastaar.com/sitemap.xml): Machine-readable list of public URLs
+- [Sitemap](https://lastaar.com/sitemap.xml): XML sitemap index for crawlers
+- [Page sitemap](https://lastaar.com/page-sitemap.xml): Core marketing pages
+- [Post sitemap](https://lastaar.com/post-sitemap.xml): Blog posts
+- [Portfolio sitemap](https://lastaar.com/portfolio-sitemap.xml): Portfolio projects
 - [Robots](https://lastaar.com/robots.txt): Crawler rules for search and AI agents
 - [Terms and Conditions](https://lastaar.com/en/terms): Project and service terms
 - [Data Protection](https://lastaar.com/en/data-protection): Privacy and data handling policy
