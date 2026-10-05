@@ -103,6 +103,9 @@ export default async function Page({
     },
   }[locale]
 
+  const linkClass =
+    "font-medium text-foreground underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary"
+
   return (
     <>
       <JsonLd
@@ -126,27 +129,72 @@ export default async function Page({
         baseHref={base}
       />
 
-      {/* Server-rendered crawlable links for AI / SEO auditors */}
-      <nav
-        aria-label={dict.footer.quickLinks.title}
-        className="container mx-auto flex flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 pb-2 pt-1 text-sm text-muted-foreground"
-      >
-        <Link href={`${base}/services`} className="underline-offset-4 hover:text-foreground hover:underline">
-          {dict.nav.services}
-        </Link>
-        <Link href={`${base}/portfolio`} className="underline-offset-4 hover:text-foreground hover:underline">
-          {dict.nav.portfolio}
-        </Link>
-        <Link href={`${base}/blog`} className="underline-offset-4 hover:text-foreground hover:underline">
-          {dict.nav.blog}
-        </Link>
-        <Link href={`${base}/about`} className="underline-offset-4 hover:text-foreground hover:underline">
-          {dict.nav.about}
-        </Link>
-        <Link href={`${base}/contact`} className="underline-offset-4 hover:text-foreground hover:underline">
-          {dict.nav.contact}
-        </Link>
-      </nav>
+      {/* Contextual body links (not nav/footer) for SEO / AI crawlers */}
+      <section className="container mx-auto px-4 py-8 md:py-10">
+        <p className="mx-auto max-w-3xl text-center text-base leading-relaxed text-muted-foreground sm:text-lg sm:leading-8">
+          {locale === "fa" ? (
+            <>
+              لستار به برندها کمک می‌کند با{" "}
+              <Link href={`${base}/services`} className={linkClass}>
+                خدمات طراحی و توسعه وب
+              </Link>
+              ، مشاهده{" "}
+              <Link href={`${base}/portfolio`} className={linkClass}>
+                نمونه‌کارهای واقعی
+              </Link>
+              {" "}و مطالعه راهنماهای{" "}
+              <Link href={`${base}/blog`} className={linkClass}>
+                بلاگ
+              </Link>
+              {" "}رشد کنند. برای شروع مسیر، از صفحه{" "}
+              <Link href={`${base}/contact`} className={linkClass}>
+                تماس با ما
+              </Link>{" "}
+              اقدام کنید.
+            </>
+          ) : locale === "ar" ? (
+            <>
+              تساعد لستار العلامات على النمو عبر{" "}
+              <Link href={`${base}/services`} className={linkClass}>
+                خدمات تصميم وتطوير الويب
+              </Link>
+              ، واستعراض{" "}
+              <Link href={`${base}/portfolio`} className={linkClass}>
+                أعمالنا المنجزة
+              </Link>
+              ، وقراءة أدلة{" "}
+              <Link href={`${base}/blog`} className={linkClass}>
+                المدونة
+              </Link>
+              . ابدأ من صفحة{" "}
+              <Link href={`${base}/contact`} className={linkClass}>
+                اتصل بنا
+              </Link>
+              .
+            </>
+          ) : (
+            <>
+              Lastaar helps brands grow with{" "}
+              <Link href={`${base}/services`} className={linkClass}>
+                web design and development services
+              </Link>
+              , a proven{" "}
+              <Link href={`${base}/portfolio`} className={linkClass}>
+                portfolio of shipped products
+              </Link>
+              , and practical guides on our{" "}
+              <Link href={`${base}/blog`} className={linkClass}>
+                blog
+              </Link>
+              . Ready to talk?{" "}
+              <Link href={`${base}/contact`} className={linkClass}>
+                Contact us
+              </Link>
+              .
+            </>
+          )}
+        </p>
+      </section>
 
       <ServicesFeatures
         locale={locale}
