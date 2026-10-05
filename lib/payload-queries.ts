@@ -177,6 +177,49 @@ export const findPostBySlug = cache(async (locale: Locale, slug: string) => {
   )()
 })
 
+export async function findRelatedPosts({
+  locale,
+  postId,
+  categoryIds,
+  categorySlugs,
+  limit = 4,
+}: {
+  locale: Locale
+  postId: string | number
+  categoryIds?: Array<string | number>
+  categorySlugs?: string[]
+  limit?: number
+}) {
+  const slugFilters = (categorySlugs ?? []).filter(Boolean)
+  const idFilters = (categoryIds ?? []).filter((id) => id != null && id !== "")
+
+  if (!slugFilters.length && !idFilters.length) return []
+
+  const categoryClause = slugFilters.length
+    ? {
+        or: slugFilters.map((slug) => ({
+          "categories.slug": { equals: slug },
+        })),
+      }
+    : {
+        or: idFilters.map((id) => ({
+          categories: { contains: id },
+        })),
+      }
+
+  const { docs } = await findPosts({
+    locale,
+    limit,
+    depth: 1,
+    sort: "-createdAt",
+    where: {
+      and: [{ id: { not_equals: postId } }, categoryClause],
+    },
+  })
+
+  return docs
+}
+
 export async function getLatestPostLinks(locale: Locale, limit = 4) {
   try {
     const { docs } = await findPosts({ locale, limit, depth: 0 })

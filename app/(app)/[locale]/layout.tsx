@@ -10,9 +10,13 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { DeferredChrome } from "@/components/deferred-chrome"
 // import { SupportChatbot } from "@/components/support-chatbot"
 import { WhatsAppButton } from "@/components/whatsapp-button"
-import { getDictionary } from "@/lib/i18n"
-import { isLocale, isRTL, type Locale } from "@/lib/i18n"
+import { getDictionary, isLocale, isRTL, type Locale } from "@/lib/i18n"
 import { getLatestPostLinks } from "@/lib/latest-posts"
+import {
+  buildOrganizationSchema,
+  buildWebSiteSchema,
+  JsonLd,
+} from "@/lib/seo-schema"
 import { getSiteMetadata } from "@/lib/metadata"
 
 // The Docker build has no Postgres to reach during `next build`.
@@ -49,6 +53,7 @@ export default async function LocaleLayout({
 
   return (
     <AccentProvider>
+      <JsonLd data={[buildOrganizationSchema(locale), buildWebSiteSchema(locale)]} />
       <script
         dangerouslySetInnerHTML={{
           __html: `document.documentElement.lang='${locale}';document.documentElement.dir='${isRTL(locale) ? "rtl" : "ltr"}';`,

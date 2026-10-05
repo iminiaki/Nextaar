@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
-
-const SITE_URL = "https://lastaar.com"
+import { SITE_LAST_MODIFIED, SITE_URL } from "@/lib/seo-schema"
 
 /** Sync copy for early <head> metadata (avoids streaming description after body). */
 const SITE_SEO: Record<
@@ -124,6 +123,14 @@ export function getPageTopic(page: keyof typeof PAGE_TOPICS, locale: Locale) {
   return PAGE_TOPICS[page][locale]
 }
 
+export function getHomeTitle(locale: Locale) {
+  return HOME_TITLES[locale] ?? HOME_TITLES.en
+}
+
+export function getSiteDescription(locale: Locale) {
+  return (SITE_SEO[locale] ?? SITE_SEO.en).description
+}
+
 type PageMetadataInput = {
   locale: Locale
   title: string
@@ -143,11 +150,31 @@ function absoluteUrl(path = "") {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`
 }
 
+/** Ensure paths are locale-prefixed: `/about` + `fa` → `/fa/about`. */
+export function localizedPath(locale: Locale, path = "") {
+  const cleaned = path.trim()
+  if (!cleaned || cleaned === "/") return `/${locale}`
+  if (/^\/(en|fa|ar)(\/|$)/.test(cleaned)) return cleaned.replace(/\/$/, "") || `/${locale}`
+  const withSlash = cleaned.startsWith("/") ? cleaned : `/${cleaned}`
+  return `/${locale}${withSlash}`.replace(/\/$/, "") || `/${locale}`
+}
+
+function languageAlternates(path: string) {
+  const withoutLocale = path.replace(/^\/(en|fa|ar)(?=\/|$)/, "") || ""
+  return {
+    en: absoluteUrl(`/en${withoutLocale}`),
+    fa: absoluteUrl(`/fa${withoutLocale}`),
+    ar: absoluteUrl(`/ar${withoutLocale}`),
+  }
+}
+
 /** Site-wide defaults — sync so meta description is in the initial HTML head. */
 export function getSiteMetadata(locale: Locale = "en"): Metadata {
   const site = SITE_SEO[locale] ?? SITE_SEO.en
   const title = HOME_TITLES[locale] ?? HOME_TITLES.en
   const imageUrl = absoluteUrl("/Nextaar.png")
+  const homePath = `/${locale}`
+  const homeUrl = absoluteUrl(homePath)
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -172,10 +199,14 @@ export function getSiteMetadata(locale: Locale = "en"): Metadata {
       index: true,
       follow: true,
     },
+    alternates: {
+      canonical: homeUrl,
+      languages: languageAlternates(homePath),
+    },
     openGraph: {
       type: "website",
       locale: site.ogLocale,
-      url: SITE_URL,
+      url: homeUrl,
       siteName: site.brand,
       title,
       description: site.description,
@@ -213,8 +244,10 @@ export function buildPageMetadata({
   const site = getSiteMetadata(locale)
   const seo = SITE_SEO[locale] ?? SITE_SEO.en
   const titleText = formatSeoTitle(title, locale)
-  const url = absoluteUrl(path)
+  const localized = localizedPath(locale, path)
+  const url = absoluteUrl(localized)
   const imageUrl = absoluteUrl(image || "/Nextaar.png")
+  const freshness = modifiedTime || publishedTime || SITE_LAST_MODIFIED
 
   return {
     ...site,
@@ -222,11 +255,7 @@ export function buildPageMetadata({
     description,
     alternates: {
       canonical: url,
-      languages: {
-        en: absoluteUrl(path.replace(/^\/(en|fa|ar)/, "/en") || "/en"),
-        fa: absoluteUrl(path.replace(/^\/(en|fa|ar)/, "/fa") || "/fa"),
-        ar: absoluteUrl(path.replace(/^\/(en|fa|ar)/, "/ar") || "/ar"),
-      },
+      languages: languageAlternates(localized),
     },
     openGraph: {
       ...site.openGraph,
@@ -242,18 +271,25 @@ export function buildPageMetadata({
           alt: title,
         },
       ],
-      ...(type === "article" && {
-        publishedTime,
-        modifiedTime,
-        authors: authors || [seo.brand],
-        tags,
-      }),
-    },
+      ...(type === "article"
+        ? {
+            publishedTime,
+            modifiedTime: freshness,
+            authors: authors || [seo.brand],
+            tags,
+          }
+        : null),
+    } as Metadata["openGraph"],
     twitter: {
       ...site.twitter,
       title: titleText,
       description,
       images: [imageUrl],
+    },
+    other: {
+      ...(typeof site.other === "object" && site.other ? site.other : {}),
+      "last-modified": freshness,
+      "og:updated_time": freshness,
     },
   }
 }

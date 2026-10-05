@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { Suspense } from "react"
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n"
 import { Hero } from "@/components/hero"
@@ -6,7 +7,16 @@ import { ServicesFeatures } from "@/components/home/services-features"
 import { PortfolioPreview } from "@/components/home/portfolio-preview"
 import { LatestPosts } from "@/components/home/latest-posts"
 import { Partners } from "@/components/home/partners"
-import { getSiteMetadata } from "@/lib/metadata"
+import {
+  buildPageMetadata,
+  getHomeTitle,
+  getSiteDescription,
+} from "@/lib/metadata"
+import {
+  buildWebPageSchema,
+  JsonLd,
+  SITE_LAST_MODIFIED,
+} from "@/lib/seo-schema"
 export const revalidate = 3600
 
 export async function generateMetadata({
@@ -16,16 +26,14 @@ export async function generateMetadata({
 }) {
   const { locale: rawLocale } = await params
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en"
-  const site = getSiteMetadata(locale)
-  const title =
-    typeof site.title === "object" && site.title && "default" in site.title
-      ? String(site.title.default)
-      : "Lastaar"
 
-  return {
-    ...site,
-    title: { absolute: title },
-  }
+  return buildPageMetadata({
+    locale,
+    title: getHomeTitle(locale).replace(/\s*\|\s*(Lastaar|لستار)\s*$/i, ""),
+    description: getSiteDescription(locale),
+    path: `/${locale}`,
+    modifiedTime: SITE_LAST_MODIFIED,
+  })
 }
 
 const CodingVideoSection = dynamic(
@@ -97,6 +105,16 @@ export default async function Page({
 
   return (
     <>
+      <JsonLd
+        data={buildWebPageSchema({
+          locale,
+          path: `/${locale}`,
+          title: getHomeTitle(locale),
+          description: getSiteDescription(locale),
+          dateModified: SITE_LAST_MODIFIED,
+        })}
+      />
+
       <Hero
         eyebrow={dict.hero.eyebrow}
         title={dict.hero.title}
@@ -107,6 +125,28 @@ export default async function Page({
         scroll={dict.hero.scroll}
         baseHref={base}
       />
+
+      {/* Server-rendered crawlable links for AI / SEO auditors */}
+      <nav
+        aria-label={dict.footer.quickLinks.title}
+        className="container mx-auto flex flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 pb-2 pt-1 text-sm text-muted-foreground"
+      >
+        <Link href={`${base}/services`} className="underline-offset-4 hover:text-foreground hover:underline">
+          {dict.nav.services}
+        </Link>
+        <Link href={`${base}/portfolio`} className="underline-offset-4 hover:text-foreground hover:underline">
+          {dict.nav.portfolio}
+        </Link>
+        <Link href={`${base}/blog`} className="underline-offset-4 hover:text-foreground hover:underline">
+          {dict.nav.blog}
+        </Link>
+        <Link href={`${base}/about`} className="underline-offset-4 hover:text-foreground hover:underline">
+          {dict.nav.about}
+        </Link>
+        <Link href={`${base}/contact`} className="underline-offset-4 hover:text-foreground hover:underline">
+          {dict.nav.contact}
+        </Link>
+      </nav>
 
       <ServicesFeatures
         locale={locale}
