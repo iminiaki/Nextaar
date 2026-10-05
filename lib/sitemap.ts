@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n"
 import { getPayloadClient } from "@/lib/payload-queries"
+import { SITE_LAST_MODIFIED } from "@/lib/seo-schema"
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lastaar.com"
 export const LOCALES: Locale[] = ["en", "fa", "ar"]
@@ -43,9 +44,9 @@ function asSlug(value: unknown): string | null {
 }
 
 function toIso(value?: string | Date | null) {
-  if (!value) return new Date().toISOString()
+  if (!value) return SITE_LAST_MODIFIED
   const date = value instanceof Date ? value : new Date(value)
-  return Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString()
+  return Number.isNaN(date.getTime()) ? SITE_LAST_MODIFIED : date.toISOString()
 }
 
 function localeUrls(
@@ -56,7 +57,7 @@ function localeUrls(
     priority?: number
   } = {}
 ): SitemapUrl[] {
-  const lastmod = toIso(options.lastmod)
+  const lastmod = toIso(options.lastmod ?? SITE_LAST_MODIFIED)
   return LOCALES.map((locale) => ({
     loc: `${SITE_URL}/${locale}${path}`,
     lastmod,
@@ -70,7 +71,7 @@ function localeUrls(
 
 export function getPageSitemapUrls(): SitemapUrl[] {
   return staticPaths.flatMap(({ path, changefreq, priority }) =>
-    localeUrls(path, { changefreq, priority })
+    localeUrls(path, { changefreq, priority, lastmod: SITE_LAST_MODIFIED })
   )
 }
 
