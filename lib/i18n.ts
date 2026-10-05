@@ -129,6 +129,7 @@ type Dict = {
     tocTitle: string
     noHeadings: string
     readTimeSuffix: string
+    relatedTitle: string
     share: {
       title: string
       linkedin: string
@@ -595,6 +596,7 @@ const dictionaries: Record<Locale, Dict> = {
       tocTitle: "Table of contents",
       noHeadings: "No headings",
       readTimeSuffix: "min read",
+      relatedTitle: "Related posts",
       share: {
         title: "Share",
         linkedin: "LinkedIn",
@@ -1082,6 +1084,7 @@ const dictionaries: Record<Locale, Dict> = {
       tocTitle: "فهرست مطالب",
       noHeadings: "بدون سرفصل",
       readTimeSuffix: "دقیقه",
+      relatedTitle: "مطالب مرتبط",
       share: {
         title: "اشتراک‌گذاری",
         linkedin: "لینکدین",
@@ -1557,6 +1560,7 @@ const dictionaries: Record<Locale, Dict> = {
       tocTitle: "جدول المحتويات",
       noHeadings: "لا عناوين",
       readTimeSuffix: "دقيقة",
+      relatedTitle: "مقالات ذات صلة",
       share: {
         title: "مشاركة",
         linkedin: "لينكدإن",
