@@ -6,6 +6,7 @@ import { Hash, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { SubscribeWidget } from "@/components/blog/subscribe-widget"
+import { PreferredSource } from "@/components/blog/preferred-source"
 import { BlogPagination, getBlogPagination } from "@/components/blog/blog-pagination"
 import {
   findCategories,
@@ -195,6 +196,10 @@ export default async function BlogPage({
               </nav>
             </div>
 
+            <PreferredSource
+              locale={params.locale}
+              labels={dict.blogDetail.preferredSource}
+            />
             <SubscribeWidget locale={params.locale} labels={dict.blogDetail.subscribe} />
           </aside>
         </RevealOnScroll>

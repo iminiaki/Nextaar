@@ -142,6 +142,12 @@ type Dict = {
       close: string
     }
     subscribe: { title: string; help: string; placeholder: string; success: string; buttonAria: string }
+    preferredSource: {
+      title: string
+      help: string
+      fallbackLabel: string
+      fallbackAria: string
+    }
   }
   footer: {
     rights: string
@@ -614,6 +620,12 @@ const dictionaries: Record<Locale, Dict> = {
         placeholder: "you@example.com",
         success: "You’re subscribed!",
         buttonAria: "Subscribe",
+      },
+      preferredSource: {
+        title: "Prefer Lastaar on Google",
+        help: "Add us as a Preferred Source to see more of our stories in Top Stories, AI Overviews, and AI Mode.",
+        fallbackLabel: "Add Lastaar in Google Preferred Sources",
+        fallbackAria: "Open Google Preferred Sources and add Lastaar",
       },
     },
     footer: {
@@ -1103,6 +1115,12 @@ const dictionaries: Record<Locale, Dict> = {
         success: "با موفقیت عضو شدید!",
         buttonAria: "اشتراک",
       },
+      preferredSource: {
+        title: "لستار را در گوگل ترجیح دهید",
+        help: "ما را به‌عنوان منبع ترجیحی اضافه کنید تا محتواهای ما بیشتر در Top Stories، AI Overviews و AI Mode دیده شود.",
+        fallbackLabel: "افزودن لستار در منابع ترجیحی گوگل",
+        fallbackAria: "باز کردن منابع ترجیحی گوگل و افزودن لستار",
+      },
     },
     footer: {
       rights: "کلیه حقوق محفوظ است.",
@@ -1578,6 +1596,12 @@ const dictionaries: Record<Locale, Dict> = {
         placeholder: "بريدك الإلكتروني",
         success: "تم الاشتراك!",
         buttonAria: "اشترك",
+      },
+      preferredSource: {
+        title: "فضّل لستار على Google",
+        help: "أضفنا كمصدر مفضل لترى المزيد من محتوانا في Top Stories وAI Overviews وAI Mode.",
+        fallbackLabel: "إضافة لستار إلى المصادر المفضلة في Google",
+        fallbackAria: "فتح المصادر المفضلة في Google وإضافة لستار",
       },
     },
     footer: {

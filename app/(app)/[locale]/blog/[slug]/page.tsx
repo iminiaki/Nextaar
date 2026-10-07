@@ -13,6 +13,7 @@ import { ShareButton } from "@/components/blog/share-button"
 import { BlogTOC } from "@/components/blog/toc"
 import { MobileBlogTOC } from "@/components/blog/mobile-toc"
 import { SubscribeWidget } from "@/components/blog/subscribe-widget"
+import { PreferredSource } from "@/components/blog/preferred-source"
 import { PostCard } from "@/components/blog/post-card"
 
 export const revalidate = 3600
@@ -162,6 +163,10 @@ export default async function PostDetail({ params, searchParams }: PageProps) {
               </h3>
               <BlogTOC containerId="post-content" locale={locale} />
             </div>
+            <PreferredSource
+              locale={locale}
+              labels={dict.blogDetail.preferredSource}
+            />
             <SubscribeWidget
               locale={locale}
               labels={dict.blogDetail.subscribe}
@@ -243,7 +248,15 @@ export default async function PostDetail({ params, searchParams }: PageProps) {
             </div>
           </RevealOnScroll>
 
-          <div className="mt-10 lg:hidden">
+          {/* End-of-article Preferred Sources (Google official button) */}
+          <div className="mt-10">
+            <PreferredSource
+              locale={locale}
+              labels={dict.blogDetail.preferredSource}
+            />
+          </div>
+
+          <div className="mt-4 lg:hidden">
             <SubscribeWidget
               locale={locale}
               labels={dict.blogDetail.subscribe}
