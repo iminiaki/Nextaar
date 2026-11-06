@@ -67,6 +67,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="ard" href="/.well-known/ard.json" type="application/json" />
+        <link
+          rel="ai-catalog"
+          href="/.well-known/ai-catalog.json"
+          type="application/json"
+        />
         {/* Umami (self-hosted, stats.radya.ir). Plain tag rather than
             next/script so it is present in the server-rendered HTML.
             Cookieless — no consent banner needed. */}
