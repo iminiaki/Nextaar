@@ -1,6 +1,6 @@
 import type React from "react"
 import { Suspense } from "react"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { AccentProvider } from "@/components/accent-provider"
 import { LocaleProvider } from "@/components/locale-provider"
 import { Navbar } from "@/components/navbar"
@@ -43,6 +43,9 @@ export default async function LocaleLayout({
 }) {
   const { locale: urlLocale } = await params
   if (!isLocale(urlLocale)) {
+    // File-like paths such as /.well-known/* are not locales. Redirecting
+    // them to /en makes crawlers treat the homepage HTML as the resource.
+    if (urlLocale.startsWith(".")) notFound()
     redirect("/en")
   }
   const locale: Locale = urlLocale
